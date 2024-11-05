@@ -1,4 +1,4 @@
-<p align="center"><img src="./public/assets/sap-logo-white.png" width="300" alt="Laravel Logo"></p>
+<p align="center"><img src="./public/assets/sap-logo-no-bg.png" width="300" alt="Laravel Logo"></p>
 
 ## About SAP
 

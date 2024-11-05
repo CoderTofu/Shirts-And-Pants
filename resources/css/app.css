@@ -1,3 +1,32 @@
+@import url("https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=League+Spartan:wght@100..900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 
+    <uniquifier>: Use a unique and descriptive class name
+    <weight>: Use a value from 100 to 900 
+*/
+
+.league-spartan {
+    font-family: "League Spartan", sans-serif;
+    font-optical-sizing: auto;
+    /* font-weight: <weight>; */
+    font-style: normal;
+}
+
+.albert-sans {
+    font-family: "Albert Sans", sans-serif;
+    font-optical-sizing: auto;
+    /* font-weight: <weight>; */
+    font-style: normal;
+}
+
+.bg-customGray {
+    background-color: #eeeeee;
+}
+
+.min-h-90vw {
+    min-height: 90vw;
+}
