@@ -10,13 +10,13 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('product_variations', function (Blueprint $table) {
+        Schema::create('product_images', function (Blueprint $table) {
             $table->string('product_name');
-            $table->foreign('product_name')->on('products')->references('product_name')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->integer('stock');
             $table->string('size');
             $table->string('color');
-            $table->primary(['product_name', 'color', 'size']);
+            $table->foreign(['product_name', 'color', 'size'])->on('product_variations')->references(['product_name', 'color', 'size'])->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('image');
+            $table->primary('image');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_variations');
+        Schema::dropIfExists('product_images');
     }
 };

@@ -10,15 +10,22 @@ class ProductVariation extends Model
         'stock' => 10,
     ];
     protected $fillable = [
-        'product_id',
+        'product_name',
         'size',
         'color',
         'stock',
-        'image_name'
     ];
+
+    public $incrementing = false;
 
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class, 'product_name');
+    }
+
 }

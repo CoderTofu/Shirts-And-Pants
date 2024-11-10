@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    protected $primaryKey = 'product_name';
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $attributes = [
         'gender' => 'Unisex',
     ];
     protected $fillable = [
-        'name',
+        'product_name',
         'description',
         'type',
         'gender',
@@ -19,6 +22,6 @@ class Product extends Model
 
     public function variations()
     {
-        return $this->hasMany(ProductVariation::class);
+        return $this->hasMany(ProductVariation::class, 'product_name');
     }
 }
