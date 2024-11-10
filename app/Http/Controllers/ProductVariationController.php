@@ -18,9 +18,9 @@ class ProductVariationController extends Controller
     {
         $validated = $request->validate([
             'product_id' => ['required', 'exists:products,id'],
-            'size' => ['required', 'regex:/XS|S|M|L|XL/'],
+            'size' => ['required'],
             'color' => ['required'],
-            'imageURL' => ['required']
+            'image_name' => ['required']
         ]);
         $prod = ProductVariation::create($validated);
         return response()->json($prod);

@@ -14,9 +14,9 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('product_id')->constrained('products', 'id')->onDelete('cascade');
             $table->integer('stock');
-            $table->enum('size', ['XS', 'S', 'M', 'L', 'XL']);
+            $table->string('size');
             $table->string('color');
-            $table->string('imageURL');
+            $table->string('image_name');
             $table->timestamps();
         });
     }

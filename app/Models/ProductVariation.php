@@ -14,7 +14,7 @@ class ProductVariation extends Model
         'size',
         'color',
         'stock',
-        'imageURL'
+        'image_name'
     ];
 
     public function product()
