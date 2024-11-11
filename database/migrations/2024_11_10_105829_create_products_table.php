@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->enum('gender', ['M', 'F', 'Unisex']);
             $table->float('price');
             $table->timestamps();
-            $table->primary('product_name');
+            $table->primary(['product_name', 'gender']);
         });
     }
 

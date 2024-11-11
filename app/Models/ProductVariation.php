@@ -25,7 +25,9 @@ class ProductVariation extends Model
 
     public function images()
     {
-        return $this->hasMany(ProductImage::class, 'product_name');
+        return $this->hasMany(ProductImage::class, 'product_name', 'product_name')
+            ->where('size', $this->size)
+            ->where('color', $this->color);
     }
 
 }
