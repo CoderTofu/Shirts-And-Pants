@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Awobaz\Compoships\Compoships;
 class ProductVariation extends Model
 {
+    use Compoships;
+
     protected $attributes = [
         'stock' => 10,
     ];
@@ -20,14 +22,16 @@ class ProductVariation extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class)
+            ->select(['product_name', 'stock', 'color', 'size']);
     }
 
     public function images()
     {
-        return $this->hasMany(ProductImage::class, 'product_name', 'product_name')
-            ->where('size', $this->size)
-            ->where('color', $this->color);
+        return $this->hasMany(
+            ProductImage::class,
+            ['product_name', 'size', 'color'],
+            ['product_name', 'size', 'color']
+        )->select(['product_name', 'size', 'color', 'image']);
     }
-
 }

@@ -22,6 +22,7 @@ class Product extends Model
 
     public function variations()
     {
-        return $this->hasMany(ProductVariation::class, 'product_name');
+        return $this->hasMany(ProductVariation::class, 'product_name')
+            ->select(['product_name', 'stock', 'color', 'size']);
     }
 }
