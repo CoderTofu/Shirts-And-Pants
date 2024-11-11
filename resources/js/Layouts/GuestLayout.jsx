@@ -1,5 +1,5 @@
 import { Link } from "@inertiajs/react";
-import Navbar from "../Components/Navbar";
+import Navbar from "../Elements/Navbar";
 
 export default function GuestLayout({ children }) {
     return (
