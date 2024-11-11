@@ -1,6 +1,6 @@
 import { Link } from "@inertiajs/react";
 
-export default function Navbar() {
+export default function Navbar({ auth }) {
     return (
         <div className="flex justify-around bg-customGray align-middle p-3">
             <nav className="-mx-3 flex items-center justify-center">
@@ -26,7 +26,7 @@ export default function Navbar() {
             />
             <nav className="-mx-3 flex items-center justify-center">
                 <Link
-                    href={route("login")}
+                    href={auth.user ? route("dashboard") : route("login")}
                     className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:opacity-75 focus:outline-none focus-visible:ring-[#FF2D20] "
                 >
                     <img

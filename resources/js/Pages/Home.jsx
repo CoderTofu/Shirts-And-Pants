@@ -21,7 +21,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
     return (
         <>
             <Head title="Home" />
-            <Navbar />
+            <Navbar auth />
             <Carousel
                 opts={{ loop: true }}
                 plugins={[
