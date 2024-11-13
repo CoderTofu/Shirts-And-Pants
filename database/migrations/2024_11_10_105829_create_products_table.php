@@ -16,8 +16,9 @@ return new class extends Migration {
             $table->string('description');
             $table->enum('type', ['shirt', 'pants']);
             $table->enum('gender', ['M', 'F', 'Unisex']);
-            $table->float('price');
+            $table->decimal('price', 8, 2);
             $table->timestamps();
+            $table->unique(['name', 'type']);
         });
     }
 
