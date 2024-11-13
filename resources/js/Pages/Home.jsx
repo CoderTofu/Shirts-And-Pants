@@ -1,5 +1,6 @@
 import { Head } from "@inertiajs/react";
 import Navbar from "../Elements/Navbar";
+import Footer from "../Elements/Footer";
 
 import Autoplay from "embla-carousel-autoplay";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,9 +30,9 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                         delay: 7000,
                     }),
                 ]}
-                className="w-full flex justify-between items-center bg-gray-700"
+                className="w-full flex justify-between items-center bg-gray-700 "
             >
-                <CarouselPrevious className="absolute left-5 z-20 border-none bg-white rounded cursor-pointer transition-colors hover:bg-gray-200" />
+                <CarouselPrevious className="absolute left-5 z-20 border-none bg-white rounded cursor-pointer transition-all opacity-15 hover:opacity-100" />
 
                 <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-10">
                     <p className="text-white text-5xl font-bold">
@@ -56,8 +57,9 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                         </CarouselItem>
                     ))}
                 </CarouselContent>
-                <CarouselNext className="absolute right-5 z-20 border-none bg-white rounded cursor-pointer transition-colors hover:bg-gray-200" />
+                <CarouselNext className="absolute right-5 z-20 border-none bg-white rounded cursor-pointer transition-all opacity-15 hover:opacity-100" />
             </Carousel>
+            <Footer />
         </>
     );
 }

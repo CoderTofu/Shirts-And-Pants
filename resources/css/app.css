@@ -24,15 +24,22 @@
 }
 
 .bg-customGray {
-    background-color: #eeeeee;
+    background-color: #e6e6e4;
+}
+
+.bg-customBlack {
+    background-color: #1e1d1b;
 }
 
 .min-h-90vw {
     min-height: 90vw;
 }
 
+body {
+    background-color: #eeeeee;
+}
 @layer base {
-  :root {
+    :root {
         --background: 0 0% 100%;
         --foreground: 240 10% 3.9%;
         --card: 0 0% 100%;
@@ -59,7 +66,7 @@
         --chart-5: 27 87% 67%;
         --radius: 0.5rem;
     }
-  .dark {
+    .dark {
         --background: 240 10% 3.9%;
         --foreground: 0 0% 98%;
         --card: 240 10% 3.9%;
@@ -88,10 +95,10 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
+    * {
+        @apply border-border;
     }
-  body {
-    @apply bg-background text-foreground;
+    body {
+        @apply bg-background text-foreground;
     }
 }

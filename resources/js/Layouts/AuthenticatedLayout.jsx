@@ -21,7 +21,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <Link href="/">
                                     <img
                                         className="max-w-[60px] h-auto justify-self-center"
-                                        src="/assets/sap-logo-no-bg.png"
+                                        src="/assets/images/sap-logo-no-bg.png"
                                         alt="SAP Logo"
                                     />
                                 </Link>
