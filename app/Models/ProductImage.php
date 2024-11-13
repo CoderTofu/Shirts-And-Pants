@@ -3,28 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Awobaz\Compoships\Compoships;
 
-class ProductImage extends Model
-{
-    use Compoships;
-
-    protected $primaryKey = 'image';
-    protected $keyType = 'string';
-    public $incrementing = false;
+class ProductImage extends Model{
     protected $fillable = [
-        'product_name',
-        'color',
-        'size',
+        'variation_id',
         'image'
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
     public function productVariation()
     {
         return $this->belongsTo(
-            ProductVariation::class,
-            ['product_name', 'size', 'color'],
-            ['product_name', 'size', 'color']
-        )->select(['product_name', 'size', 'color', 'image']);
+            ProductVariation::class, 'variation_id', 'id'
+        );
     }
 }

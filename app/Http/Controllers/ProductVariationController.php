@@ -19,8 +19,8 @@ class ProductVariationController extends Controller
 
         $query = ProductVariation::with('images');
 
-        if (!empty($params['product_name'])) {
-            $query = $query->where('product_name', $params['product_name']);
+        if (!empty($params['product_id'])) {
+            $query = $query->where('product_id', $params['product_id']);
         }
         if (!empty($params['size'])) {
             $query = $query->where('size', $params['size']);
@@ -33,7 +33,7 @@ class ProductVariationController extends Controller
     public function add(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'product_name' => ['required', 'exists:products,product_name'],
+            'product_id' => ['required', 'exists:products,id'],
             'size' => ['required'],
             'color' => ['required'],
             'stock' => ['required']
@@ -42,13 +42,14 @@ class ProductVariationController extends Controller
         return response()->json($prod);
     }
 
-    public function destroy(Request $request): JsonResponse
+    public function get(Request $request, int $id): JsonResponse
     {
-        $query = $request->query();
-        $prod = ProductVariation::where('product_name', $query['name'])
-            ->where('size', $query['size'])
-            ->where('color', $query['color'])
-            ->first();
+        return response()->json(ProductVariation::with('images')->where('id', $id)->first());
+    }
+
+    public function destroy(Request $request, int $id): JsonResponse
+    {
+        $prod = ProductVariation::where('id', $id)->first();
         $prod->delete();
 
         return response()->json($prod, 200);

@@ -3,35 +3,33 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Awobaz\Compoships\Compoships;
 class ProductVariation extends Model
 {
-    use Compoships;
-
     protected $attributes = [
         'stock' => 10,
     ];
     protected $fillable = [
-        'product_name',
+        'product_id',
         'size',
         'color',
         'stock',
     ];
 
-    public $incrementing = false;
-
     public function product()
     {
-        return $this->belongsTo(Product::class)
-            ->select(['product_name', 'stock', 'color', 'size']);
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 
     public function images()
     {
         return $this->hasMany(
             ProductImage::class,
-            ['product_name', 'size', 'color'],
-            ['product_name', 'size', 'color']
-        )->select(['product_name', 'size', 'color', 'image']);
+            'variation_id',
+            'id'
+        );
     }
 }

@@ -11,13 +11,18 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('product_variations', function (Blueprint $table) {
-            $table->string('product_name');
-            $table->foreign('product_name')->on('products')->references('product_name')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->id();
+            $table->unsignedBigInteger('product_id');
             $table->integer('stock');
             $table->string('size');
             $table->string('color');
-            $table->primary(['product_name', 'color', 'size']);
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->timestamps();
+            $table->unique(['product_id', 'size', 'color']);
         });
     }
 

@@ -19,36 +19,29 @@ class ProductImageController extends Controller
 
         $query = ProductImage::all();
 
-        if (!empty($params['product_name'])) {
-            $query = $query->where('product_name', $params['product_name']);
+        if (!empty($params['variation_id'])) {
+            $query = $query->where('variation_id', $params['variation_id']);
         }
-        if (!empty($params['size'])) {
-            $query = $query->where('size', $params['size']);
-        }
-        if (!empty($params['color'])) {
-            $query = $query->where('color', $params['color']);
-        }
+    
         return response()->json($query->all());
     }
     public function add(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'product_name' => ['required', 'exists:product_variations,product_name'],
-            'size' => ['required', 'exists:product_variations,size'],
-            'color' => ['required', 'exists:product_variations,color'],
+            'variation_id' => ['required', 'exists:product_variations,id'],
             'image' => ['required'],
         ]);
         $prod = ProductImage::create($validated);
         return response()->json($prod);
     }
 
-    public function get(Request $request, string $name): JsonResponse
+    public function get(Request $request, int $id): JsonResponse
     {
-        return response()->json(ProductImage::where('image', $name)->first());
+        return response()->json(ProductImage::where('id', $id)->first());
     }
-    public function destroy(Request $request, string $name): JsonResponse
+    public function destroy(Request $request, int $id): JsonResponse
     {
-        $prod = ProductImage::where('image', $name)->first();
+        $prod = ProductImage::where('', $id)->first();
         $prod->delete();
         return response()->json($prod, 200);
     }

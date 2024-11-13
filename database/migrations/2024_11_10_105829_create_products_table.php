@@ -11,13 +11,14 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->string('product_name');
+            $table->id();
+            $table->string('name');
             $table->string('description');
             $table->enum('type', ['shirt', 'pants']);
             $table->enum('gender', ['M', 'F', 'Unisex']);
-            $table->float('price');
+            $table->decimal('price', 8, 2);
             $table->timestamps();
-            $table->primary(['product_name', 'gender']);
+            $table->unique(['name', 'type']);
         });
     }
 
