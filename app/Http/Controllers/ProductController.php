@@ -3,17 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\ProductVariation;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Inertia\Inertia;
+use Inertia\Response;
+
 class ProductController extends Controller
 {
 
+    // function for dynamic product pages
+    public function show(int $id): Response
+    {
+        // Fetch product by ID
+        $product = Product::find($id);
+
+        // Not Found
+        if (!$product) {
+            return Inertia::render('Dynamic/NotFound', [
+                'message' => 'Product not found.',
+            ]);
+        }
+
+        // Pass product data to the view
+        return Inertia::render('Dynamic/Product', [
+            'product' => $product
+        ]);
+    }
+
     public function list(Request $request): JsonResponse
     {
-       
-        $products = Product::with('variations.images');      
-        return response()->json($products->get());
+
+        return response()->json(Product::with('variations')->get());
     }
     public function add(Request $request): JsonResponse
     {
@@ -53,4 +73,5 @@ class ProductController extends Controller
         $prod->delete();
         return response()->json($prod, 200);
     }
+    
 }

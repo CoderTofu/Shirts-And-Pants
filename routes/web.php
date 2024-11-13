@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return Inertia::render('Home', [
@@ -22,6 +23,9 @@ Route::get('/products', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 })->name('products');
+
+Route::get('/products/{id}', [ProductController::class, 'show'])->name(name: 'products.show');
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
