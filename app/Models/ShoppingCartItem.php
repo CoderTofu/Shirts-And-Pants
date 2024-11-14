@@ -9,7 +9,7 @@ class ShoppingCartItem extends Model
     protected $fillable = [
         'shopping_cart_id',
         'product_id',
-        'variation_id',
+        'variant_id',
         'quantity',
         'price'
     ];
@@ -20,8 +20,8 @@ class ShoppingCartItem extends Model
     public function shoppingCart(){
         return $this->belongsTo(ShoppingCart::class, 'shopping_cart_id', 'id');
     }
-    public function variation(){
-        return $this->belongsTo(ProductVariation::class, 'variation_id', 'id');
+    public function variant(){
+        return $this->belongsTo(ProductVariant::class, 'variant_id', 'id');
     }
 
     public function product(){

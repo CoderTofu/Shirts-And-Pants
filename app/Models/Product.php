@@ -14,7 +14,7 @@ class Product extends Model
         'description',
         'type',
         'gender',
-        'price',
+        'price'
     ];
 
     protected $hidden = [
@@ -22,9 +22,9 @@ class Product extends Model
         'updated_at',
     ];
 
-    public function variations()
+    public function variants()
     {
-        return $this->hasMany(ProductVariation::class, 'product_id', 'id');
+        return $this->hasMany(ProductVariant::class, 'product_id', 'id');
     }
     public function inCart(){
         return $this->hasMany(ShoppingCartItem::class, 'product_id', 'id');

@@ -10,11 +10,43 @@ use Inertia\Inertia;
 class ProductController extends Controller
 {
 
+    public static function toJson($product){
+        return [
+            'id' => $product->id,
+            'name' => $product->name,
+            'description' => $product->description,
+            'type' => $product->type,
+            'gender' => $product->gender,
+            'price' => $product->price,
+            'display_image' => $product->variants[0]->images[0]->image,
+            'variants' => $product->variants->groupBy('color.color_name')->map(function ($groupedVariants) {
+                return [
+                    'color' => $groupedVariants->first()->color->color_name,
+                    'sizes' => $groupedVariants->map(function ($variant) {
+                        return [
+                            'variant_id' => $variant->id,
+                            'size' => $variant->size->size_name,
+                            'stock' => $variant->stock,
+                        ];
+                    })->unique('size')->values(), 
+                    'images' => $groupedVariants->flatMap(function ($variant) {
+                        return $variant->images->map(function ($image) {
+                            return ['image' => $image->image];
+                        });
+                    })->unique()->values(), 
+                ];
+            })->values(),
+        ];    
+    }
     public function list(Request $request)
     {
-        $products = Product::with('variations.images')->get();
+        $products = Product::with(['variants.images', 'variants.color', 'variants.size'])->get();
+        $response = $products->map(function ($product) { 
+            return $this->toJson($product); 
+        });
+
         return Inertia::render('Products', [ 
-            'products' => $products
+            'products' => $response
         ]);
     }
     public function add(Request $request): JsonResponse
@@ -30,37 +62,22 @@ class ProductController extends Controller
         return response()->json($prod);
     }
 
-    public function get(Request $request, int $id)
+    public function get(int $id)
     {
-        $params = $request->query();
-        $product = Product::where("id", $id);
+        $product = Product::with(['variants.images', 'variants.color', 'variants.size'])->find($id);
         if(!$product){
             return Inertia::render('Dynamic/NotFound', [
                 'message' => 'Product not found.',
             ]);
         }
         
-        if(empty($params)){
-            return Inertia::render('Dynamic/Product', 
-            ['product' => $product->with('variations.images')
-                ->get()
-                ->first()
-            ]);
-        }
-
-        $product = $product->with(['variations' => function($query) use($params) {
-            if(!empty($params['size'])){
-                $query->where('size', $params['size']);
-            }
-            if(!empty($params['color'])){
-                $query->where('color', $params['color']);
-            }
-            $query->with('images');
-        }]);
-
-        return Inertia::render('Dynamic/Product', ['product' => $product->first()]);
+        return Inertia::render('Dynamic/Product', ['product' => $this->toJson($product)]);
     }
 
+    public function getAsJson(int $id){
+        $product = Product::with(['variants.images', 'variants.color', 'variants.size'])->find($id);
+        return response()->json($this->toJson($product));
+    }
     public function destroy(Request $request, int $id): JsonResponse
     {
         $prod = Product::where('id', $id)->first();

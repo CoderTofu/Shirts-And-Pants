@@ -1,26 +1,23 @@
-import Dropdown from "@/Elements/Dropdown";
-import { router, useForm } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
 export default function ShoppingCartItem({ key, item }) {
+    // console.log(item);
     const { data, setData, patch, processing } = useForm({
         id: item.id,
         product_id: item.product_id,
-        color: item.variation.color,
+        color: item.color,
         quantity: item.quantity,
-        size: item.variation.size,
+        size: item.size,
     });
-    const [availableSizes, setAvailableSizes] = useState([item.variation.size]);
+    const [availableSizes, setAvailableSizes] = useState([item.size]);
 
     useEffect(() => {
         axios
-            .get(`/product-variations/product/${item.product_id}`)
+            .get(`/api/v1/products/${item.product_id}`)
             .then((response) => {
-                const set = new Set();
-                response.data.variations.map((variation) => {
-                    if (variation.stock > 0) set.add(variation.size);
-                });
-                setAvailableSizes([...set]);
+                const product = response.data;
+                console.log(product);
             })
             .catch((err) => console.error(err));
     }, []);
@@ -32,8 +29,8 @@ export default function ShoppingCartItem({ key, item }) {
 
     const handleQtyChange = (e) => {
         let value = parseInt(e.target.value, 10);
-        if (value > item.variation.stock) {
-            value = item.variation.stock;
+        if (value > item.stock) {
+            value = item.stock;
         }
         setData("quantity", value);
     };
@@ -52,10 +49,11 @@ export default function ShoppingCartItem({ key, item }) {
             <div className="flex flex-row justify-between items-center">
                 <input type="checkbox" />
                 <img
-                    src={`/assets/products/${item.variation.images[0].image}`}
+                    className="w-52"
+                    src={`/assets/products/${item.display_image}`}
                 />
                 <div className="flex flex-col justify-center items-center">
-                    <p>{item.product.name}</p>
+                    <p>{item.product_name}</p>
                     {/* <p>{item.variation.color}</p> */}
                     <select
                         name="size"
@@ -68,7 +66,7 @@ export default function ShoppingCartItem({ key, item }) {
                             </option>
                         ))}
                     </select>
-                    <p>{item.product.price}</p>
+                    <p>{item.price}</p>
                 </div>
                 <input
                     type="number"
@@ -77,7 +75,7 @@ export default function ShoppingCartItem({ key, item }) {
                     value={data.quantity}
                     min="1"
                 />
-                <p>{item.product.price * item.quantity}</p>
+                <p>{Number(item.price) * Number(item.quantity)}</p>
             </div>
         </div>
     );

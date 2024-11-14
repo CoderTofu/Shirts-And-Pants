@@ -5,7 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductVariationController;
+use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ShoppingCartController;
 
@@ -20,6 +20,7 @@ Route::get('/', function () {
 
 Route::controller(ProductController::class)->group(
     function () {
+        Route::get('/api/v1/products/{id}', 'getAsJson')->name('products.json');
         Route::get('/products', 'list')->name('products');
         Route::get('/products/{id}', 'get')->name('products.get');
         Route::post('/products/add', 'add')->name('products.add');
@@ -27,13 +28,13 @@ Route::controller(ProductController::class)->group(
     }
 );
 
-Route::controller(ProductVariationController::class)->group(
+Route::controller(ProductVariantController::class)->group(
     function () {
-        Route::get('/product-variations', 'list')->name('product-variations');
-        Route::get('/product-variations/product/{id}', 'getFromProductId')->name('product-variations.prod-id');
-        Route::post('/product-variations/add', 'add')->name('product-variations.add');
-        Route::get('/product-variations/{id}', 'get')->name('product-variations.get');
-        Route::delete('/product-variations/{id}', 'destroy')->name('product-variations.destroy');
+        Route::get('/product-variants', 'list')->name('product-variants');
+        Route::get('/product-variants/product/{id}', 'getFromProductId')->name('product-variants.prod-id');
+        Route::post('/product-variants/add', 'add')->name('product-variants.add');
+        Route::get('/product-variants/{id}', 'get')->name('product-variants.get');
+        Route::delete('/product-variants/{id}', 'destroy')->name('product-variants.destroy');
     }
 );
 

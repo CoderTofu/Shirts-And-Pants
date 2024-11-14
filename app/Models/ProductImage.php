@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductImage extends Model{
     protected $fillable = [
-        'variation_id',
+        'variant_id',
         'image'
     ];
 
@@ -14,10 +14,10 @@ class ProductImage extends Model{
         'created_at',
         'updated_at',
     ];
-    public function productVariation()
+    public function productVariant()
     {
         return $this->belongsTo(
-            ProductVariation::class, 'variation_id', 'id'
+            ProductVariant::class, 'variant_id', 'id'
         );
     }
 }

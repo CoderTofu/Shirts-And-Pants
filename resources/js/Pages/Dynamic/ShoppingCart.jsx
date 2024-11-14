@@ -3,6 +3,7 @@ import Navbar from "@/Elements/Navbar";
 import ShoppingCartItem from "./ShoppingCartItem";
 
 export default function ShoppingCart({ cart }) {
+    // console.log(cart);
     return (
         <>
             <Head title="Shopping Cart" />

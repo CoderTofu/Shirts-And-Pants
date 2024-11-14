@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ShoppingCart;
 use App\Models\ShoppingCartItem;
-use App\Models\ProductVariation;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -12,14 +12,41 @@ use Inertia\Inertia;
 
 class ShoppingCartController extends Controller
 {
+
+    public static function toJson($cart){
+
+    }
     public function fetch(){
         $userId = Auth::id();
-        $cart = ShoppingCart::with(['items' => ['product', 'variation.images']])->where('user_id', $userId)->where('status', 'open')->first();
+        $cart = ShoppingCart::with(['items' => ['product', 'variant.images', 'variant.color', 'variant.size']])
+            ->where('user_id', $userId)
+            ->where('status', 'open')
+            ->first();
         if(!$cart){
             ShoppingCart::create(['user_id' => $userId,  'total_price' => 0, 'status' => 'open']);
-            $cart = ShoppingCart::with(['items' => ['product', 'variation.images']])->where('user_id', $userId)->where('status', 'open')->first();
+            $cart = ShoppingCart::with(['items' => ['product', 'variant.images', 'variant.color', 'variant.size']])
+                ->where('user_id', $userId)
+                ->where('status', 'open')
+                ->first();
         }
-        return $cart;
+        return [
+            "id" => $cart->id,
+            "total_price" => $cart->total_price,
+            "items" => $cart->items->map(function($item)
+            {
+                return [
+                    "product_id" => $item->product->id,
+                    "product_name" => $item->product->name,
+                    "price"=>$item->product->price,
+                    "variant_id" => $item->variant->id,
+                    "color" =>$item->variant->color->color_name,
+                    "size"=> $item->variant->size->size_name,
+                    "stock" => $item->variant->stock,
+                    "quantity" => $item->quantity,
+                    "display_image" => $item->variant->images[0]->image
+                ];
+            })
+        ];
     }
 
     public function update(Request $request) {
@@ -41,10 +68,10 @@ class ShoppingCartController extends Controller
             $cartItem->update(['quantity'=>$validated['quantity']]);
         }
         if($size && $color){
-            $newVariation = ProductVariation::where('product_id', $validated['product_id'])
+            $newVariant = ProductVariant::where('product_id', $validated['product_id'])
             ->where('size', $validated['size'])->where('color',$validated['color'])->first();
-            if($newVariation){
-                $cartItem->variation_id = $newVariation->id;
+            if($newVariant){
+                $cartItem->variant_id = $newVariant->id;
                 $cartItem->quantity = 1;
                 $cartItem->save();
             }
@@ -58,8 +85,9 @@ class ShoppingCartController extends Controller
     }
 
     public function addToCart(Request $request){
+      
         $product_id = $request->input('product_id');
-        $variation_id = $request->input('variation_id');
+        $variant_id = $request->input('variant_id');
         $quantity = $request->input('quantity');
         $price = $request->input('price');
         $cart = $this->fetch();
@@ -67,7 +95,7 @@ class ShoppingCartController extends Controller
 
         $item = ShoppingCartItem::where('shopping_cart_id', $cart->id)
             ->where('product_id', $product_id)
-            ->where('variation_id', $variation_id)
+            ->where('variant_id', $variant_id)
             ->first();
 
         if($item){
@@ -78,7 +106,7 @@ class ShoppingCartController extends Controller
                 [
                     'shopping_cart_id' => $cart->id,
                     'product_id' => $request->input('product_id'),
-                    'variation_id' => $request->input('variation_id'), 
+                    'variant_id' => $request->input('variant_id'), 
                     'quantity' => $request->input('quantity'), 
                     'price' => $request->input('price')
                 ]);        

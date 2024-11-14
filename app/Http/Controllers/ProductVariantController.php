@@ -3,22 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\ProductVariation;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 
-class ProductVariationController extends Controller
+class ProductVariantController extends Controller
 {
 
     public function list(Request $request): JsonResponse
     {
         $params = $request->query();
         if (empty($params)) {
-            return response()->json(ProductVariation::with('images')->get());
+            return response()->json(ProductVariant::with('images')->get());
         }
 
-        $query = ProductVariation::with('images');
+        $query = ProductVariant::with('images');
 
         if (!empty($params['product_id'])) {
             $query = $query->where('product_id', $params['product_id']);
@@ -39,22 +39,22 @@ class ProductVariationController extends Controller
             'color' => ['required'],
             'stock' => ['required']
         ]);
-        $prod = ProductVariation::create($validated);
+        $prod = ProductVariant::create($validated);
         return response()->json($prod);
     }
 
     public function get(Request $request, int $id): JsonResponse
     {
-        return response()->json(ProductVariation::with('images')->where('id', $id)->first());
+        return response()->json(ProductVariant::with('images')->where('id', $id)->first());
     }
 
     public function getFromProductId(int $productId) {
-        return response()->json(Product::with('variations')->where('id', $productId)->first());
+        return response()->json(Product::with('variants')->where('id', $productId)->first());
     }
 
     public function destroy(Request $request, int $id): JsonResponse
     {
-        $prod = ProductVariation::where('id', $id)->first();
+        $prod = ProductVariant::where('id', $id)->first();
         $prod->delete();
 
         return response()->json($prod, 200);

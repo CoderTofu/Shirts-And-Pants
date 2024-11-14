@@ -19,8 +19,8 @@ class ProductImageController extends Controller
 
         $query = ProductImage::all();
 
-        if (!empty($params['variation_id'])) {
-            $query = $query->where('variation_id', $params['variation_id']);
+        if (!empty($params['variant_id'])) {
+            $query = $query->where('variant_id', $params['variant_id']);
         }
     
         return response()->json($query->all());
@@ -28,7 +28,7 @@ class ProductImageController extends Controller
     public function add(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'variation_id' => ['required', 'exists:product_variations,id'],
+            'variation_id' => ['required', 'exists:product_variants,id'],
             'image' => ['required'],
         ]);
         $prod = ProductImage::create($validated);
