@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Checkbox from "../../Elements/Checkbox";
 import InputError from "../../Elements/InputError";
 import InputLabel from "../../Elements/InputLabel";
@@ -15,9 +16,11 @@ export default function Login({ status, canResetPassword }) {
 
     const submit = (e) => {
         e.preventDefault();
-
-        post(route("login"), {
-            onFinish: () => reset("password"),
+        axios.get("/sanctum/csrf-cookie").then((response) => {
+            console.log("here");
+            post(route("login"), {
+                onFinish: () => reset("password"),
+            });
         });
     };
 

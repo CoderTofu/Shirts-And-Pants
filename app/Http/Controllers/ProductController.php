@@ -6,34 +6,16 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Inertia\Inertia;
-use Inertia\Response;
 
 class ProductController extends Controller
 {
 
-    // function for dynamic product pages
-    public function show(int $id): Response
+    public function list(Request $request)
     {
-        // Fetch product by ID
-        $product = Product::find($id);
-
-        // Not Found
-        if (!$product) {
-            return Inertia::render('Dynamic/NotFound', [
-                'message' => 'Product not found.',
-            ]);
-        }
-
-        // Pass product data to the view
-        return Inertia::render('Dynamic/Product', [
-            'product' => $product
+        $products = Product::with('variations.images')->get();
+        return Inertia::render('Products', [ 
+            'products' => $products
         ]);
-    }
-
-    public function list(Request $request): JsonResponse
-    {
-
-        return response()->json(Product::with('variations')->get());
     }
     public function add(Request $request): JsonResponse
     {
@@ -48,14 +30,25 @@ class ProductController extends Controller
         return response()->json($prod);
     }
 
-    public function get(Request $request, int $id): JsonResponse
+    public function get(Request $request, int $id)
     {
         $params = $request->query();
-        $variation = Product::where("id", $id);
-        if(empty($params)){
-            return response()->json($variation->with('variations')->get());
+        $product = Product::where("id", $id);
+        if(!$product){
+            return Inertia::render('Dynamic/NotFound', [
+                'message' => 'Product not found.',
+            ]);
         }
-        $variation = $variation->with(['variations' => function($query) use($params) {
+        
+        if(empty($params)){
+            return Inertia::render('Dynamic/Product', 
+            ['product' => $product->with('variations.images')
+                ->get()
+                ->first()
+            ]);
+        }
+
+        $product = $product->with(['variations' => function($query) use($params) {
             if(!empty($params['size'])){
                 $query->where('size', $params['size']);
             }
@@ -64,7 +57,8 @@ class ProductController extends Controller
             }
             $query->with('images');
         }]);
-        return response()->json($variation->first());
+
+        return Inertia::render('Dynamic/Product', ['product' => $product->first()]);
     }
 
     public function destroy(Request $request, int $id): JsonResponse

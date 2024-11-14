@@ -26,4 +26,7 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariation::class, 'product_id', 'id');
     }
+    public function inCart(){
+        return $this->hasMany(ShoppingCartItem::class, 'product_id', 'id');
+    }
 }

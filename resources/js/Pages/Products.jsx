@@ -1,31 +1,30 @@
 import { Head } from "@inertiajs/react";
 import Navbar from "../Elements/Navbar";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
-export default function Products() {
-    const [products, setProducts] = useState([]);
-
-    useEffect(() => {
-        axios
-            .get("/api/v1/products")
-            .then((response) => {
-                setProducts(response.data);
-            })
-            .catch((error) => {
-                console.error(
-                    "There was an error fetching the products!",
-                    error
-                );
-            });
-    }, []);
-
+export default function Products({ products }) {
     return (
         <>
             <Head title="Products" />
             <Navbar auth />
-            <div>
-                <h1>Products</h1>
+            <h1>Products</h1>
+            <div className="m-10 flex flex-row space-x-5 ">
+                {products.map((product, index) => (
+                    <div key={index} className="w-52">
+                        <div className="flex flex-col justify-center items-center">
+                            <a href={`/products/${product.id}`}>
+                                <img
+                                    src={`assets/products/${product.variations[0].images[0].image}`}
+                                />
+                            </a>
+                            <a
+                                className="hover:underline"
+                                href={`/products/${product.id}`}
+                            >
+                                {product.name}
+                            </a>
+                        </div>
+                    </div>
+                ))}
             </div>
         </>
     );

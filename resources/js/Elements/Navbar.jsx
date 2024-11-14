@@ -74,7 +74,7 @@ export default function Navbar({ auth }) {
                 </div>
 
                 <Link
-                    href={route("products")}
+                    href={route("shopping-cart")}
                     className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:opacity-75 focus:outline-none focus-visible:ring-[#FF2D20] "
                 >
                     <img

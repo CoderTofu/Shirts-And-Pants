@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\ProductVariation;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -45,6 +46,10 @@ class ProductVariationController extends Controller
     public function get(Request $request, int $id): JsonResponse
     {
         return response()->json(ProductVariation::with('images')->where('id', $id)->first());
+    }
+
+    public function getFromProductId(int $productId) {
+        return response()->json(Product::with('variations')->where('id', $productId)->first());
     }
 
     public function destroy(Request $request, int $id): JsonResponse
