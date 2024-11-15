@@ -1,8 +1,36 @@
 import { Head } from "@inertiajs/react";
 import Navbar from "../Elements/Navbar";
 
+/*
+ Product = {
+    id: number
+    name: string
+    description: string
+    display_image: Image
+    price: number
+    gender: enum ('M', 'F', 'Unisex')
+    type: enum ('shirt', 'pants')
+    variants: Variant[]
+ }
+
+ Variant = {
+    color: string
+    sizes: Size[]
+    images: Image[]
+ }
+
+  Size = {
+    variant_id: number
+    size_name: string
+    stock: number
+  }
+
+  Image = {
+    image: string
+  }
+*/
+
 export default function Products({ products }) {
-    console.log(products);
     return (
         <>
             <Head title="Products" />

@@ -4,8 +4,36 @@ import Navbar from "@/Elements/Navbar";
 import PrimaryButton from "@/Elements/PrimaryButton";
 import { useEffect, useState } from "react";
 
+/*
+ Product = {
+    id: number
+    name: string
+    description: string
+    display_image: Image
+    price: number
+    gender: enum ('M', 'F', 'Unisex')
+    type: enum ('shirt', 'pants')
+    variants: Variant[]
+ }
+
+ Variant = {
+    color: string
+    sizes: Size[]
+    images: Image[]
+ }
+
+  Size = {
+    variant_id: number
+    size_name: string
+    stock: number
+  }
+
+  Image = {
+    image: string
+  }
+*/
+
 export default function Product({ product }) {
-    console.log(product);
     const images = product.variants.map((variant) => variant.images).flat();
     const [selectedImage, setSelectedImage] = useState(product.display_image);
     const [selectedColorIndex, setSelectedColorIndex] = useState(0);
@@ -80,20 +108,22 @@ export default function Product({ product }) {
             <Navbar />
             <div className="flex flex-col justify-center mt-[15vh] overflow-y-auto items-center">
                 <div className="flex flex-row space-x-[15vw]">
-                    <div className="border-black">
-                        <div className="flex flex-row max-w-xs">
-                            <div className="flex flex-col space-y-2">
-                                kaw na bahala d2 lods
-                                {images.map((image, index) => (
-                                    <img
-                                        key={index}
-                                        className="cursor-pointer hover:border "
-                                        onClick={() => setImage(index)}
-                                        src={`/assets/products/${image.image}`}
-                                    />
-                                ))}
-                            </div>
-                            <img src={`/assets/products/${selectedImage}`} />
+                    <div className="flex flex-col space-y-5">
+                        <div className="max-w-[22vw]">
+                            <img
+                                className="w-max"
+                                src={`/assets/products/${selectedImage}`}
+                            />
+                        </div>
+                        <div className="flex flex-row space-x-2 max-w-[2.5vw]">
+                            {images.map((image, index) => (
+                                <img
+                                    key={index}
+                                    className="cursor-pointer hover:border "
+                                    onClick={() => setImage(index)}
+                                    src={`/assets/products/${image.image}`}
+                                />
+                            ))}
                         </div>
                     </div>
                     <div className="flex flex-col justify-center">
