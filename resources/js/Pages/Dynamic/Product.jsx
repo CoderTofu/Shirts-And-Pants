@@ -78,11 +78,11 @@ export default function Product({ product }) {
         <>
             <Head title={product.name} />
             <Navbar />
-            <div className="flex justify-center m-10">
-                <div className="grid grid-cols-5">
-                    <div className="col-span-3 border-black">
+            <div className="flex flex-col justify-center mt-[15vh] overflow-y-auto items-center">
+                <div className="flex flex-row space-x-[15vw]">
+                    <div className="border-black">
                         <div className="flex flex-row max-w-xs">
-                            <div className="flex flex-col space-y-2 p-5">
+                            <div className="flex flex-col space-y-2">
                                 kaw na bahala d2 lods
                                 {images.map((image, index) => (
                                     <img
@@ -96,7 +96,7 @@ export default function Product({ product }) {
                             <img src={`/assets/products/${selectedImage}`} />
                         </div>
                     </div>
-                    <div className="col-start-4 flex flex-col justify-center">
+                    <div className="flex flex-col justify-center">
                         <h1>{product.name}</h1>
                         <p>{product.description}</p>
                         <div className="items-center mt-5 space-y-2">
