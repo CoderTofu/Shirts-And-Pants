@@ -31,6 +31,16 @@
     background-color: #1e1d1b;
 }
 
+.bg-form {
+    /* For login and register form */
+    background-color: #56524f;
+}
+
+.input-bg-form {
+    /* For login and register form */
+    background-color: #aca79c;
+}
+
 .min-h-90vw {
     min-height: 90vw;
 }

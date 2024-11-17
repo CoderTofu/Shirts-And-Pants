@@ -24,6 +24,15 @@ Route::get('/products', function () {
     ]);
 })->name('products');
 
+Route::get('/cart', function () {
+    return Inertia::render('Cart', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
+})->name('cart');
+
 Route::get('/products/{id}', [ProductController::class, 'show'])->name(name: 'products.show');
 
 
