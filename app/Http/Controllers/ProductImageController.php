@@ -28,7 +28,7 @@ class ProductImageController extends Controller
     public function add(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'variation_id' => ['required', 'exists:product_variants,id'],
+            'variant_id' => ['required', 'exists:product_variants,id'],
             'image' => ['required'],
         ]);
         $prod = ProductImage::create($validated);
