@@ -14,10 +14,21 @@ import {
 
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
     const carouselItems = [
-        "https://www.yellowbrick.co/wp-content/uploads/2023/02/Streetwear-style.jpg",
-        "https://media.voguebusiness.com/photos/661033e2da7d9e9fd8ddfea1/master/w_1600%2Cc_limit/STREETWEAR-IN-2024-vogue-business-story-inline-6.jpg",
-        "https://www.highsnobiety.com/static-assets/dato/1690970245-inside-nigerias-booming-streetwear-renaissance-07.jpg",
+        "/assets/images/banners/banner_1.jpg",
+        "/assets/images/banners/banner_2.jpg",
+        "/assets/images/banners/banner_3.jpg",
+        "/assets/images/banners/banner_4.jpg",
+        "/assets/images/banners/banner_5.jpg",
+        "/assets/images/banners/banner_6.jpg",
+        "/assets/images/banners/banner_7.jpg",
+        "/assets/images/banners/banner_8.jpg",
+        "/assets/images/banners/banner_9.jpg",
     ];
+
+    // Randomize and select up to 5 items from carouselItems
+    const shuffledItems = carouselItems
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 5);
 
     return (
         <>
@@ -30,7 +41,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                         delay: 7000,
                     }),
                 ]}
-                className="w-full flex justify-between items-center bg-gray-700 "
+                className="w-full flex justify-between items-center bg-gray-700 p-5"
             >
                 <CarouselPrevious className="absolute left-5 z-20 border-none bg-white rounded cursor-pointer transition-all opacity-15 hover:opacity-100" />
 
@@ -41,7 +52,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                 </div>
 
                 <CarouselContent className="z-0">
-                    {carouselItems.map((item, index) => (
+                    {shuffledItems.map((item, index) => (
                         <CarouselItem key={index}>
                             <div className="w-full h-full max-h-[80vh]">
                                 <Card className="w-full h-full max-h-[100%] border-none">
@@ -49,7 +60,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                         <img
                                             src={item}
                                             alt={`Carousel item ${index + 1}`}
-                                            className="object-cover w-full h-full max-w-[100%] object-top"
+                                            className="object-cover w-full h-auto max-w-[80vw] object-top"
                                         />
                                     </CardContent>
                                 </Card>
