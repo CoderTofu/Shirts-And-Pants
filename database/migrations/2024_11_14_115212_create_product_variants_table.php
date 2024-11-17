@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('size_id');
-            $table->unsignedBigInteger('color_id');
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
@@ -25,14 +24,9 @@ return new class extends Migration {
                 ->on('sizes')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreign('color_id')
-                ->references('id')
-                ->on('colors')
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
             $table->integer('stock');
             $table->timestamps();
-            $table->unique(['product_id', 'color_id', 'size_id']);
+            $table->unique(['product_id', 'size_id']);
         });
     }
 

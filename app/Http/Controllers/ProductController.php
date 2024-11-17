@@ -18,29 +18,23 @@ class ProductController extends Controller
             'type' => $product->type,
             'gender' => $product->gender,
             'price' => $product->price,
-            'display_image' => $product->variants[0]->images[0]->image,
-            'variants' => $product->variants->groupBy('color.color_name')->map(function ($groupedVariants) {
+            'display_image' => $product->images[0]->image,
+            'images' => $product->images->map(function ($image) {
+                return 
+                    $image->image;
+            }),
+            'sizes' => $product->variants->map(function ($variant) {
                 return [
-                    'color' => $groupedVariants->first()->color->color_name,
-                    'sizes' => $groupedVariants->map(function ($variant) {
-                        return [
-                            'variant_id' => $variant->id,
-                            'size' => $variant->size->size_name,
-                            'stock' => $variant->stock,
-                        ];
-                    })->unique('size')->values(), 
-                    'images' => $groupedVariants->flatMap(function ($variant) {
-                        return $variant->images->map(function ($image) {
-                            return ['image' => $image->image];
-                        });
-                    })->unique()->values(), 
+                    "variant_id" => $variant->id,
+                    "size" => $variant->size->size_name,
+                    "stock" => $variant->stock
                 ];
-            })->values(),
+            })
         ];    
     }
     public function list(Request $request)
     {
-        $products = Product::with(['variants.images', 'variants.color', 'variants.size'])->get();
+        $products = Product::with(['variants.size', 'images'])->get();
         $response = $products->map(function ($product) { 
             return $this->toJson($product); 
         });
@@ -64,7 +58,7 @@ class ProductController extends Controller
 
     public function get(int $id)
     {
-        $product = Product::with(['variants.images', 'variants.color', 'variants.size'])->find($id);
+        $product = Product::with(['images', 'variants.size'])->find($id);
         if(!$product){
             return Inertia::render('Dynamic/NotFound', [
                 'message' => 'Product not found.',
@@ -75,7 +69,7 @@ class ProductController extends Controller
     }
 
     public function getAsJson(int $id){
-        $product = Product::with(['variants.images', 'variants.color', 'variants.size'])->find($id);
+        $product = Product::with(['images', 'variants.size'])->find($id);
         return response()->json($this->toJson($product));
     }
     public function destroy(Request $request, int $id): JsonResponse

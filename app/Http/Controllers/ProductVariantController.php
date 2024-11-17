@@ -10,7 +10,12 @@ use Illuminate\Http\JsonResponse;
 
 class ProductVariantController extends Controller
 {
-
+    public function toJson($variant) {
+        return [
+            "id" => $variant->id,
+            "size" => $variant->size_name
+        ];
+    }
     public function list(Request $request): JsonResponse
     {
         $params = $request->query();
@@ -26,9 +31,7 @@ class ProductVariantController extends Controller
         if (!empty($params['size'])) {
             $query = $query->where('size', $params['size']);
         }
-        if (!empty($params['color'])) {
-            $query = $query->where('color', $params['color']);
-        }
+
         return response()->json($query->get());
     }
     public function add(Request $request): JsonResponse
@@ -36,7 +39,6 @@ class ProductVariantController extends Controller
         $validated = $request->validate([
             'product_id' => ['required', 'exists:products,id'],
             'size' => ['required'],
-            'color' => ['required'],
             'stock' => ['required']
         ]);
         $prod = ProductVariant::create($validated);

@@ -1,47 +1,59 @@
 import { useForm } from "@inertiajs/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ShoppingCartItem({ key, item }) {
     // console.log(item);
+    const sizes = item.product.sizes.map((size) => size.size);
     const { data, setData, patch, processing } = useForm({
         id: item.id,
-        product_id: item.product_id,
-        color: item.color,
         quantity: item.quantity,
-        size: item.size,
+        variant_id: item.variant_id_on_cart,
     });
-    const [availableSizes, setAvailableSizes] = useState([item.size]);
 
-    useEffect(() => {
-        axios
-            .get(`/api/v1/products/${item.product_id}`)
-            .then((response) => {
-                const product = response.data;
-                console.log(product);
-            })
-            .catch((err) => console.error(err));
-    }, []);
+    const [currentSize, setCurrentSize] = useState(
+        item.product.sizes.find((size) => size.variant_id === data.variant_id)
+            .size
+    );
+    const initialRenderRef = useRef(true);
 
     useEffect(() => {
         console.log(data);
+        if (initialRenderRef.current) {
+            initialRenderRef.current = false;
+            return;
+        }
         update();
     }, [data]);
 
     const handleQtyChange = (e) => {
         let value = parseInt(e.target.value, 10);
-        if (value > item.stock) {
-            value = item.stock;
+        const variant = item.product.sizes.find(
+            (size) => size.variant_id === data.variant_id
+        );
+
+        if (value >= variant.stock) {
+            setData({ ...data, quantity: variant.stock });
+        } else if (value) {
+            setData({ ...data, quantity: value });
         }
-        setData("quantity", value);
     };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setData(name, value);
+    const handleSizeChange = (e) => {
+        const variant = item.product.sizes.find(
+            (size) => size.size === e.target.value
+        );
+        setData({
+            ...data,
+            quantity: 1,
+            variant_id: variant.variant_id,
+        });
+        setCurrentSize(e.target.value);
     };
 
     const update = () => {
-        patch(route("shopping-cart.update"));
+        patch(route("shopping-cart.update"), {
+            onSuccess: () => window.location.reload(),
+        });
     };
 
     return (
@@ -54,13 +66,12 @@ export default function ShoppingCartItem({ key, item }) {
                 />
                 <div className="flex flex-col justify-center items-center">
                     <p>{item.product_name}</p>
-                    {/* <p>{item.variation.color}</p> */}
                     <select
                         name="size"
-                        value={data.size}
-                        onChange={handleChange}
+                        value={currentSize}
+                        onChange={handleSizeChange}
                     >
-                        {availableSizes.map((size, index) => (
+                        {sizes.map((size, index) => (
                             <option key={index} value={size}>
                                 {size}
                             </option>
@@ -69,13 +80,18 @@ export default function ShoppingCartItem({ key, item }) {
                     <p>{item.price}</p>
                 </div>
                 <input
+                    className="max-w-20"
                     type="number"
                     name="quantity"
                     onChange={handleQtyChange}
                     value={data.quantity}
                     min="1"
                 />
-                <p>{Number(item.price) * Number(item.quantity)}</p>
+                <p>
+                    {(
+                        Number(item.product.price) * Number(item.quantity)
+                    ).toFixed(2)}
+                </p>
             </div>
         </div>
     );

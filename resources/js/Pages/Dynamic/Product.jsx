@@ -13,93 +13,56 @@ import { useEffect, useState } from "react";
     price: number
     gender: enum ('M', 'F', 'Unisex')
     type: enum ('shirt', 'pants')
-    variants: Variant[]
+    sizes: Variant[]
+    images: string[]
  }
 
  Variant = {
-    color: string
-    sizes: Size[]
-    images: Image[]
- }
-
-  Size = {
     variant_id: number
-    size_name: string
+    size: string
     stock: number
-  }
-
-  Image = {
-    image: string
-  }
+ }
 */
 
 export default function Product({ product }) {
-    const images = product.variants.map((variant) => variant.images).flat();
+    const images = product.images;
     const [selectedImage, setSelectedImage] = useState(product.display_image);
-    const [selectedColorIndex, setSelectedColorIndex] = useState(0);
-    const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
-    const [quantity, setQuantity] = useState(1);
     const { data, setData, post, processing } = useForm({
         product_id: product.id,
-        variant_id: product.variants[0].sizes[0].variant_id,
+        variant_id: product.sizes[0].variant_id,
         quantity: 1,
         price: product.price,
+        size: product.sizes[0].size,
     });
 
-    const submit = (e) => {
-        console.log(data);
-        e.preventDefault();
-        post(route("shopping-cart.add"), {
-            // onSuccess: () => {
-            //     alert("Item added to cart!");
-            // },
-            // onError: (error) => {
-            //     alert("error");
-            // },
-        });
-    };
-
     const setImage = (index) => {
-        setSelectedImage(images[index].image);
-        setSelectedColorIndex(index);
-        updateVariant();
+        setSelectedImage(images[index]);
     };
 
     const changeSize = (e) => {
         e.preventDefault();
-        setSelectedSizeIndex(e.target.value);
-        updateVariant();
-    };
-
-    const changeColor = (e) => {
-        e.preventDefault();
-        setSelectedColorIndex(e.target.value);
-        setSelectedImage(images[e.target.value].image);
-        updateVariant();
-    };
-
-    const updateVariant = () => {
-        setData(
-            "variant_id",
-            product.variants[selectedColorIndex].sizes[selectedSizeIndex]
-                .variant_id
-        );
-        setQuantity(1);
+        const size = product.sizes.find((size) => size.size === e.target.value);
+        setData({
+            ...data,
+            quantity: 1,
+            size: size.size,
+            variant_id: size.variant_id,
+        });
     };
 
     const changeQty = (e) => {
         e.preventDefault();
-        const quantity = Number(e.target.value);
-        if (
-            quantity != 0 &&
-            product.variants[selectedColorIndex].sizes[selectedSizeIndex]
-                .stock -
-                quantity >=
-                0
-        ) {
-            setQuantity(quantity);
-            setData("quantity", quantity);
+        const newQuantity = e.target.value;
+        const stock = product.sizes.find(
+            (size) => size.size === data.size
+        ).stock;
+        if (newQuantity != 0 && stock - newQuantity >= 0) {
+            setData({ ...data, quantity: Number(newQuantity) });
         }
+    };
+    const submit = (e) => {
+        e.preventDefault();
+        post(`/shopping-cart/add-to-cart`);
     };
 
     return (
@@ -121,7 +84,7 @@ export default function Product({ product }) {
                                     key={index}
                                     className="cursor-pointer hover:border "
                                     onClick={() => setImage(index)}
-                                    src={`/assets/products/${image.image}`}
+                                    src={`/assets/products/${image}`}
                                 />
                             ))}
                         </div>
@@ -131,40 +94,24 @@ export default function Product({ product }) {
                         <p>{product.description}</p>
                         <div className="items-center mt-5 space-y-2">
                             <div className="flex flex-row space-x-5">
-                                <select
-                                    value={selectedColorIndex}
-                                    onChange={changeColor}
-                                >
-                                    {product.variants.map((variant, index) => {
+                                <select value={data.size} onChange={changeSize}>
+                                    {product.sizes.map((size, index) => {
                                         return (
-                                            <option key={index} value={index}>
-                                                {variant.color[0].toUpperCase() +
-                                                    variant.color.slice(1)}
-                                            </option>
-                                        );
-                                    })}
-                                </select>
-                                <select
-                                    value={selectedSizeIndex}
-                                    onChange={changeSize}
-                                >
-                                    {product.variants[
-                                        selectedColorIndex
-                                    ].sizes.map((size, index) => {
-                                        return (
-                                            <option key={index} value={index}>
+                                            <option
+                                                key={index}
+                                                value={size.size}
+                                            >
                                                 {size.size}
                                             </option>
                                         );
                                     })}
                                 </select>
-                            </div>
-                            <div>
                                 <input
                                     type="number"
                                     min="1"
-                                    value={quantity}
+                                    value={Number(data.quantity)}
                                     onChange={changeQty}
+                                    className="max-w-20"
                                 />
                             </div>
                             <PrimaryButton onClick={submit}>

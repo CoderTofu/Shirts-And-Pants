@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ShoppingCart;
 use App\Models\ShoppingCartItem;
 use App\Models\ProductVariant;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -12,76 +13,78 @@ use Inertia\Inertia;
 
 class ShoppingCartController extends Controller
 {
-
     public static function toJson($cart){
-
+        return [
+            "cart_id" => $cart->id,
+            "cart_items" => $cart->items->map(function($item) 
+            {
+        
+                return [
+                    "id" => $item->id,
+                    "product" => ProductController::toJson($item->product),
+                    "variant_id_on_cart" => $item->variant->id,
+                    "quantity" => $item->quantity,
+                    "display_image" => $item->product->images[0]->image
+                ];
+            })
+        ];
     }
     public function fetch(){
         $userId = Auth::id();
-        $cart = ShoppingCart::with(['items' => ['product', 'variant.images', 'variant.color', 'variant.size']])
+        $cart = ShoppingCart::with(['items' => ['product.images', 'variant.size']])
             ->where('user_id', $userId)
             ->where('status', 'open')
             ->first();
         if(!$cart){
-            ShoppingCart::create(['user_id' => $userId,  'total_price' => 0, 'status' => 'open']);
-            $cart = ShoppingCart::with(['items' => ['product', 'variant.images', 'variant.color', 'variant.size']])
+            ShoppingCart::create(['user_id' => $userId, 'status' => 'open']);
+            $cart = ShoppingCart::with(['items' => ['product.images', 'variant.size']])
                 ->where('user_id', $userId)
                 ->where('status', 'open')
                 ->first();
         }
-        return [
-            "id" => $cart->id,
-            "total_price" => $cart->total_price,
-            "items" => $cart->items->map(function($item)
-            {
-                return [
-                    "product_id" => $item->product->id,
-                    "product_name" => $item->product->name,
-                    "price"=>$item->product->price,
-                    "variant_id" => $item->variant->id,
-                    "color" =>$item->variant->color->color_name,
-                    "size"=> $item->variant->size->size_name,
-                    "stock" => $item->variant->stock,
-                    "quantity" => $item->quantity,
-                    "display_image" => $item->variant->images[0]->image
-                ];
-            })
-        ];
+       return $cart;
     }
 
     public function update(Request $request) {
         $validated = $request->validate([
             'id' => ['required'],
-            'product_id' => ['exists:products,id'],
-            'color' => ['string'],
             'quantity'=> ['integer'],
-            'size' => ['string']
+            'variant_id' => ['exists:product_variants,id'],
         ]);
         
-        $cartId = $validated['id'];
-        $quantity = array_key_exists('quantity', $validated);
-        $size = array_key_exists('size', $validated);
-        $color = array_key_exists('color', $validated);
-        $cartItem = ShoppingCartItem::find( $cartId);
-        
-        if($quantity){
-            $cartItem->update(['quantity'=>$validated['quantity']]);
-        }
-        if($size && $color){
-            $newVariant = ProductVariant::where('product_id', $validated['product_id'])
-            ->where('size', $validated['size'])->where('color',$validated['color'])->first();
-            if($newVariant){
-                $cartItem->variant_id = $newVariant->id;
-                $cartItem->quantity = 1;
-                $cartItem->save();
+        $cartItem = ShoppingCartItem::find( $validated['id']);     
+        $cart = $this->fetch();
+
+        $inCart = ShoppingCartItem::where('shopping_cart_id', $cart->id)->where('variant_id', $validated['variant_id'])->get();
+        if(count($inCart) == 1){
+            $item = $inCart->first();
+            if($cartItem->variant->id != $item->variant->id){
+                $variant = ProductVariant::find($item->variant->id);  
+                if($item->quantity+1 <= $variant->stock){
+                    $item->quantity = $item->quantity+1;
+                    $item->save();
+                }
+                $cartItem->delete();
+                return redirect()->back();
             }
+            
+                // return response()->json(['c' => 'ere']);
+            $cartItem->quantity = $validated['quantity'];
+            $cartItem->save();
+            return redirect()->back();
         }
+        
+        $variant = ProductVariant::find($validated['variant_id']);
+        $cartItem->variant_id = $variant->id;
+        $cartItem->quantity = 1;
+        $cartItem->save();
+        
         return redirect()->back();
     }
 
     public function getCart(){
         $cart = $this->fetch();
-        return Inertia::render('Dynamic/ShoppingCart', ['cart' => $cart]);
+        return Inertia::render('Dynamic/ShoppingCart', ['cart' => $this->toJson($cart)]);
     }
 
     public function addToCart(Request $request){
@@ -89,9 +92,7 @@ class ShoppingCartController extends Controller
         $product_id = $request->input('product_id');
         $variant_id = $request->input('variant_id');
         $quantity = $request->input('quantity');
-        $price = $request->input('price');
         $cart = $this->fetch();
-        $cart->update(['total_price' => $cart->total_price + (((float)$price)*$quantity)]);
 
         $item = ShoppingCartItem::where('shopping_cart_id', $cart->id)
             ->where('product_id', $product_id)
@@ -99,7 +100,10 @@ class ShoppingCartController extends Controller
             ->first();
 
         if($item){
-            $item->update(['quantity' => $item->quantity + $quantity]);
+            if($item->quantity+$quantity <= $item->variant->stock){
+                $item->quantity = $item->quantity + $quantity;
+                $item->save();
+            }
         }
         else{
             ShoppingCartItem::create(

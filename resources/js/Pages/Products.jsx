@@ -10,27 +10,21 @@ import Navbar from "../Elements/Navbar";
     price: number
     gender: enum ('M', 'F', 'Unisex')
     type: enum ('shirt', 'pants')
-    variants: Variant[]
+    sizes: Variant[]
+    images: string[]
  }
 
  Variant = {
-    color: string
-    sizes: Size[]
-    images: Image[]
+    variant_id: string
+    size: string
+    stock: number
  }
 
-  Size = {
-    variant_id: number
-    size_name: string
-    stock: number
-  }
-
-  Image = {
-    image: string
-  }
 */
 
 export default function Products({ products }) {
+    console.log(products);
+
     return (
         <>
             <Head title="Products" />
