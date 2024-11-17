@@ -66,9 +66,7 @@ class ShoppingCartController extends Controller
                 }
                 $cartItem->delete();
                 return redirect()->back();
-            }
-            
-                // return response()->json(['c' => 'ere']);
+            }            
             $cartItem->quantity = $validated['quantity'];
             $cartItem->save();
             return redirect()->back();

@@ -20,7 +20,6 @@ Route::get('/', function () {
 
 Route::controller(ProductController::class)->group(
     function () {
-        Route::get('/api/v1/products/{id}', 'getAsJson')->name('products.json');
         Route::get('/products', 'list')->name('products');
         Route::get('/products/{id}', 'get')->name('products.get');
         Route::post('/products/add', 'add')->name('products.add');
