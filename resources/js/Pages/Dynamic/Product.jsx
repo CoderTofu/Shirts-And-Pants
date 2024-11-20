@@ -94,7 +94,11 @@ export default function Product({ product }) {
                         <p>{product.description}</p>
                         <div className="items-center mt-5 space-y-2">
                             <div className="flex flex-row space-x-5">
-                                <select value={data.size} onChange={changeSize}>
+                                <select
+                                    value={data.size}
+                                    onChange={changeSize}
+                                    className="cursor-pointer"
+                                >
                                     {product.sizes.map((size, index) => {
                                         return (
                                             <option
@@ -111,7 +115,7 @@ export default function Product({ product }) {
                                     min="1"
                                     value={Number(data.quantity)}
                                     onChange={changeQty}
-                                    className="max-w-20"
+                                    className="max-w-20 cursor-pointer"
                                 />
                             </div>
                             <PrimaryButton onClick={submit}>

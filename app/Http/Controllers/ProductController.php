@@ -38,7 +38,7 @@ class ProductController extends Controller
         $response = $products->map(function ($product) { 
             return $this->toJson($product); 
         });
-
+        
         return Inertia::render('Products', [ 
             'products' => $response
         ]);
