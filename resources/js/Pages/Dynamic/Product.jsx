@@ -3,6 +3,7 @@ import { Head, useForm, router } from "@inertiajs/react";
 import Navbar from "@/Elements/Navbar";
 import PrimaryButton from "@/Elements/PrimaryButton";
 import { useEffect, useState } from "react";
+import Footer from "./../../Elements/Footer";
 
 /*
  Product = {
@@ -65,16 +66,21 @@ export default function Product({ product }) {
         post(`/shopping-cart/add-to-cart`);
     };
 
+    const buy = (e) => {
+        e.preventDefault();
+        post(`/shopping-cart/add-to-cart`);
+    };
+
     return (
         <>
             <Head title={product.name} />
             <Navbar />
-            <div className="flex flex-col justify-center mt-[15vh] overflow-y-auto items-center">
-                <div className="flex flex-row space-x-[15vw]">
-                    <div className="flex flex-col space-y-5">
+            <div className="flex flex-col justify-start pt-[10vh] pb-[20vh] overflow-y-auto items-center">
+                <div className="pl-[200px] flex flex-row justify-start  w-full">
+                    <div className="flex flex-col space-y-5 ">
                         <div className="max-w-[22vw]">
                             <img
-                                className="w-max"
+                                className="w-auto h-[60vh] object-cover border-black border-solid border"
                                 src={`/assets/products/${selectedImage}`}
                             />
                         </div>
@@ -89,42 +95,67 @@ export default function Product({ product }) {
                             ))}
                         </div>
                     </div>
-                    <div className="flex flex-col justify-center">
-                        <h1>{product.name}</h1>
-                        <p>{product.description}</p>
-                        <div className="items-center mt-5 space-y-2">
-                            <div className="flex flex-row space-x-5">
-                                <select
-                                    value={data.size}
-                                    onChange={changeSize}
-                                    className="cursor-pointer"
-                                >
-                                    {product.sizes.map((size, index) => {
-                                        return (
-                                            <option
-                                                key={index}
-                                                value={size.size}
-                                            >
-                                                {size.size}
-                                            </option>
-                                        );
-                                    })}
-                                </select>
-                                <input
-                                    type="number"
-                                    min="1"
-                                    value={Number(data.quantity)}
-                                    onChange={changeQty}
-                                    className="max-w-20 cursor-pointer"
-                                />
+                    <div className="pl-[50px] flex flex-col justify-center">
+                        <p className="albert-sans text-2xl font-thin">
+                            SHIRTS & PANTS
+                        </p>
+                        <h1 className="albert-sans font-bold text-5xl">
+                            {product.name}
+                        </h1>
+                        <p className="albert-sans p-5 pl-0">
+                            {product.description}
+                        </p>
+                        <div className="items-center ">
+                            <div className="flex flex-col space-y-5">
+                                <div>
+                                    <h4 className="albert-sans text-base font-light pb-1">
+                                        Size:
+                                    </h4>
+                                    <select
+                                        value={data.size}
+                                        onChange={changeSize}
+                                        className="cursor-pointer"
+                                    >
+                                        {product.sizes.map((size, index) => {
+                                            return (
+                                                <option
+                                                    key={index}
+                                                    value={size.size}
+                                                >
+                                                    {size.size}
+                                                </option>
+                                            );
+                                        })}
+                                    </select>
+                                </div>
+                                <div>
+                                    <h4 className="albert-sans text-base font-light pb-1">
+                                        Price:
+                                    </h4>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        value={Number(data.quantity)}
+                                        onChange={changeQty}
+                                        className="max-w-20 cursor-pointer"
+                                    />
+                                </div>
                             </div>
-                            <PrimaryButton onClick={submit}>
+                            <PrimaryButton
+                                onClick={submit}
+                                className="mt-[20px] mr-3"
+                            >
                                 Add to cart
+                            </PrimaryButton>
+
+                            <PrimaryButton onClick={buy} className="mt-[20px]">
+                                Buy now
                             </PrimaryButton>
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }
