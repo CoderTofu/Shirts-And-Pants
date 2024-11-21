@@ -33,7 +33,7 @@
 
 .bg-form {
     /* For login and register form */
-    background-color: #56524f;
+    background-color: hsl(26, 4%, 22%);
 }
 
 .input-bg-form {
