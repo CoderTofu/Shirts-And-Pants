@@ -3,7 +3,6 @@ import Dropdown from "../Elements/Dropdown";
 
 export default function Navbar({ auth }) {
     const user = usePage().props.auth.user;
-
     return (
         <div className="flex justify-around bg-customGray align-middle p-3">
             <nav className="-mx-3 flex items-center justify-center">
@@ -50,6 +49,11 @@ export default function Navbar({ auth }) {
                                 <Dropdown.Link href={route("profile.edit")}>
                                     Profile
                                 </Dropdown.Link>
+                                {user.is_admin == 1 && (
+                                    <Dropdown.Link href={route("dashboard")}>
+                                        Dashboard
+                                    </Dropdown.Link>
+                                )}
                                 <Dropdown.Link
                                     href={route("logout")}
                                     method="post"
