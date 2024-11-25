@@ -25,6 +25,7 @@ import Footer from "./../Elements/Footer";
 */
 
 export default function Products({ products }) {
+    console.log(products);
     function getProducts() {
         return products.map((product, index) => (
             <div key={index}>
