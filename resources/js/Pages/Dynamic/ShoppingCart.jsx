@@ -37,6 +37,7 @@ import PrimaryButton from "@/Elements/PrimaryButton";
 */
 
 export default function ShoppingCart({ cart }) {
+    console.log(cart);
     let total_price = 0;
     for (const item of cart.cart_items) {
         total_price += parseFloat(item.product.price * item.quantity);

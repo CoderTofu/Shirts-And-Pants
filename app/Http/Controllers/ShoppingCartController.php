@@ -115,4 +115,28 @@ class ShoppingCartController extends Controller
         }
         return redirect()->back();
     }
+
+    public function cartItemToJson($item){
+        return [
+            "id" => $item->id,
+            "product" => ProductController::toJson($item->product),
+            "variant_id_on_cart" => $item->variant->id,
+            "quantity" => $item->quantity,
+            "display_image" => $item->product->images[0]->image
+        ];
+    }
+
+    // test
+    public function buy(Request $request){
+        $items = $request->input('selected_items');
+        $selected_items = $items->map(function ($item) {
+            return ShoppingCartItem::find($item['id']);
+        });
+        $cart = $this->fetch();
+        $cart->status = 'closed';
+        $cart->items = $selected_items;
+        $cart->save();
+
+        return redirect()->back();
+    }
 }
