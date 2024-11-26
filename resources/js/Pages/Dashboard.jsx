@@ -9,13 +9,16 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChevronDown } from "lucide-react";
 
 export default function Dashboard() {
+    const [tab, setTab] = useState("ALL");
+    const [search, setSearch] = useState("");
     const [orders] = useState([
         {
             id: "XXXX",
             date: "29 Sep, 2024 at 8:19 PM",
+            customer: "John Doe",
             product: {
                 name: "PRODUCT NAME",
-                variation: "White",
+                size: "S",
                 image: "/placeholder.svg",
             },
             quantity: 1,
@@ -26,9 +29,10 @@ export default function Dashboard() {
         {
             id: "XXXX",
             date: "11 Nov, 2024 at 3:24 PM",
+            customer: "John Doe",
             product: {
                 name: "PRODUCT NAME",
-                variation: "Beige",
+                size: "XS",
                 image: "/placeholder.svg",
             },
             quantity: 1,
@@ -39,9 +43,10 @@ export default function Dashboard() {
         {
             id: "XXXX",
             date: "07 Nov, 2024 at 10:39 AM",
+            customer: "John Doe",
             product: {
                 name: "PRODUCT NAME",
-                variation: "Beige/Black",
+                size: "M",
                 image: "/placeholder.svg",
             },
             quantity: 2,
@@ -50,6 +55,29 @@ export default function Dashboard() {
             status: "Completed",
         },
     ]);
+    const filteredOrders = orders
+        .filter((order) => {
+            // Filter by status
+            if (tab === "ALL") return true;
+            if (tab === "TO SHIP" && order.status === "To ship") return true;
+            if (tab === "SHIPPING" && order.status === "Shipping") return true;
+            if (tab === "COMPLETED" && order.status === "Completed")
+                return true;
+            if (tab === "CANCELLED" && order.status === "Cancelled")
+                return true;
+            if (tab === "RETURN/REFUND" && order.status === "Return/Refund")
+                return true;
+            return false;
+        })
+        .filter((order) => {
+            // Filter by search query
+            return (
+                order.id.toLowerCase().includes(search.toLowerCase()) ||
+                order.customer.toLowerCase().includes(search.toLowerCase()) ||
+                order.product.name.toLowerCase().includes(search.toLowerCase())
+            );
+        });
+
     return (
         <AuthenticatedLayout
             header={
@@ -60,64 +88,100 @@ export default function Dashboard() {
         >
             <Head title="Dashboard" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
-                            You're logged in!
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="py-12">
+            <div className="py-12 px-[100px]">
                 <div className="p-6">
                     <h1 className="text-2xl font-semibold mb-6">Orders</h1>
 
-                    <Tabs defaultValue="all" className="mb-6">
-                        <TabsList className="grid grid-cols-7 w-full">
-                            <TabsTrigger value="all">All</TabsTrigger>
-                            <TabsTrigger value="unpaid">Unpaid</TabsTrigger>
-                            <TabsTrigger value="to-ship">To Ship</TabsTrigger>
-                            <TabsTrigger value="shipping">Shipping</TabsTrigger>
-                            <TabsTrigger value="completed">
-                                Completed
-                            </TabsTrigger>
-                            <TabsTrigger value="cancellation">
-                                Cancellation
-                            </TabsTrigger>
-                            <TabsTrigger value="return-refund">
-                                Return/Refund
-                            </TabsTrigger>
-                        </TabsList>
-                    </Tabs>
+                    <nav className="flex">
+                        <button
+                            onClick={() => {
+                                setTab("ALL");
+                            }}
+                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
+                        >
+                            All
+                        </button>
+                        <button
+                            onClick={() => {
+                                setTab("TO SHIP");
+                            }}
+                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
+                        >
+                            To Ship
+                        </button>
+                        <button
+                            onClick={() => {
+                                setTab("SHIPPING");
+                            }}
+                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
+                        >
+                            Shipping
+                        </button>
+                        <button
+                            onClick={() => {
+                                setTab("COMPLETED");
+                            }}
+                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
+                        >
+                            Completed
+                        </button>
+                        <button
+                            onClick={() => {
+                                setTab("CANCELLED");
+                            }}
+                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
+                        >
+                            Cancelled
+                        </button>
+                        <button
+                            onClick={() => {
+                                setTab("RETURN/REFUND");
+                            }}
+                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
+                        >
+                            Return/Refund
+                        </button>
+                    </nav>
 
-                    <div className="flex gap-4 mb-6">
-                        <Input placeholder="Search" className="max-w-sm" />
-                        <Button variant="outline">Filters</Button>
+                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg my-2">
+                        <div className="px-4 text-gray-900 ">
+                            <div className="flex gap-4 my-3">
+                                <Input
+                                    placeholder="Order ID..."
+                                    className="max-w-sm"
+                                    onChange={(e) => setSearch(e.target.value)}
+                                />
+                                <Button
+                                    className="py-2 px-5 hover:bg-slate-100"
+                                    variant="outline"
+                                    onClick={() => {}}
+                                >
+                                    Search ID
+                                </Button>
+                            </div>
+                        </div>
                     </div>
-
                     <div className="border rounded-lg">
-                        <div className="grid grid-cols-7 gap-4 p-4 border-b bg-muted/50 text-sm">
-                            <div className="col-span-2">Order Details</div>
-                            <div>Quantity</div>
-                            <div>Order Total</div>
-                            <div>Courier</div>
-                            <div>Status</div>
-                            <div>Actions</div>
+                        <div className="grid grid-cols-7 gap-4 p-4  text-sm">
+                            <div className="col-span-2"> </div>
+                            <div className="text-center">Quantity</div>
+                            <div className="text-center">Order Total</div>
+                            <div className="text-center">Courier</div>
+                            <div className="text-center">Status</div>
+                            <div className="text-center">Actions</div>
                         </div>
 
-                        {orders.map((order) => (
+                        {filteredOrders.map((order) => (
                             <div
                                 key={order.id + order.date}
-                                className="grid grid-cols-7 gap-4 p-4 border-b items-center text-sm"
+                                className="grid grid-cols-7 gap-4 p-4 items-center text-sm"
                             >
-                                <div className="col-span-2 flex gap-4">
-                                    <Checkbox />
+                                <div className="col-span-2 flex gap-4 items-center">
+                                    <Checkbox className="border-b border-black" />
                                     <div className="flex gap-3">
                                         <img
-                                            src={order.product.image}
-                                            alt={order.product.name}
+                                            src={`/assets/products/${order.product.image}`}
+                                            alt="Just 1 Product Image"
                                             width={60}
                                             height={60}
                                             className="bg-muted"
@@ -130,28 +194,31 @@ export default function Dashboard() {
                                                 {order.date}
                                             </div>
                                             <div className="mt-1">
-                                                {order.product.name}
-                                            </div>
-                                            <div className="text-muted-foreground text-xs">
-                                                Variation:{" "}
-                                                {order.product.variation}
+                                                Customer Name: {order.customer}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div>x{order.quantity}</div>
-                                <div>P {order.total}</div>
-                                <div>{order.courier}</div>
-                                <div>{order.status}</div>
-                                <div className="flex items-center gap-2">
-                                    <Button variant="outline" size="sm">
+                                <div className="text-center">
+                                    x{order.quantity}
+                                </div>
+                                <div className="text-center">
+                                    P {order.total}
+                                </div>
+                                <div className="text-center">
+                                    {order.courier}
+                                </div>
+                                <div className="text-center">
+                                    {order.status}
+                                </div>
+                                <div className="flex items-center gap-2 justify-center">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="hover:bg-slate-100 transition-colors duration-300"
+                                    >
                                         View Details
                                     </Button>
-                                    {order.status === "To ship" && (
-                                        <Button size="sm" variant="ghost">
-                                            <ChevronDown className="h-4 w-4" />
-                                        </Button>
-                                    )}
                                 </div>
                             </div>
                         ))}
