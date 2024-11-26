@@ -177,7 +177,6 @@ export default function Dashboard() {
                                 className="grid grid-cols-7 gap-4 p-4 items-center text-sm"
                             >
                                 <div className="col-span-2 flex gap-4 items-center">
-                                    <Checkbox className="border-b border-black" />
                                     <div className="flex gap-3">
                                         <img
                                             src={`/assets/products/${order.product.image}`}
