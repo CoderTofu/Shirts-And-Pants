@@ -53,7 +53,6 @@ export default function Products({ products }) {
                     ) /* This is a dummy data, replace this with the actual data*/
                 }
             </div>
-            <Footer />
         </>
     );
 }

@@ -9,6 +9,13 @@
     <weight>: Use a value from 100 to 900 
 */
 
+body,
+html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .league-spartan {
     font-family: "League Spartan", sans-serif;
     font-optical-sizing: auto;
@@ -47,6 +54,7 @@
 
 body {
     background-color: #eeeeee;
+    min-height: 100vh;
 }
 @layer base {
     :root {

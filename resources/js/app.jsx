@@ -4,6 +4,7 @@ import "./bootstrap";
 import { createInertiaApp } from "@inertiajs/react";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
+import Footer from "./Elements/Footer";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -17,7 +18,14 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(
+            <main className="min-h-screen flex flex-col">
+                <div className="flex-grow">
+                    <App {...props} />
+                </div>
+                <Footer />
+            </main>
+        );
     },
     progress: {
         color: "#4B5563",

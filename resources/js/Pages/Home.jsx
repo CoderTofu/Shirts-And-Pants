@@ -70,7 +70,6 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                 </CarouselContent>
                 <CarouselNext className="absolute right-5 z-20 border-none bg-white rounded cursor-pointer transition-all opacity-15 hover:opacity-100" />
             </Carousel>
-            <Footer />
         </>
     );
 }

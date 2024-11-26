@@ -102,6 +102,9 @@ export default function Product({ product }) {
                         <h1 className="albert-sans font-bold text-5xl">
                             {product.name}
                         </h1>
+                        <h4 className="albert-sans font-light text-base">
+                            P {product.price}
+                        </h4>
                         <p className="albert-sans p-5 pl-0">
                             {product.description}
                         </p>
@@ -130,7 +133,7 @@ export default function Product({ product }) {
                                 </div>
                                 <div>
                                     <h4 className="albert-sans text-base font-light pb-1">
-                                        Price:
+                                        Quantity:
                                     </h4>
                                     <input
                                         type="number"
@@ -155,7 +158,6 @@ export default function Product({ product }) {
                     </div>
                 </div>
             </div>
-            <Footer />
         </>
     );
 }
