@@ -1,8 +1,7 @@
 import { useForm } from "@inertiajs/react";
 import { useEffect, useRef, useState } from "react";
 
-export default function ShoppingCartItem({ item }) {
-    // console.log(item);
+export default function ShoppingCartItem({ item, selected, setSelected }) {
     const sizes = item.product.sizes.map((size) => size.size);
     const { data, setData, patch, processing } = useForm({
         id: item.id,
@@ -17,13 +16,24 @@ export default function ShoppingCartItem({ item }) {
     const initialRenderRef = useRef(true);
 
     useEffect(() => {
-        console.log(data);
         if (initialRenderRef.current) {
             initialRenderRef.current = false;
             return;
         }
         update();
     }, [data]);
+
+    const handleSelect = (e) => {
+        if (!selected.some((selectedItem) => selectedItem.id === item.id)) {
+            // If item is not in selected array
+            setSelected([...selected, item]);
+        } else {
+            // If item is in selected array
+            setSelected(
+                selected.filter((selectedItem) => selectedItem.id !== item.id)
+            );
+        }
+    };
 
     const handleQtyChange = (e) => {
         let value = parseInt(e.target.value, 10);
@@ -63,11 +73,15 @@ export default function ShoppingCartItem({ item }) {
     };
 
     return (
-        <div className="w-full  p-4 rounded-lg shadow-md">
+        <div className="w-full p-4 rounded-lg border-2 bg-white border-gray-300">
             <div className="flex flex-row items-center justify-between">
                 {/* Checkbox and thumb */}
                 <div className="flex justify-center items-center">
-                    <input type="checkbox" className="mr-4" />
+                    <input
+                        type="checkbox"
+                        className="mr-4"
+                        onChange={handleSelect}
+                    />
                     <img
                         className="h-[200px] w-auto object-cover rounded-md"
                         src={`/assets/products/${item.display_image}`}
@@ -84,31 +98,37 @@ export default function ShoppingCartItem({ item }) {
                 </div>
 
                 <div className="flex items-center justify-center">
-                    <select
-                        name="size"
-                        value={currentSize}
-                        onChange={handleSizeChange}
-                        className="border text-left rounded w-24 py-1 "
-                    >
-                        {sizes.map((size, index) => (
-                            <option key={index} value={size}>
-                                {size}
-                            </option>
-                        ))}
-                    </select>
+                    <div className="flex justify-center items-center">
+                        <p className="albert-sans text-sm mr-2">Sizes:</p>
+                        <select
+                            name="size"
+                            value={currentSize}
+                            onChange={handleSizeChange}
+                            className="border text-left rounded w-24 py-1 "
+                        >
+                            {sizes.map((size, index) => (
+                                <option key={index} value={size}>
+                                    {size}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
                     {/* Quantity Input */}
-                    <input
-                        className="w-16 border rounded text-center px-2 py-1"
-                        type="number"
-                        name="quantity"
-                        onChange={handleQtyChange}
-                        value={data.quantity}
-                        min="1"
-                    />
+                    <div className=" ml-10 flex justify-center items-center">
+                        <p className="albert-sans text-sm mr-2">Quantity:</p>
+                        <input
+                            className="w-16 border rounded text-center px-2 py-1"
+                            type="number"
+                            name="quantity"
+                            onChange={handleQtyChange}
+                            value={data.quantity}
+                            min="1"
+                        />
+                    </div>
 
                     {/* Total Price */}
-                    <p className="ml-4 font-bold">
+                    <p className="ml-10 font-bold">
                         P{" "}
                         {(
                             Number(item.product.price) * Number(item.quantity)
