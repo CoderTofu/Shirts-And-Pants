@@ -4,24 +4,23 @@ import { Head } from "@inertiajs/react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChevronDown } from "lucide-react";
 
 export default function Dashboard() {
     const [tab, setTab] = useState("ALL");
     const [search, setSearch] = useState("");
-    const [orders] = useState([
+    const orders = [
         {
             id: "XXXX",
             date: "29 Sep, 2024 at 8:19 PM",
             customer: "John Doe",
-            product: {
-                name: "PRODUCT NAME",
-                size: "S",
-                image: "/placeholder.svg",
-            },
-            quantity: 1,
+            products: [
+                {
+                    name: "PRODUCT NAME",
+                    size: "XS",
+                    image: "/placeholder.svg",
+                    quantity: 1,
+                },
+            ],
             total: 200,
             courier: "J&T Express",
             status: "Cancelled",
@@ -30,12 +29,14 @@ export default function Dashboard() {
             id: "XXXX",
             date: "11 Nov, 2024 at 3:24 PM",
             customer: "John Doe",
-            product: {
-                name: "PRODUCT NAME",
-                size: "XS",
-                image: "/placeholder.svg",
-            },
-            quantity: 1,
+            products: [
+                {
+                    name: "PRODUCT NAME",
+                    size: "XS",
+                    image: "/placeholder.svg",
+                    quantity: 2,
+                },
+            ],
             total: 600,
             courier: "J&T Express",
             status: "To ship",
@@ -44,17 +45,19 @@ export default function Dashboard() {
             id: "XXXX",
             date: "07 Nov, 2024 at 10:39 AM",
             customer: "John Doe",
-            product: {
-                name: "PRODUCT NAME",
-                size: "M",
-                image: "/placeholder.svg",
-            },
-            quantity: 2,
+            products: [
+                {
+                    name: "PRODUCT NAME",
+                    size: "XS",
+                    image: "/placeholder.svg",
+                    quantity: 2,
+                },
+            ],
             total: 400,
             courier: "J&T Express",
             status: "Completed",
         },
-    ]);
+    ];
     const filteredOrders = orders
         .filter((order) => {
             // Filter by status
@@ -88,7 +91,7 @@ export default function Dashboard() {
         >
             <Head title="Dashboard" />
 
-            <div className="py-12 px-[100px]">
+            <div className="py-12 px-[100px] albert-sans">
                 <div className="p-6">
                     <h1 className="text-2xl font-semibold mb-6">Orders</h1>
 
@@ -162,11 +165,9 @@ export default function Dashboard() {
                         </div>
                     </div>
                     <div className="border rounded-lg">
-                        <div className="grid grid-cols-7 gap-4 p-4  text-sm">
+                        <div className="grid grid-cols-5 gap-4 p-4  text-sm">
                             <div className="col-span-2"> </div>
-                            <div className="text-center">Quantity</div>
                             <div className="text-center">Order Total</div>
-                            <div className="text-center">Courier</div>
                             <div className="text-center">Status</div>
                             <div className="text-center">Actions</div>
                         </div>
@@ -174,12 +175,12 @@ export default function Dashboard() {
                         {filteredOrders.map((order) => (
                             <div
                                 key={order.id + order.date}
-                                className="grid grid-cols-7 gap-4 p-4 items-center text-sm"
+                                className="grid grid-cols-5 gap-4 p-4 items-center text-sm"
                             >
                                 <div className="col-span-2 flex gap-4 items-center">
                                     <div className="flex gap-3">
                                         <img
-                                            src={`/assets/products/${order.product.image}`}
+                                            src={`/assets/products/${order.products[0].image}`}
                                             alt="Just 1 Product Image"
                                             width={60}
                                             height={60}
@@ -199,13 +200,7 @@ export default function Dashboard() {
                                     </div>
                                 </div>
                                 <div className="text-center">
-                                    x{order.quantity}
-                                </div>
-                                <div className="text-center">
                                     P {order.total}
-                                </div>
-                                <div className="text-center">
-                                    {order.courier}
                                 </div>
                                 <div className="text-center">
                                     {order.status}
@@ -214,7 +209,7 @@ export default function Dashboard() {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="hover:bg-slate-100 transition-colors duration-300"
+                                        className="hover:bg-slate-100 bg-slate-200 transition-colors duration-300"
                                     >
                                         View Details
                                     </Button>

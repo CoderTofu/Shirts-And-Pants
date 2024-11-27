@@ -42,10 +42,21 @@ export default function ShoppingCartItem({ item, selected, setSelected }) {
         );
 
         if (value >= variant.stock) {
-            setData({ ...data, quantity: variant.stock });
-        } else if (value) {
-            setData({ ...data, quantity: value });
+            value = variant.stock;
+        } else if (!value || value < 1) {
+            value = 1;
         }
+
+        setData({ ...data, quantity: value });
+
+        // Update the selected item quantity in the parent state
+        setSelected((prevSelected) =>
+            prevSelected.map((selectedItem) =>
+                selectedItem.id === item.id
+                    ? { ...selectedItem, quantity: value }
+                    : selectedItem
+            )
+        );
     };
 
     const handleSizeChange = (e) => {
