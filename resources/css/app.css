@@ -30,6 +30,10 @@ html {
     font-style: normal;
 }
 
+.text-customGray {
+    color: #56524f;
+}
+
 .bg-customGray {
     background-color: #e6e6e4;
 }

@@ -66,4 +66,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+route::get('/order', function(){ // Temporary route for testing
+    return Inertia::render('Dynamic/Order');
+});
+
+route::get('/checkout', function(){ // Temporary route for testing
+    return Inertia::render('Dynamic/Checkout');
+});
+
 require __DIR__ . '/auth.php';
