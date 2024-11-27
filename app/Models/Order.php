@@ -7,20 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $attributes = [
-        'status' => 'to ship',
+        'status' => 'To ship',
     ];
 
     protected $fillable = [
         'user_id',
         'status',
-    ];
-
-    protected $hidden = [
-        'created_at',
-        'updated_at',
+        'total'
     ];
 
     public function items(){
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
+
+    public function jsonify(){
+        return ['id' => $this->id,
+        'total' => $this->total,
+        'status' => $this->status, 
+        'date' => $this->updated_at,
+        'products' => $this->items->map(
+            function ($item) {
+                return $item->jsonify();
+         })
+        ]; 
+    }
+
 }

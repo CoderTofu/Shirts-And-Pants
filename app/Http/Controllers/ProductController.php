@@ -10,33 +10,11 @@ use Inertia\Inertia;
 class ProductController extends Controller
 {
 
-    public static function toJson($product){
-        return [
-            'id' => $product->id,
-            'name' => $product->name,
-            'description' => $product->description,
-            'type' => $product->type,
-            'gender' => $product->gender,
-            'price' => $product->price,
-            'display_image' => $product->images[0]->image,
-            'images' => $product->images->map(function ($image) {
-                return 
-                    $image->image;
-            }),
-            'sizes' => $product->variants->map(function ($variant) {
-                return [
-                    "variant_id" => $variant->id,
-                    "size" => $variant->size->size_name,
-                    "stock" => $variant->stock
-                ];
-            })
-        ];    
-    }
     public function list(Request $request)
     {
         $products = Product::with(['variants.size', 'images'])->get();
         $response = $products->map(function ($product) { 
-            return $this->toJson($product); 
+            return $product->jsonify(); 
         });
         
         return Inertia::render('Products', [ 
@@ -65,12 +43,12 @@ class ProductController extends Controller
             ]);
         }
         
-        return Inertia::render('Dynamic/Product', ['product' => $this->toJson($product)]);
+        return Inertia::render('Dynamic/Product', ['product' => $product->jsonify()]);
     }
 
     public function getAsJson(int $id){
         $product = Product::with(['images', 'variants.size'])->find($id);
-        return response()->json($this->toJson($product));
+        return response()->json($product->jsonify());
     }
     public function destroy(Request $request, int $id): JsonResponse
     {

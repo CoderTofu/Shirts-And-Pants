@@ -26,4 +26,11 @@ class ProductVariant extends Model
     public function size() {
         return $this->belongsTo(Size::class, 'size_id', 'id');
     }
+
+    public function jsonify() {
+        return [
+            "id" => $this->id,
+            "size" => $this->size->size_name
+        ];
+    }
 }

@@ -13,7 +13,11 @@ class OrderItem extends Model
     public function item(){
         return $this->belongsTo(ShoppingCartItem::class, 'shopping_cart_item_id', 'id');
     }
-    public function cart(){
+    public function order(){
         return $this->belongsTo(Order::class, 'order_id', 'id');
+    }
+
+    public function jsonify(){
+        return ['id'=>$this->id, 'order_id' => $this->order_id, 'product' => $this->item->product->jsonify(), 'variant' => $this->item->variant->jsonify(), 'quantity' => $this->item->quantity];
     }
 }
