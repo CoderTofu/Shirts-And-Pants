@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $attributes = [
-        'status' => 'To ship',
+        'status' => 'to ship',
     ];
 
     protected $fillable = [
-        'shopping_cart_id',
+        'user_id',
         'status',
     ];
 
@@ -20,8 +20,7 @@ class Order extends Model
         'updated_at',
     ];
 
-    public function cart()
-    {
-        return $this->belongsTo(ShoppingCart::class, 'shopping_cart_id', 'id');
+    public function items(){
+        return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 }

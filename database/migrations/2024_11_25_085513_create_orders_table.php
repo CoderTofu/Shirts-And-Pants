@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('shopping_cart_id');
-            $table->string('status');
+            $table->unsignedBigInteger('user_id');
+            $table->enum('status', ['to ship', 'shipping', 'completed', 'cancelled'])->default('to ship');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

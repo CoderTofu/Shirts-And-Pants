@@ -26,6 +26,7 @@ import Footer from "./../../Elements/Footer";
 */
 
 export default function Product({ product }) {
+    console.log(product);
     const images = product.images;
     const [selectedImage, setSelectedImage] = useState(product.display_image);
     const { data, setData, post, processing } = useForm({
@@ -64,6 +65,10 @@ export default function Product({ product }) {
     const submit = (e) => {
         e.preventDefault();
         post(`/shopping-cart/add-to-cart`);
+    };
+
+    const getStock = () => {
+        return product.sizes.find((size) => size.size == data.size).stock;
     };
 
     const buy = (e) => {
@@ -146,12 +151,17 @@ export default function Product({ product }) {
                             </div>
                             <PrimaryButton
                                 onClick={submit}
+                                disabled={getStock() === 0}
                                 className="mt-[20px] mr-3"
                             >
                                 Add to cart
                             </PrimaryButton>
 
-                            <PrimaryButton onClick={buy} className="mt-[20px]">
+                            <PrimaryButton
+                                disabled={getStock() === 0}
+                                onClick={buy}
+                                className="mt-[20px]"
+                            >
                                 Buy now
                             </PrimaryButton>
                         </div>

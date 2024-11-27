@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrderItem;
 use App\Models\ShoppingCart;
 use App\Models\ShoppingCartItem;
 use App\Models\ProductVariant;
-use App\Models\Product;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -122,21 +123,22 @@ class ShoppingCartController extends Controller
             "product" => ProductController::toJson($item->product),
             "variant_id_on_cart" => $item->variant->id,
             "quantity" => $item->quantity,
-            "display_image" => $item->product->images[0]->image
+            'display_image' => $item->product->display_image
         ];
     }
 
-    // test
-    public function buy(Request $request){
+    public function checkout(Request $request){
+        $order = Order::create(['user_id' => Auth::id()]);
         $items = $request->input('selected_items');
-        $selected_items = $items->map(function ($item) {
-            return ShoppingCartItem::find($item['id']);
-        });
-        $cart = $this->fetch();
-        $cart->status = 'closed';
-        $cart->items = $selected_items;
-        $cart->save();
+        foreach($items as $item){
+          OrderItem::create(['order_id' => $order->id, 'shopping_cart_item_id' => $item['id']]);
+          $variant = ProductVariant::find($item['variant_id_on_cart']);
+          $variant->stock--;
+          $variant->save();
+          ShoppingCartItem::destroy($item['id']);
 
-        return redirect()->back();
+        }
+
+        return Inertia::render('Dynamic/Checkout', ['order'=>$order]);
     }
 }

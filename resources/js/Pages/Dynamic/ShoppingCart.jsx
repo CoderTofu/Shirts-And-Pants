@@ -1,4 +1,4 @@
-import { Head, useForm } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import Navbar from "@/Elements/Navbar";
 import ShoppingCartItem from "./ShoppingCartItem";
 import PrimaryButton from "@/Elements/PrimaryButton";
@@ -45,22 +45,32 @@ const dummyUser = {
 };
 
 export default function ShoppingCart({ cart }) {
+    const user = usePage().props.auth.user;
+    console.log(user);
     let [selected, setSelected] = useState([]);
     let [total_price, setTotal] = useState(0);
     const { data, setData, post, processing } = useForm({
-        id: cart.id,
+        selected_items: [],
         total_price: total_price,
     }); // for checkout
 
     useEffect(() => {
-        setTotal(0);
-        for (const item of selected) {
-            setTotal(
-                total_price + parseFloat(item.product.price * item.quantity)
-            );
-        }
-    }, [selected, setSelected, data]);
+        let newTotal = 0;
+        selected.forEach((item) => {
+            newTotal += parseFloat(item.product.price * item.quantity);
+        });
+        setTotal(newTotal); // Update total price based on selected items
+        setData({ ...data, selected_items: selected, total_price: newTotal });
+    }, [selected]); // Run this effect whenever 'selected' changes
 
+    useEffect(() => {
+        console.log(data); // This will log the updated 'data' with total_price
+    }, [data]);
+
+    const checkout = (e) => {
+        e.preventDefault();
+        post("/shopping-cart/checkout");
+    };
     return (
         <>
             <Head title="Shopping Cart" />
@@ -93,7 +103,10 @@ export default function ShoppingCart({ cart }) {
                             <p className="text-2xl font-bold">
                                 Total: P {total_price.toFixed(2)}
                             </p>
-                            <PrimaryButton>
+                            <PrimaryButton
+                                disabled={selected.length === 0}
+                                onClick={checkout}
+                            >
                                 <p className="albert-sans text-lg font-bold">
                                     Checkout
                                 </p>
@@ -110,25 +123,25 @@ export default function ShoppingCart({ cart }) {
                                 <h4 className="text-sm text-customGray">
                                     Name
                                 </h4>
-                                <h3 className="text-lg">{dummyUser.name}</h3>
+                                <h3 className="text-lg">{user.name}</h3>
                             </div>
                             <div className="mb-2">
                                 <h4 className="text-sm text-customGray">
                                     Email
                                 </h4>
-                                <h3 className="text-lg">{dummyUser.email}</h3>
+                                <h3 className="text-lg">{user.email}</h3>
                             </div>
                             <div className="mb-2">
                                 <h4 className="text-sm text-customGray">
                                     Phone
                                 </h4>
-                                <h3 className="text-lg">{dummyUser.phone}</h3>
+                                <h3 className="text-lg">{user.phone}</h3>
                             </div>
                             <div className="mb-2">
                                 <h4 className="text-sm text-customGray">
                                     Shipping Address
                                 </h4>
-                                <h3 className="text-lg">{dummyUser.address}</h3>
+                                <h3 className="text-lg">{user.address}</h3>
                             </div>
                         </div>
                     </div>

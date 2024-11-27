@@ -36,7 +36,7 @@ const dummyCustomer = {
     address: "1234 Main St, Suburb, City",
 };
 
-export default function Order() {
+export default function Order({ order }) {
     return (
         <>
             <Navbar />
