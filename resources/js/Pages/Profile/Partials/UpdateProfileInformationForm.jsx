@@ -16,6 +16,8 @@ export default function UpdateProfileInformation({
         useForm({
             name: user.name,
             email: user.email,
+            phone: user.phone || "",
+            address: user.address || "",
         });
 
     const submit = (e) => {
@@ -67,6 +69,37 @@ export default function UpdateProfileInformation({
                     />
 
                     <InputError className="mt-2" message={errors.email} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="phone" value="Phone Number" />
+
+                    <TextInput
+                        id="phone"
+                        type="tel"
+                        className="mt-1 block w-full"
+                        value={data.phone}
+                        onChange={(e) => setData("phone", e.target.value)}
+                        required
+                        autoComplete="tel"
+                    />
+
+                    <InputError className="mt-2" message={errors.phone} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="address" value="Address" />
+
+                    <TextInput
+                        id="address"
+                        className="mt-1 block w-full"
+                        value={data.address}
+                        onChange={(e) => setData("address", e.target.value)}
+                        required
+                        autoComplete="street-address"
+                    />
+
+                    <InputError className="mt-2" message={errors.address} />
                 </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (
