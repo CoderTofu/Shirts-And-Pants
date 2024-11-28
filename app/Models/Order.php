@@ -11,17 +11,25 @@ class Order extends Model
     ];
 
     protected $fillable = [
-        'shopping_cart_id',
+        'user_id',
         'status',
+        'total'
     ];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
-
-    public function cart()
-    {
-        return $this->belongsTo(ShoppingCart::class, 'shopping_cart_id', 'id');
+    public function items(){
+        return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
+
+    public function jsonify(){
+        return ['id' => $this->id,
+        'total' => $this->total,
+        'status' => $this->status, 
+        'date' => $this->updated_at,
+        'products' => $this->items->map(
+            function ($item) {
+                return $item->jsonify();
+         })
+        ]; 
+    }
+
 }

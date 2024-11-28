@@ -1,9 +1,8 @@
-import { Head, useForm } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import Navbar from "@/Elements/Navbar";
 import ShoppingCartItem from "./ShoppingCartItem";
 import PrimaryButton from "@/Elements/PrimaryButton";
 import { useEffect, useState } from "react";
-import Order from "./Order";
 
 /* 
     Cart = {
@@ -38,71 +37,13 @@ import Order from "./Order";
     }
 */
 
-const dummyUser = {
-    name: "John Doe",
-    email: "johndoe@gmail.com",
-    phone: "081234567890",
-    address: "1234 Main St, Suburb, City",
-};
-
-const orders = [
-    {
-        id: "XXXX",
-        date: "29 Sep, 2024 at 8:19 PM",
-        customer: "John Doe",
-        products: [
-            {
-                name: "PRODUCT NAME",
-                size: "XS",
-                image: "/placeholder.svg",
-                quantity: 1,
-            },
-        ],
-        total: 200,
-        courier: "J&T Express",
-        status: "Cancelled",
-    },
-    {
-        id: "XXXX",
-        date: "11 Nov, 2024 at 3:24 PM",
-        customer: "John Doe",
-        products: [
-            {
-                name: "PRODUCT NAME",
-                size: "XS",
-                image: "/placeholder.svg",
-                quantity: 2,
-            },
-        ],
-        total: 600,
-        courier: "J&T Express",
-        status: "To ship",
-    },
-    {
-        id: "XXXX",
-        date: "07 Nov, 2024 at 10:39 AM",
-        customer: "John Doe",
-        products: [
-            {
-                name: "PRODUCT NAME",
-                size: "XS",
-                image: "/placeholder.svg",
-                quantity: 2,
-            },
-        ],
-        total: 400,
-        courier: "J&T Express",
-        status: "Completed",
-    },
-];
-
-export default function ShoppingCart({ cart }) {
+export default function ShoppingCart({ cart, orders }) {
+    const user = usePage().props.auth.user;
     let [tab, setTab] = useState("Cart");
-
     let [selected, setSelected] = useState([]);
     let [total_price, setTotal] = useState(0);
     const { data, setData, post, processing } = useForm({
-        id: cart.id,
+        selected_items: [],
         total_price: total_price,
     }); // for checkout
     const [visibleOrder, setVisibleOrder] = useState(null);
@@ -112,12 +53,21 @@ export default function ShoppingCart({ cart }) {
     };
     useEffect(() => {
         let newTotal = 0;
-        for (const item of selected) {
+        selected.forEach((item) => {
             newTotal += parseFloat(item.product.price * item.quantity);
-        }
-        setTotal(newTotal);
-    }, [selected]);
+        });
+        setTotal(newTotal); // Update total price based on selected items
+        setData({ ...data, selected_items: selected, total_price: newTotal });
+    }, [selected]); // Run this effect whenever 'selected' changes
 
+    useEffect(() => {
+        console.log(data); // This will log the updated 'data' with total_price
+    }, [data]);
+
+    const checkout = (e) => {
+        e.preventDefault();
+        post("/shopping-cart/checkout");
+    };
     return (
         <>
             <Head title="Shopping Cart" />
@@ -170,7 +120,10 @@ export default function ShoppingCart({ cart }) {
                                     <p className="text-2xl font-bold">
                                         Total: P {total_price.toFixed(2)}
                                     </p>
-                                    <PrimaryButton>
+                                    <PrimaryButton
+                                        onClick={checkout}
+                                        disabled={selected.length === 0}
+                                    >
                                         <p className="albert-sans text-lg font-bold">
                                             Checkout
                                         </p>
@@ -190,7 +143,9 @@ export default function ShoppingCart({ cart }) {
                                                     Order #{order.id}
                                                 </h3>
                                                 <p className="text-gray-500 text-sm">
-                                                    {order.date}
+                                                    {new Date(
+                                                        order.date
+                                                    ).toUTCString()}
                                                 </p>
                                                 <p className="font-semibold text-xl text-gray-700">
                                                     P {order.total}
@@ -232,23 +187,32 @@ export default function ShoppingCart({ cart }) {
                                                         >
                                                             <img
                                                                 src={
-                                                                    product.image
+                                                                    "assets/products/" +
+                                                                    product
+                                                                        .product
+                                                                        .display_image
                                                                 }
                                                                 alt={
-                                                                    product.name
+                                                                    product
+                                                                        .product
+                                                                        .name
                                                                 }
                                                                 className="w-16 h-16 object-cover rounded-lg border"
                                                             />
                                                             <div>
                                                                 <h4 className="font-semibold text-lg">
                                                                     {
-                                                                        product.name
+                                                                        product
+                                                                            .product
+                                                                            .name
                                                                     }
                                                                 </h4>
                                                                 <p className="text-gray-500 text-sm">
                                                                     Size:{" "}
                                                                     {
-                                                                        product.size
+                                                                        product
+                                                                            .variant
+                                                                            .size
                                                                     }
                                                                 </p>
                                                                 <p className="text-gray-500 text-sm">
@@ -278,25 +242,25 @@ export default function ShoppingCart({ cart }) {
                                 <h4 className="text-sm text-customGray">
                                     Name
                                 </h4>
-                                <h3 className="text-lg">{dummyUser.name}</h3>
+                                <h3 className="text-lg">{user.name}</h3>
                             </div>
                             <div className="mb-2">
                                 <h4 className="text-sm text-customGray">
                                     Email
                                 </h4>
-                                <h3 className="text-lg">{dummyUser.email}</h3>
+                                <h3 className="text-lg">{user.email}</h3>
                             </div>
                             <div className="mb-2">
                                 <h4 className="text-sm text-customGray">
                                     Phone
                                 </h4>
-                                <h3 className="text-lg">{dummyUser.phone}</h3>
+                                <h3 className="text-lg">{user.phone}</h3>
                             </div>
                             <div className="mb-2">
                                 <h4 className="text-sm text-customGray">
                                     Shipping Address
                                 </h4>
-                                <h3 className="text-lg">{dummyUser.address}</h3>
+                                <h3 className="text-lg">{user.address}</h3>
                             </div>
                         </div>
                     </div>

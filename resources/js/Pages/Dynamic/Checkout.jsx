@@ -28,7 +28,7 @@ const order = [
     },
 ];
 
-export default function Checkout() {
+export default function Checkout({ order }) {
     return (
         <>
             <Head title="Checkout" />

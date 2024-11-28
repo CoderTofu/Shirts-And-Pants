@@ -52,6 +52,7 @@ Route::middleware('auth')->controller(ShoppingCartController::class)->group(
         Route::get('/shopping-cart', 'getCart')->name('shopping-cart');
         Route::patch('/shopping-cart', 'update')->name('shopping-cart.update');
         Route::post('/shopping-cart/add-to-cart', 'addToCart')->name('shopping-cart.add');
+        Route::post('/shopping-cart/checkout', 'checkout')->name('shopping-cart.checkout');
     }
 );
 

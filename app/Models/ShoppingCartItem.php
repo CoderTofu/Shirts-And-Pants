@@ -28,4 +28,17 @@ class ShoppingCartItem extends Model
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
+    public function order(){
+        return $this->belongsTo(OrderItem::class, 'shopping_cart_item_id', 'id');
+    }
+    public function jsonify(){
+        return [
+            "id" => $this->id,
+            "product" => $this->product->jsonify(),
+            "variant_id_on_cart" => $this->variant->id,
+            "quantity" => $this->quantity,
+            'display_image' => $this->product->display_image
+        ];
+    }
+
 }

@@ -2,33 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrderItem;
 use App\Models\ShoppingCart;
 use App\Models\ShoppingCartItem;
 use App\Models\ProductVariant;
-use App\Models\Product;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 
+
 class ShoppingCartController extends Controller
 {
-    public static function toJson($cart){
-        return [
-            "cart_id" => $cart->id,
-            "cart_items" => $cart->items->map(function($item) 
-            {
-        
-                return [
-                    "id" => $item->id,
-                    "product" => ProductController::toJson($item->product),
-                    "variant_id_on_cart" => $item->variant->id,
-                    "quantity" => $item->quantity,
-                    "display_image" => $item->product->images[0]->image
-                ];
-            })
-        ];
-    }
     public function fetch(){
         $userId = Auth::id();
         $cart = ShoppingCart::with(['items' => ['product.images', 'variant.size']])
@@ -82,7 +68,15 @@ class ShoppingCartController extends Controller
 
     public function getCart(){
         $cart = $this->fetch();
-        return Inertia::render('Dynamic/ShoppingCart', ['cart' => $this->toJson($cart)]);
+        $orders = Order::where('user_id', Auth::id())->get();
+        return Inertia::render('Dynamic/ShoppingCart', 
+        ['cart' => $cart->jsonify(), 
+                'orders' => $orders->map( 
+                function ($order)
+                { 
+                    return $order->jsonify();
+                }
+            )]);
     }
 
     public function addToCart(Request $request){
@@ -116,27 +110,31 @@ class ShoppingCartController extends Controller
         return redirect()->back();
     }
 
-    public function cartItemToJson($item){
-        return [
-            "id" => $item->id,
-            "product" => ProductController::toJson($item->product),
-            "variant_id_on_cart" => $item->variant->id,
-            "quantity" => $item->quantity,
-            "display_image" => $item->product->images[0]->image
-        ];
-    }
-
-    // test
-    public function buy(Request $request){
+    public function checkout(Request $request)
+    {
+        $order = Order::create([
+            'user_id' => Auth::id(),
+            'total' => $request->input("total_price")
+        ]);
+    
         $items = $request->input('selected_items');
-        $selected_items = $items->map(function ($item) {
-            return ShoppingCartItem::find($item['id']);
-        });
+        foreach ($items as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'shopping_cart_item_id' => $item['id']
+            ]);
+    
+            $variant = ProductVariant::find($item['variant_id_on_cart']);
+            if ($variant && $variant->stock > 0) {
+                $variant->stock--;
+                $variant->save();
+            }
+        }
+
         $cart = $this->fetch();
         $cart->status = 'closed';
-        $cart->items = $selected_items;
         $cart->save();
-
-        return redirect()->back();
+        return Inertia::render('Dynamic/Checkout', ['order' => $order]);
     }
+    
 }

@@ -32,4 +32,28 @@ class Product extends Model
     public function inCart(){
         return $this->hasMany(ShoppingCartItem::class, 'product_id', 'id');
     }
+
+    public function jsonify(){
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'type' => $this->type,
+            'gender' => $this->gender,
+            'price' => $this->price,
+            'display_image' => $this->images[0]->image,
+            'images' => $this->images->map(function ($image) {
+                return 
+                    $image->image;
+            }),
+            'sizes' => $this->variants->map(function ($variant) {
+                return [
+                    "variant_id" => $variant->id,
+                    "size" => $variant->size->size_name,
+                    "stock" => $variant->stock
+                ];
+            })
+        ];    
+    }
+
 }

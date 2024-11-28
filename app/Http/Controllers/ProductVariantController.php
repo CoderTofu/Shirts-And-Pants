@@ -10,12 +10,7 @@ use Illuminate\Http\JsonResponse;
 
 class ProductVariantController extends Controller
 {
-    public function toJson($variant) {
-        return [
-            "id" => $variant->id,
-            "size" => $variant->size_name
-        ];
-    }
+    
     public function list(Request $request): JsonResponse
     {
         $params = $request->query();
