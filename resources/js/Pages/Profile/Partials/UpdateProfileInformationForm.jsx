@@ -82,6 +82,8 @@ export default function UpdateProfileInformation({
                         onChange={(e) => setData("phone", e.target.value)}
                         required
                         autoComplete="tel"
+                        pattern="^(09)\d{9}$"
+                        title="Phone number should follow the format 09123456789"
                     />
 
                     <InputError className="mt-2" message={errors.phone} />

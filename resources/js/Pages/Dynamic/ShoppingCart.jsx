@@ -66,7 +66,18 @@ export default function ShoppingCart({ cart, orders }) {
 
     const checkout = (e) => {
         e.preventDefault();
-        post("/shopping-cart/checkout");
+        console.log(user);
+        if (
+            user.address === "" ||
+            user.address === null ||
+            user.phone === "" ||
+            user.phone === null
+        ) {
+            alert("Please update your profile information first."); // Temporary alert
+            return;
+        } else {
+            post("/shopping-cart/checkout");
+        }
     };
     return (
         <>
@@ -250,18 +261,26 @@ export default function ShoppingCart({ cart, orders }) {
                                 </h4>
                                 <h3 className="text-lg">{user.email}</h3>
                             </div>
-                            <div className="mb-2">
-                                <h4 className="text-sm text-customGray">
-                                    Phone
-                                </h4>
-                                <h3 className="text-lg">{user.phone}</h3>
-                            </div>
-                            <div className="mb-2">
-                                <h4 className="text-sm text-customGray">
-                                    Shipping Address
-                                </h4>
-                                <h3 className="text-lg">{user.address}</h3>
-                            </div>
+                            {user.phone === "" ? (
+                                <div className="mb-2">
+                                    <h4 className="text-sm text-customGray">
+                                        Phone
+                                    </h4>
+                                    <h3 className="text-lg">{user.phone}</h3>
+                                </div>
+                            ) : (
+                                ""
+                            )}
+                            {user.address === "" ? (
+                                <div className="mb-2">
+                                    <h4 className="text-sm text-customGray">
+                                        Shipping Address
+                                    </h4>
+                                    <h3 className="text-lg">{user.address}</h3>
+                                </div>
+                            ) : (
+                                ""
+                            )}
                         </div>
                     </div>
                 </div>

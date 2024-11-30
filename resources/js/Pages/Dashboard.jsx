@@ -166,7 +166,7 @@ export default function Dashboard() {
                     </div>
                     <div className="border rounded-lg">
                         <div className="grid grid-cols-5 gap-4 p-4  text-sm">
-                            <div className="col-span-2"> </div>
+                            <div className="col-span-2"></div>
                             <div className="text-center">Order Total</div>
                             <div className="text-center">Status</div>
                             <div className="text-center">Actions</div>
