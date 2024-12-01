@@ -146,4 +146,12 @@ class ShoppingCartController extends Controller
         return Inertia::render('Dynamic/OrderConfirmed', ['order' => $order]);
     }
 
+    public function destroy(Request $request){
+        $items = $request->input('selected_items');
+        foreach($items as $item){
+            ShoppingCartItem::destroy($item['id']);
+        }
+        return redirect()->back();
+    }
+
 }

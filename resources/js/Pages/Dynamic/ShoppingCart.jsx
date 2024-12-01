@@ -42,7 +42,13 @@ export default function ShoppingCart({ cart, orders }) {
     let [tab, setTab] = useState("Cart");
     let [selected, setSelected] = useState([]);
     let [total_price, setTotal] = useState(0);
-    const { data, setData, post, processing } = useForm({
+    const {
+        data,
+        setData,
+        post,
+        delete: destroy,
+        processing,
+    } = useForm({
         selected_items: [],
         total_price: total_price,
     }); // for checkout
@@ -139,6 +145,16 @@ export default function ShoppingCart({ cart, orders }) {
                                             Checkout
                                         </p>
                                     </PrimaryButton>
+                                    <button
+                                        disabled={selected.length === 0}
+                                        className="px-4 py-2 bg-red-600 text-white font-semibold rounded-md disabled:opacity-20 hover:bg-red-700 transition-colors duration-300"
+                                        onClick={() => {
+                                            destroy("/shopping-cart");
+                                            window.location.reload();
+                                        }}
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
                             </div>
                         ) : (
