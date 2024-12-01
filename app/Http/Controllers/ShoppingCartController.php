@@ -50,11 +50,17 @@ class ShoppingCartController extends Controller
             $item = $inCart->first();
             if($cartItem->variant->id != $item->variant->id){
                 $variant = ProductVariant::find($item->variant->id);  
-                if($item->quantity+$validated['quantity'] <= $variant->stock){
-                    $item->quantity = $item->quantity+$validated['quantity'];
+                if($item->quantity+1 <= $variant->stock){
+                    if($item->status !== 'closed'){
+                        $item->quantity = $item->quantity+1;
+                    }
+                    else{
+                        $item->status = 'open';
+                    }
                     $item->save();
                 }
-                $cartItem->delete();
+                $cartItem->status = 'closed';
+                $cartItem->save();
                 return redirect()->back();
             }            
             $cartItem->quantity = $validated['quantity'];
@@ -65,6 +71,7 @@ class ShoppingCartController extends Controller
         $variant = ProductVariant::find($validated['variant_id']);
         $cartItem->variant_id = $variant->id;
         $cartItem->quantity = 1;
+        $cartItem->status = 'open';
         $cartItem->save();
         
         return redirect()->back();

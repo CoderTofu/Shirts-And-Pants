@@ -8,6 +8,7 @@ export default function ShoppingCartItem({ item, selected, setSelected }) {
         quantity: item.quantity,
         variant_id: item.variant_id_on_cart,
     });
+    console.log(sizes);
 
     const [currentSize, setCurrentSize] = useState(
         item.product.sizes.find((size) => size.variant_id === data.variant_id)
@@ -75,7 +76,7 @@ export default function ShoppingCartItem({ item, selected, setSelected }) {
         patch(route("shopping-cart.update"), {
             preserveScroll: true, // Ensures the page scroll position remains the same
             onSuccess: () => {
-                console.log("Cart updated successfully!"); // Optional: add any feedback
+                window.location.reload();
             },
             onError: (errors) => {
                 console.error("Failed to update cart:", errors); // Handle errors if necessary
@@ -110,10 +111,14 @@ export default function ShoppingCartItem({ item, selected, setSelected }) {
 
                 <div className="flex items-center justify-center">
                     <div className="flex justify-center items-center">
-                        <p className="albert-sans text-sm mr-2">Sizes:</p>
-                        <p className="text-left rounded w-24 py-1">
-                            {currentSize}
-                        </p>
+                        <p className="albert-sans text-sm mr-2">Size:</p>
+                        <select value={currentSize} onChange={handleSizeChange}>
+                            {sizes.map((size, index) => (
+                                <option key={index} value={size}>
+                                    {size}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     {/* Quantity Input */}
