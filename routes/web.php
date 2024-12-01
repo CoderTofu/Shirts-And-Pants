@@ -56,6 +56,7 @@ Route::middleware('auth')->controller(ShoppingCartController::class)->group(
         Route::delete('/shopping-cart', 'destroy')->name('shopping-cart.destroy');
         Route::post('/shopping-cart/add-to-cart', 'addToCart')->name('shopping-cart.add');
         Route::post('/shopping-cart/checkout', 'checkout')->name('shopping-cart.checkout');
+        Route::post('/shopping-cart/buy', 'buy')->name('shopping-cart.buy');
         Route::post('/shopping-cart/confirm', 'confirmOrder')->name('shopping-cart.confirm');
         Route::get('/shopping-cart/checkout', 'getCart');
     }

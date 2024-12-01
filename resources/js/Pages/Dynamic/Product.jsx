@@ -26,7 +26,6 @@ import Footer from "./../../Elements/Footer";
 */
 
 export default function Product({ product }) {
-    console.log(product);
     const images = product.images;
     const [selectedImage, setSelectedImage] = useState(product.display_image);
     const { data, setData, post, processing } = useForm({
@@ -73,8 +72,12 @@ export default function Product({ product }) {
 
     const buy = (e) => {
         e.preventDefault();
-        post(`/shopping-cart/add-to-cart`);
+        post(`/shopping-cart/buy`);
     };
+
+    useEffect(() => {
+        console.log(data);
+    }, [data]);
 
     return (
         <>

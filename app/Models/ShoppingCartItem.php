@@ -42,7 +42,8 @@ class ShoppingCartItem extends Model
             "product" => $this->product->jsonify(),
             "variant_id_on_cart" => $this->variant->id,
             "quantity" => $this->quantity,
-            'display_image' => $this->product->display_image
+            'display_image' => $this->product->jsonify()['display_image'],
+            'stock' => $this->variant->stock
         ];
     }
 

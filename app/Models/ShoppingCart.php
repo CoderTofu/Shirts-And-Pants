@@ -26,13 +26,7 @@ class ShoppingCart extends Model
             "cart_items" => $this->items->map(function($item) 
             {
         
-                return [
-                    "id" => $item->id,
-                    "product" => $item->product->jsonify(),
-                    "variant_id_on_cart" => $item->variant->id,
-                    "quantity" => $item->quantity,
-                    "display_image" => $item->product->images[0]->image
-                ];
+                return $item->jsonify();
             })
         ];
     }

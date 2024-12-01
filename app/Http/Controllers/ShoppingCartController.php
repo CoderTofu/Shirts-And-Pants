@@ -35,6 +35,7 @@ class ShoppingCartController extends Controller
     }
 
     public function update(Request $request) {
+
         $validated = $request->validate([
             'id' => ['required'],
             'quantity'=> ['integer'],
@@ -49,8 +50,8 @@ class ShoppingCartController extends Controller
             $item = $inCart->first();
             if($cartItem->variant->id != $item->variant->id){
                 $variant = ProductVariant::find($item->variant->id);  
-                if($item->quantity+1 <= $variant->stock){
-                    $item->quantity = $item->quantity+1;
+                if($item->quantity+$validated['quantity'] <= $variant->stock){
+                    $item->quantity = $item->quantity+$validated['quantity'];
                     $item->save();
                 }
                 $cartItem->delete();
@@ -71,6 +72,12 @@ class ShoppingCartController extends Controller
 
     public function getCart(){
         $cart = $this->fetch();
+        foreach($cart->items as $item){
+            if($item->variant->stock <= 0){
+                $item->status = 'closed';
+                $item->save();
+            }
+        }
         $orders = Order::where('user_id', Auth::id())->get();
         return Inertia::render('Dynamic/ShoppingCart', 
         ['cart' => $cart->jsonify(), 
@@ -96,7 +103,7 @@ class ShoppingCartController extends Controller
         if($item){
             if($item->status === 'closed'){
                 $item->status = 'open';
-                $item->quantity = 1;
+                $item->quantity = $quantity;
                 $item->save();
             }
             else if($item->quantity+$quantity <= $item->variant->stock){
@@ -130,26 +137,59 @@ class ShoppingCartController extends Controller
     
         $items = $request->input('selected_items');
         foreach ($items as $item) {
+            $cart_item = ShoppingCartItem::find($item['id']);
             OrderItem::create([
                 'order_id' => $order->id,
                 'shopping_cart_item_id' => $item['id']
             ]);
             $variant = ProductVariant::find($item['variant_id_on_cart']);
             if ($variant && $variant->stock > 0) {
-                $variant->stock--;
+                $variant->stock -= $cart_item->quantity;
                 $variant->save();
             }
-            $cart_item = ShoppingCartItem::find($item['id']);
             $cart_item->status = 'closed';
             $cart_item->save();
         }
         return Inertia::render('Dynamic/OrderConfirmed', ['order' => $order]);
     }
 
+    public function buy(Request $request){
+        $product_id = $request->input('product_id');
+        $variant_id = $request->input('variant_id');
+        $quantity = $request->input('quantity');
+        $cart = $this->fetch();
+
+        $item = ShoppingCartItem::where('shopping_cart_id', $cart->id)
+            ->where('product_id', $product_id)
+            ->where('variant_id', $variant_id)
+            ->first();
+
+        if($item){
+            if($item->status === 'closed'){
+                $item->status = 'open';
+                $item->quantity = $quantity;
+                $item->save();
+            }
+        }
+        else{
+            $item = ShoppingCartItem::create(
+                [
+                    'shopping_cart_id' => $cart->id,
+                    'product_id' => $request->input('product_id'),
+                    'variant_id' => $request->input('variant_id'), 
+                    'quantity' => $request->input('quantity'), 
+                    'price' => $request->input('price')
+                ]);        
+        }   
+        return Inertia::render('Dynamic/Checkout', ['orders' => ['selected_items' => [$item->jsonify()], 'total_price' => $request->input('price')]]);
+    }
+
     public function destroy(Request $request){
         $items = $request->input('selected_items');
         foreach($items as $item){
-            ShoppingCartItem::destroy($item['id']);
+            $item = ShoppingCartItem::find($item['id']);
+            $item->status = 'closed';
+            $item->save();
         }
         return redirect()->back();
     }

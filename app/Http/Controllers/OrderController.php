@@ -24,7 +24,6 @@ class OrderController extends Controller
         $toDelete = $request->input('toDelete');
         OrderItem::destroy($toDelete);
         $order->total = $request->input('total');
-        $order->save();
-        
+        $order->save();   
     }
 }
