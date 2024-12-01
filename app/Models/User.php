@@ -51,4 +51,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function orders(){
+        return $this->hasMany(Order::class, 'user_id', 'id');
+    }
+    public function jsonify(){
+        return ['id'=>$this->id, 'name' => $this->name, 'address' => $this->address, 'phone' => $this->phone, 'email' => $this->email];
+    }
 }

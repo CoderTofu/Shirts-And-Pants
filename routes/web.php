@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\CheckAdmin;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -59,10 +61,7 @@ Route::middleware('auth')->controller(ShoppingCartController::class)->group(
     }
 );
 
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [OrderController::class, 'list'])->middleware(['auth', 'verified', CheckAdmin::class])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -70,9 +69,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-route::get('/order', function(){ // Temporary route for testing
-    return Inertia::render('Dynamic/Order');
+Route::middleware(['auth', CheckAdmin::class])->group(function (){
+    Route::get('/order/{id}', [OrderController:: class, 'get'])->name('order');
+    Route::patch('/order/{id}', [OrderController:: class, 'edit'])->name('order.edit');
+    Route::delete('/order/{id}', [OrderController:: class, 'destroy'])->name('order.destroy');
 });
+
 
 route::get('/checkout', function(){ // Temporary route for testing
     return Inertia::render('Dynamic/Checkout');

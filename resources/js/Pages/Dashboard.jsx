@@ -5,59 +5,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-export default function Dashboard() {
+export default function Dashboard({ orders }) {
     const [tab, setTab] = useState("ALL");
     const [search, setSearch] = useState("");
-    const orders = [
-        {
-            id: "XXXX",
-            date: "29 Sep, 2024 at 8:19 PM",
-            customer: "John Doe",
-            products: [
-                {
-                    name: "PRODUCT NAME",
-                    size: "XS",
-                    image: "/placeholder.svg",
-                    quantity: 1,
-                },
-            ],
-            total: 200,
-            courier: "J&T Express",
-            status: "Cancelled",
-        },
-        {
-            id: "XXXX",
-            date: "11 Nov, 2024 at 3:24 PM",
-            customer: "John Doe",
-            products: [
-                {
-                    name: "PRODUCT NAME",
-                    size: "XS",
-                    image: "/placeholder.svg",
-                    quantity: 2,
-                },
-            ],
-            total: 600,
-            courier: "J&T Express",
-            status: "To ship",
-        },
-        {
-            id: "XXXX",
-            date: "07 Nov, 2024 at 10:39 AM",
-            customer: "John Doe",
-            products: [
-                {
-                    name: "PRODUCT NAME",
-                    size: "XS",
-                    image: "/placeholder.svg",
-                    quantity: 2,
-                },
-            ],
-            total: 400,
-            courier: "J&T Express",
-            status: "Completed",
-        },
-    ];
+    console.log(orders);
     const filteredOrders = orders
         .filter((order) => {
             // Filter by status
@@ -75,9 +26,8 @@ export default function Dashboard() {
         .filter((order) => {
             // Filter by search query
             return (
-                order.id.toLowerCase().includes(search.toLowerCase()) ||
-                order.customer.toLowerCase().includes(search.toLowerCase()) ||
-                order.product.name.toLowerCase().includes(search.toLowerCase())
+                String(order.id).toLowerCase().includes(search.toLowerCase()) ||
+                order.customer.name.toLowerCase().includes(search.toLowerCase())
             );
         });
 
@@ -180,7 +130,7 @@ export default function Dashboard() {
                                 <div className="col-span-2 flex gap-4 items-center">
                                     <div className="flex gap-3">
                                         <img
-                                            src={`/assets/products/${order.products[0].image}`}
+                                            src={`/assets/products/${order.products[0].product.display_image}`}
                                             alt="Just 1 Product Image"
                                             width={60}
                                             height={60}
@@ -191,10 +141,13 @@ export default function Dashboard() {
                                                 Order #{order.id}
                                             </div>
                                             <div className="text-muted-foreground text-xs">
-                                                {order.date}
+                                                {new Date(
+                                                    order.date
+                                                ).toUTCString()}
                                             </div>
                                             <div className="mt-1">
-                                                Customer Name: {order.customer}
+                                                Customer Name:{" "}
+                                                {order.customer.name}
                                             </div>
                                         </div>
                                     </div>
@@ -211,7 +164,9 @@ export default function Dashboard() {
                                         size="sm"
                                         className="hover:bg-slate-100 bg-slate-200 transition-colors duration-300"
                                     >
-                                        View Details
+                                        <a href={`/order/${order.id}`}>
+                                            View Details
+                                        </a>
                                     </Button>
                                 </div>
                             </div>
