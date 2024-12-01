@@ -2,6 +2,7 @@ import { Head } from "@inertiajs/react";
 import Navbar from "../Elements/Navbar";
 import { useState } from "react";
 import Footer from "../Elements/Footer";
+import Alert from "../Elements/Alert";
 
 /*
  Product = {
@@ -27,6 +28,8 @@ export default function Products({ products }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [filterType, setFilterType] = useState("");
     const [displayedProducts, setDisplayedProducts] = useState(products);
+    const [showSearchAlert, setShowSearchAlert] = useState(false);
+    const [showFilterAlert, setShowFilterAlert] = useState(false);
 
     const handleSearch = () => {
         const filtered = products.filter((product) => {
@@ -36,6 +39,9 @@ export default function Products({ products }) {
             );
         });
         setDisplayedProducts(filtered);
+
+        setShowSearchAlert(true); // Show alert when the item is added
+        setTimeout(() => setShowSearchAlert(false), 3000); // Hide after 3 seconds
     };
 
     const handleFilterType = (event) => {
@@ -49,15 +55,26 @@ export default function Products({ products }) {
             );
         });
         setDisplayedProducts(filtered);
+
+        setShowFilterAlert(true); // Show alert when the item is added
+        setTimeout(() => setShowFilterAlert(false), 3000); // Hide after 3 seconds
     };
 
     return (
         <>
             <Head title="Products" />
             <Navbar auth />
+            {showSearchAlert && (
+                <Alert type="success" message="Search applied!" />
+            )}
+
+            {showFilterAlert && (
+                <Alert type="success" message="Filter applied!" />
+            )}
             <div className="px-[200px] py-5">
                 <div className="flex justify-between">
                     <h1 className="text-4xl font-bold albert-sans">Products</h1>
+
                     {/* Search and Filters */}
                     <div className="flex justify-between items-center mb-4">
                         <input
@@ -74,7 +91,7 @@ export default function Products({ products }) {
                         />
                         <select
                             value={filterType}
-                            onChange={(e) => setFilterType(e.target.value)}
+                            onChange={handleFilterType}
                             className="border p-2 rounded"
                         >
                             <option value="">All Types</option>

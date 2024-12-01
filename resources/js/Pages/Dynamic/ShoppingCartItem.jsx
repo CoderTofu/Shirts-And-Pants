@@ -8,7 +8,6 @@ export default function ShoppingCartItem({ item, selected, setSelected }) {
         quantity: item.quantity,
         variant_id: item.variant_id_on_cart,
     });
-    console.log(sizes);
 
     const [currentSize, setCurrentSize] = useState(
         item.product.sizes.find((size) => size.variant_id === data.variant_id)

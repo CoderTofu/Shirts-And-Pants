@@ -1,9 +1,9 @@
-import { Head, useForm, router } from "@inertiajs/react";
-
+import { Head, useForm } from "@inertiajs/react";
 import Navbar from "@/Elements/Navbar";
 import PrimaryButton from "@/Elements/PrimaryButton";
 import { useEffect, useState } from "react";
 import Footer from "./../../Elements/Footer";
+import Alert from "../../Elements/Alert";
 
 /*
  Product = {
@@ -36,6 +36,8 @@ export default function Product({ product }) {
         size: product.sizes[0].size,
     });
 
+    const [showAlert, setShowAlert] = useState(false);
+
     const setImage = (index) => {
         setSelectedImage(images[index]);
     };
@@ -61,9 +63,15 @@ export default function Product({ product }) {
             setData({ ...data, quantity: Number(newQuantity) });
         }
     };
+
     const submit = (e) => {
         e.preventDefault();
-        post(`/shopping-cart/add-to-cart`);
+        post(`/shopping-cart/add-to-cart`, {
+            onSuccess: () => {
+                setShowAlert(true); // Show alert when the item is added
+                setTimeout(() => setShowAlert(false), 3000); // Hide after 3 seconds
+            },
+        });
     };
 
     const getStock = () => {
@@ -75,14 +83,11 @@ export default function Product({ product }) {
         post(`/shopping-cart/buy`);
     };
 
-    useEffect(() => {
-        console.log(data);
-    }, [data]);
-
     return (
         <>
             <Head title={product.name} />
             <Navbar />
+            {showAlert && <Alert type="success" message="Added to cart!" />}
             <div className="flex flex-col justify-start pt-[10vh] pb-[20vh] overflow-y-auto items-center">
                 <div className="pl-[200px] flex flex-row justify-start w-full">
                     <div className="flex flex-col space-y-5 ">

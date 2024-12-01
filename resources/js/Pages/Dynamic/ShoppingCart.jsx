@@ -3,6 +3,7 @@ import Navbar from "@/Elements/Navbar";
 import ShoppingCartItem from "./ShoppingCartItem";
 import PrimaryButton from "@/Elements/PrimaryButton";
 import { useEffect, useState } from "react";
+import { Dialog } from "../../Elements/Dialog";
 
 /* 
     Cart = {
@@ -42,6 +43,11 @@ export default function ShoppingCart({ cart, orders }) {
     let [tab, setTab] = useState("Cart");
     let [selected, setSelected] = useState([]);
     let [total_price, setTotal] = useState(0);
+
+    const [isDialogVisible, setDialogVisible] = useState(false);
+    const [dialogResult, setDialogResult] = useState(null);
+    const [showAlert, setShowAlert] = useState(false);
+
     const {
         data,
         setData,
@@ -57,6 +63,20 @@ export default function ShoppingCart({ cart, orders }) {
     const toggleDetails = (index) => {
         setVisibleOrder(visibleOrder === index ? null : index);
     };
+
+    const handleDialogClose = (result) => {
+        setDialogVisible(false); // Hide the dialog
+        setDialogResult(result); // Capture the result (true for confirm, false for cancel)
+        if (result) {
+            // Perform confirm-related actions here
+            destroy("/shopping-cart");
+            window.location.reload();
+        } else {
+            console.log("User canceled!");
+            // Perform cancel-related actions here
+        }
+    };
+
     useEffect(() => {
         let newTotal = 0;
         selected.forEach((item) => {
@@ -66,13 +86,8 @@ export default function ShoppingCart({ cart, orders }) {
         setData({ ...data, selected_items: selected, total_price: newTotal });
     }, [selected]); // Run this effect whenever 'selected' changes
 
-    useEffect(() => {
-        console.log(data); // This will log the updated 'data' with total_price
-    }, [data]);
-
     const checkout = (e) => {
         e.preventDefault();
-        console.log(user);
         if (
             user.address === "" ||
             user.address === null ||
@@ -85,10 +100,17 @@ export default function ShoppingCart({ cart, orders }) {
             post("/shopping-cart/checkout");
         }
     };
+
     return (
         <>
             <Head title="Shopping Cart" />
             <Navbar />
+            {isDialogVisible && (
+                <Dialog
+                    onClose={handleDialogClose}
+                    message={"Do you want to remove selected item/s?"}
+                />
+            )}
             {/* Top Part */}
             <main className="py-[50px] px-[100px]">
                 <div className="w-full flex flex-col justify-center items-center">
@@ -149,8 +171,7 @@ export default function ShoppingCart({ cart, orders }) {
                                         disabled={selected.length === 0}
                                         className="px-4 py-2 bg-red-600 text-white font-semibold rounded-md disabled:opacity-20 hover:bg-red-700 transition-colors duration-300"
                                         onClick={() => {
-                                            destroy("/shopping-cart");
-                                            window.location.reload();
+                                            setDialogVisible(true);
                                         }}
                                     >
                                         Delete
