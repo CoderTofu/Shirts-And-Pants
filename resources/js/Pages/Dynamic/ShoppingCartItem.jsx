@@ -111,18 +111,9 @@ export default function ShoppingCartItem({ item, selected, setSelected }) {
                 <div className="flex items-center justify-center">
                     <div className="flex justify-center items-center">
                         <p className="albert-sans text-sm mr-2">Sizes:</p>
-                        <select
-                            name="size"
-                            value={currentSize}
-                            onChange={handleSizeChange}
-                            className="border text-left rounded w-24 py-1 "
-                        >
-                            {sizes.map((size, index) => (
-                                <option key={index} value={size}>
-                                    {size}
-                                </option>
-                            ))}
-                        </select>
+                        <p className="text-left rounded w-24 py-1">
+                            {currentSize}
+                        </p>
                     </div>
 
                     {/* Quantity Input */}
