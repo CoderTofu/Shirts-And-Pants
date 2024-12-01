@@ -58,7 +58,6 @@ export default function Products({ products }) {
             <div className="px-[200px] py-5">
                 <div className="flex justify-between">
                     <h1 className="text-4xl font-bold albert-sans">Products</h1>
-
                     {/* Search and Filters */}
                     <div className="flex justify-between items-center mb-4">
                         <input
