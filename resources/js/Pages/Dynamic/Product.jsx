@@ -84,19 +84,19 @@ export default function Product({ product }) {
             <Head title={product.name} />
             <Navbar />
             <div className="flex flex-col justify-start pt-[10vh] pb-[20vh] overflow-y-auto items-center">
-                <div className="pl-[200px] flex flex-row justify-start  w-full">
+                <div className="pl-[200px] flex flex-row justify-start w-full">
                     <div className="flex flex-col space-y-5 ">
-                        <div className="max-w-[22vw]">
+                        <div className="border-black border-solid border w-[30vw] h-[600px] flex items-center bg-white">
                             <img
-                                className="w-auto h-[60vh] object-cover border-black border-solid border"
+                                className="w-[600px] h-auto object-cover "
                                 src={`/assets/products/${selectedImage}`}
                             />
                         </div>
-                        <div className="flex flex-row space-x-2 max-w-[2.5vw]">
+                        <div className="flex flex-row space-x-2 max-w-[2.5vw] ">
                             {images.map((image, index) => (
                                 <img
                                     key={index}
-                                    className="cursor-pointer hover:border "
+                                    className="cursor-pointer hover:scale-105 hover:opacity-80 transition-all border-black border-solid border "
                                     onClick={() => setImage(index)}
                                     src={`/assets/products/${image}`}
                                 />
@@ -104,7 +104,7 @@ export default function Product({ product }) {
                         </div>
                     </div>
                     <div className="pl-[50px] flex flex-col justify-center">
-                        <p className="albert-sans text-2xl font-thin">
+                        <p className="albert-sans text-2xl font-light">
                             SHIRTS & PANTS
                         </p>
                         <h1 className="albert-sans font-bold text-5xl">
@@ -113,7 +113,7 @@ export default function Product({ product }) {
                         <h4 className="albert-sans font-light text-base">
                             P {product.price}
                         </h4>
-                        <p className="albert-sans p-5 pl-0">
+                        <p className="albert-sans p-5 pl-0 max-w-[700px]">
                             {product.description}
                         </p>
                         <div className="items-center ">
