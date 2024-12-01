@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('variant_id');
             $table->integer('quantity');
             $table->decimal('price', 8, 2);
+            $table->enum('status', ['open', 'closed'])->default('open');
             $table->foreign('shopping_cart_id')->references('id')->on('shopping_carts')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('variant_id')->references('id')->on('product_variants')->cascadeOnDelete()->cascadeOnUpdate();

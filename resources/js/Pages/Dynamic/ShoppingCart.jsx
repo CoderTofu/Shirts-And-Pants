@@ -261,7 +261,7 @@ export default function ShoppingCart({ cart, orders }) {
                                 </h4>
                                 <h3 className="text-lg">{user.email}</h3>
                             </div>
-                            {user.phone === "" ? (
+                            {user.phone ? (
                                 <div className="mb-2">
                                     <h4 className="text-sm text-customGray">
                                         Phone
@@ -271,7 +271,7 @@ export default function ShoppingCart({ cart, orders }) {
                             ) : (
                                 ""
                             )}
-                            {user.address === "" ? (
+                            {user.address ? (
                                 <div className="mb-2">
                                     <h4 className="text-sm text-customGray">
                                         Shipping Address

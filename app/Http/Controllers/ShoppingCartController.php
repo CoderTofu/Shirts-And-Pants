@@ -17,15 +17,18 @@ class ShoppingCartController extends Controller
 {
     public function fetch(){
         $userId = Auth::id();
-        $cart = ShoppingCart::with(['items' => ['product.images', 'variant.size']])
+        $cart = ShoppingCart::with(
+            ['items' => function($query) { 
+                $query->where('status', 'open')
+                    ->with(['product.images', 'variant.size']);
+                }
+            ])
             ->where('user_id', $userId)
-            ->where('status', 'open')
             ->first();
-        if(!$cart){
-            ShoppingCart::create(['user_id' => $userId, 'status' => 'open']);
+        if(!$cart)  {
+            ShoppingCart::create(['user_id' => $userId]);
             $cart = ShoppingCart::with(['items' => ['product.images', 'variant.size']])
                 ->where('user_id', $userId)
-                ->where('status', 'open')
                 ->first();
         }
        return $cart;
@@ -80,7 +83,6 @@ class ShoppingCartController extends Controller
     }
 
     public function addToCart(Request $request){
-      
         $product_id = $request->input('product_id');
         $variant_id = $request->input('variant_id');
         $quantity = $request->input('quantity');
@@ -92,7 +94,12 @@ class ShoppingCartController extends Controller
             ->first();
 
         if($item){
-            if($item->quantity+$quantity <= $item->variant->stock){
+            if($item->status === 'closed'){
+                $item->status = 'open';
+                $item->quantity = 1;
+                $item->save();
+            }
+            else if($item->quantity+$quantity <= $item->variant->stock){
                 $item->quantity = $item->quantity + $quantity;
                 $item->save();
             }
@@ -112,6 +119,10 @@ class ShoppingCartController extends Controller
 
     public function checkout(Request $request)
     {
+        return Inertia::render('Dynamic/Checkout', ['orders' => $request->all()]);
+    }
+
+    public function confirmOrder(Request $request){
         $order = Order::create([
             'user_id' => Auth::id(),
             'total' => $request->input("total_price")
@@ -123,18 +134,16 @@ class ShoppingCartController extends Controller
                 'order_id' => $order->id,
                 'shopping_cart_item_id' => $item['id']
             ]);
-    
             $variant = ProductVariant::find($item['variant_id_on_cart']);
             if ($variant && $variant->stock > 0) {
                 $variant->stock--;
                 $variant->save();
             }
+            $cart_item = ShoppingCartItem::find($item['id']);
+            $cart_item->status = 'closed';
+            $cart_item->save();
         }
-
-        $cart = $this->fetch();
-        $cart->status = 'closed';
-        $cart->save();
-        return Inertia::render('Dynamic/Checkout', ['order' => $order]);
+        return Inertia::render('Dynamic/OrderConfirmed', ['order' => $order]);
     }
-    
+
 }

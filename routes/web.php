@@ -53,6 +53,8 @@ Route::middleware('auth')->controller(ShoppingCartController::class)->group(
         Route::patch('/shopping-cart', 'update')->name('shopping-cart.update');
         Route::post('/shopping-cart/add-to-cart', 'addToCart')->name('shopping-cart.add');
         Route::post('/shopping-cart/checkout', 'checkout')->name('shopping-cart.checkout');
+        Route::post('/shopping-cart/confirm', 'confirmOrder')->name('shopping-cart.confirm');
+        Route::get('/shopping-cart/checkout', 'getCart');
     }
 );
 

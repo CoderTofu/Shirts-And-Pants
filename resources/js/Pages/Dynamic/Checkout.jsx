@@ -1,44 +1,16 @@
 import Navbar from "../../Elements/Navbar";
-import { Head } from "@inertiajs/react";
+import { Head, usePage, useForm } from "@inertiajs/react";
 
-const tempOrder = [
-    {
-        name: "PRODUCT NAME 1",
-        size: "XS",
-        image: "/placeholder.svg",
-        quantity: 1,
-        price: 100,
-    },
-    {
-        name: "PRODUCT NAME 2",
-        size: "XS",
-        image: "/placeholder.svg",
-        quantity: 2,
-        price: 300,
-    },
-    {
-        name: "PRODUCT NAME 3",
-        size: "XS",
-        image: "/assets/products/SAP Angel Sweatshirt.png",
-        quantity: 3,
-        price: 500,
-    },
-    {
-        name: "PRODUCT NAME 4",
-        size: "XS",
-        image: "/placeholder.svg",
-        quantity: 4,
-        price: 800,
-    },
-];
-
-const user = {
-    address:
-        "Gen. Luna corner Muralla St., Intramuros Manila, Philippines 1002",
-};
-
-export default function Checkout({ order }) {
+export default function Checkout({ orders }) {
+    console.log(orders);
+    const items = orders.selected_items;
     const shippingFee = 50;
+    const user = usePage().props.auth.user;
+    const total_price = Number(orders.total_price);
+    const { data, setData, post, processing } = useForm({
+        selected_items: items,
+        total_price: total_price + shippingFee,
+    });
 
     const estimatedDeliveryDate = new Date();
     estimatedDeliveryDate.setDate(estimatedDeliveryDate.getDate() + 3);
@@ -85,34 +57,40 @@ export default function Checkout({ order }) {
                         </div>
                     </div>
                     <div>
-                        {tempOrder.map((product) => (
+                        {items.map((item) => (
                             <div className="grid grid-cols-5 items-center border-b border-black">
                                 <div className="col-span-2 flex items-center py-4 px-10">
                                     <img
-                                        src={product.image}
+                                        src={`/assets/products/${item.display_image}`}
                                         alt="Product Image"
                                         className="w-[200px] h-[200px] object-cover mr-5"
                                     />
                                     <div>
                                         <h3 className="text-xl font-bold">
-                                            {product.name}
+                                            {item.product.name}
                                         </h3>
                                         <h4 className="text-gray-500 text-sm font-base">
-                                            {product.size}
+                                            {item.product.sizes.find(
+                                                (size) =>
+                                                    size.size ===
+                                                    item.product
+                                                        .variant_id_on_cart
+                                            )}
                                         </h4>
                                     </div>
                                 </div>
                                 <div className="text-center">
-                                    {product.quantity}
+                                    {item.quantity}
                                 </div>
                                 <div className="text-center">
-                                    P {product.price.toFixed(2)}
+                                    P {Number(item.product.price).toFixed(2)}
                                 </div>
                                 <div className="text-center">
                                     P{" "}
-                                    {(product.quantity * product.price).toFixed(
-                                        2
-                                    )}
+                                    {(
+                                        Number(item.quantity) *
+                                        Number(item.product.price)
+                                    ).toFixed(2)}
                                 </div>
                             </div>
                         ))}
@@ -138,15 +116,7 @@ export default function Checkout({ order }) {
                                 Merchandise Subtotal:
                             </h3>
                             <h4 className="text-2xl text-gray-500">
-                                P{" "}
-                                {tempOrder
-                                    .reduce(
-                                        (total, product) =>
-                                            total +
-                                            product.quantity * product.price,
-                                        0
-                                    )
-                                    .toFixed(2)}
+                                P {total_price.toFixed(2)}
                             </h4>
                         </div>
                         <div className="flex items-center ">
@@ -165,18 +135,13 @@ export default function Checkout({ order }) {
                                 Total Payment:
                             </h3>
                             <h4 className="text-2xl text-gray-500">
-                                P{" "}
-                                {(
-                                    tempOrder.reduce(
-                                        (total, product) =>
-                                            total +
-                                            product.quantity * product.price,
-                                        0
-                                    ) + shippingFee
-                                ).toFixed(2)}
+                                P {(total_price + shippingFee).toFixed(2)}
                             </h4>
                         </div>
-                        <button className="bg-black text-white px-5 py-2 rounded-lg">
+                        <button
+                            className="bg-black text-white px-5 py-2 rounded-lg"
+                            onClick={() => post("/shopping-cart/confirm")}
+                        >
                             Confirm Order
                         </button>
                     </div>

@@ -8,7 +8,6 @@ class ShoppingCart extends Model
 {
     protected $fillable = [
         'user_id',
-        'status'
     ];
     protected $hidden = [
         'created_at',

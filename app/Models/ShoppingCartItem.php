@@ -17,6 +17,11 @@ class ShoppingCartItem extends Model
         'created_at',
         'updated_at',
     ];
+
+    protected $attributes = [
+        'status' => 'open'
+    ];
+    
     public function shoppingCart(){
         return $this->belongsTo(ShoppingCart::class, 'shopping_cart_id', 'id');
     }
