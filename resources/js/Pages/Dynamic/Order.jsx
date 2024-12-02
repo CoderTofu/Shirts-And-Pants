@@ -3,8 +3,8 @@ import { Head, useForm } from "@inertiajs/react";
 import { useEffect, useRef } from "react";
 
 export default function Order({ order }) {
-    console.log(order);
     const initialRenderRef = useRef(true);
+
     const {
         data,
         setData,
@@ -17,6 +17,7 @@ export default function Order({ order }) {
         toDelete: [],
         total: Number(order.total),
     });
+
     const remove = (id) => {
         if (order.products.length === data.toDelete.length + 1) {
             alert("An order must have at least 1 item.");
@@ -35,6 +36,7 @@ export default function Order({ order }) {
     const update = (e) => {
         e.preventDefault();
         patch(`/order/${order.id}`);
+        window.location.href = "/dashboard";
     };
 
     return (
@@ -86,9 +88,6 @@ export default function Order({ order }) {
                                     <option value="Shipping">Shipping</option>
                                     <option value="Completed">Completed</option>
                                     <option value="Cancelled">Cancelled</option>
-                                    <option value="Return/Refund">
-                                        Return/Refund
-                                    </option>
                                 </select>
                             </div>
                         </div>

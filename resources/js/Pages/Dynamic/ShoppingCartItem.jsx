@@ -90,7 +90,7 @@ export default function ShoppingCartItem({ item, selected, setSelected }) {
                 <div className="flex justify-center items-center">
                     <input
                         type="checkbox"
-                        className="mr-4"
+                        className="mr-4 cursor-pointer"
                         onChange={handleSelect}
                     />
                     <img
@@ -111,7 +111,11 @@ export default function ShoppingCartItem({ item, selected, setSelected }) {
                 <div className="flex items-center justify-center">
                     <div className="flex justify-center items-center">
                         <p className="albert-sans text-sm mr-2">Size:</p>
-                        <select value={currentSize} onChange={handleSizeChange}>
+                        <select
+                            className="cursor-pointer"
+                            value={currentSize}
+                            onChange={handleSizeChange}
+                        >
                             {sizes.map((size, index) => (
                                 <option key={index} value={size}>
                                     {size}

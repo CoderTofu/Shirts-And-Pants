@@ -44,16 +44,16 @@ export default function Alert({ type, message }) {
 
     return (
         <div
-            className={`fixed bottom-5 left-1/2 transform -translate-x-1/2 pr-5 pl-3 py-2 rounded shadow-md flex items-center space-x-2 ${bgColor} transition-opacity duration-300`}
+            className={`fixed bottom-5 left-1/2 transform -translate-x-1/2 pr-5 max-w-[300px] pl-3 py-2 rounded shadow-md flex items-center space-x-2 ${bgColor} transition-opacity duration-300`}
             fixed
             style={{ opacity }}
         >
             {icon && (
                 <span className={`font-bold ${textColor}`}>
-                    <img src={icon} alt={icon} className="h-[30px] w-auto" />
+                    <img src={icon} alt={icon} className="h-full w-auto" />
                 </span>
             )}
-            <span className={textColor}>{message}</span>
+            <p className={textColor}>{message}</p>
         </div>
     );
 }

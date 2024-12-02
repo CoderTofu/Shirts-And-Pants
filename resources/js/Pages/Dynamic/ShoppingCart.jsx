@@ -4,6 +4,7 @@ import ShoppingCartItem from "./ShoppingCartItem";
 import PrimaryButton from "@/Elements/PrimaryButton";
 import { useEffect, useState } from "react";
 import { Dialog } from "../../Elements/Dialog";
+import Alert from "../../Elements/Alert";
 
 /* 
     Cart = {
@@ -44,8 +45,9 @@ export default function ShoppingCart({ cart, orders }) {
     let [selected, setSelected] = useState([]);
     let [total_price, setTotal] = useState(0);
 
-    const [isDialogVisible, setDialogVisible] = useState(false);
-    const [dialogResult, setDialogResult] = useState(null);
+    const [isDeleteDialogVisible, setDeleteDialogVisible] = useState(false);
+    const [deleteDialogResponse, setDeleteDialogResult] = useState(null);
+
     const [showAlert, setShowAlert] = useState(false);
 
     const {
@@ -64,9 +66,9 @@ export default function ShoppingCart({ cart, orders }) {
         setVisibleOrder(visibleOrder === index ? null : index);
     };
 
-    const handleDialogClose = (result) => {
-        setDialogVisible(false); // Hide the dialog
-        setDialogResult(result); // Capture the result (true for confirm, false for cancel)
+    const handleDeleteDialog = (result) => {
+        setDeleteDialogVisible(false); // Hide the dialog
+        setDeleteDialogResult(result); // Capture the result (true for confirm, false for cancel)
         if (result) {
             // Perform confirm-related actions here
             destroy("/shopping-cart");
@@ -94,7 +96,8 @@ export default function ShoppingCart({ cart, orders }) {
             user.phone === "" ||
             user.phone === null
         ) {
-            alert("Please update your profile information first."); // Temporary alert
+            setShowAlert(true); // Show alert
+            setTimeout(() => setShowAlert(false), 3000); // Hide after 3 seconds
             return;
         } else {
             post("/shopping-cart/checkout");
@@ -105,10 +108,17 @@ export default function ShoppingCart({ cart, orders }) {
         <>
             <Head title="Shopping Cart" />
             <Navbar />
-            {isDialogVisible && (
+            {isDeleteDialogVisible && (
                 <Dialog
-                    onClose={handleDialogClose}
+                    onClose={handleDeleteDialog}
                     message={"Do you want to remove selected item/s?"}
+                />
+            )}
+
+            {showAlert && (
+                <Alert
+                    type="error"
+                    message={`Please update your address and phone number.`}
                 />
             )}
             {/* Top Part */}
@@ -159,23 +169,24 @@ export default function ShoppingCart({ cart, orders }) {
                                     <p className="text-2xl font-bold">
                                         Total: P {total_price.toFixed(2)}
                                     </p>
-                                    <PrimaryButton
-                                        onClick={checkout}
-                                        disabled={selected.length === 0}
-                                    >
-                                        <p className="albert-sans text-lg font-bold">
+                                    <div>
+                                        <button
+                                            disabled={selected.length === 0}
+                                            className="px-10 py-2 bg-red-600 text-white font-semibold rounded-md disabled:opacity-20 hover:bg-red-700 transition-colors duration-300 mr-5"
+                                            onClick={() => {
+                                                setDeleteDialogVisible(true);
+                                            }}
+                                        >
+                                            Delete
+                                        </button>
+                                        <button
+                                            onClick={checkout}
+                                            disabled={selected.length === 0}
+                                            className="albert-sans text-lg font-semibold border border-black px-10 py-2 rounded-md hover:bg-black hover:text-white transition-colors duration-300 cursor-pointer"
+                                        >
                                             Checkout
-                                        </p>
-                                    </PrimaryButton>
-                                    <button
-                                        disabled={selected.length === 0}
-                                        className="px-4 py-2 bg-red-600 text-white font-semibold rounded-md disabled:opacity-20 hover:bg-red-700 transition-colors duration-300"
-                                        onClick={() => {
-                                            setDialogVisible(true);
-                                        }}
-                                    >
-                                        Delete
-                                    </button>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ) : (

@@ -29,17 +29,19 @@ export default function Checkout({ orders }) {
         <>
             <Head title="Checkout" />
             <Navbar />
-            <main className="py-[50px] px-[100px] albert-sans">
+            <main className="py-[50px] px-[200px] albert-sans">
                 <div className="w-full flex flex-col justify-center items-center">
-                    <h1 className="albert-sans text-3xl font-bold">
+                    <h1 className="albert-sans text-5xl font-bold">
                         Order Checkout
                     </h1>
                 </div>
 
                 {/* Address */}
                 <div className="bg-customGray border border-black py-7 px-12 mt-10">
-                    <h2 className="text-2xl font-bold">Delivery Address</h2>
-                    <h3 className="text-lg font-light">{user.address}</h3>
+                    <h2 className="text-xl font-bold text-customGray">
+                        Delivery Address
+                    </h2>
+                    <h3 className="text-lg ">{user.address}</h3>
                 </div>
 
                 {/* Products */}
@@ -97,53 +99,63 @@ export default function Checkout({ orders }) {
                     </div>
                 </div>
 
-                {/* Info and confirm button */}
-                <div className="">
-                    <div></div>
+                <div className="flex flex-col w-full mt-10">
+                    <h3 className="text-3xl font-bold mr-2 text-customGray">
+                        Shipping Details: Standard Local
+                    </h3>
+                    <h4 className="text-lg text-gray-500 ">
+                        Guaranteed to get by {deliveryStart} - {deliveryEnd}
+                    </h4>
+                </div>
 
-                    <div className="flex items-center">
-                        <h3 className="text-3xl font-bold mr-2">
-                            Estimated Delivery:
-                        </h3>
-                        <h4 className="text-2xl text-gray-500">
-                            {deliveryStart} - {deliveryEnd}
-                        </h4>
-                    </div>
-
-                    <div>
-                        <div className="flex items-center ">
-                            <h3 className="text-3xl font-bold mr-2">
+                <div className="flex justify-center">
+                    <div className="grid grid-cols-3 w-[70vw] p-10 m-10 border border-black gap-1">
+                        {/* Merchandise Subtotal */}
+                        <div className="col-span-2 ">
+                            <h3 className="text-2xl mr-2 ">
                                 Merchandise Subtotal:
                             </h3>
+                        </div>
+                        <div className="col-span-1 text-center">
                             <h4 className="text-2xl text-gray-500">
                                 P {total_price.toFixed(2)}
                             </h4>
                         </div>
-                        <div className="flex items-center ">
-                            <h3 className="text-3xl font-bold mr-2">
+
+                        {/* Shipping Subtotal */}
+                        <div className="col-span-2 ">
+                            <h3 className="text-2xl mr-2">
                                 Shipping Subtotal:
                             </h3>
+                        </div>
+                        <div className="col-span-1 text-center">
                             <h4 className="text-2xl text-gray-500">
                                 P {shippingFee.toFixed(2)}
                             </h4>
                         </div>
-                    </div>
 
-                    <div className="flex justify-between mt-10 mx-20">
-                        <div className="flex items-center ">
-                            <h3 className="text-3xl font-bold mr-2">
-                                Total Payment:
-                            </h3>
+                        <div className="border-b border-black w-full col-span-3 my-3"></div>
+
+                        {/* Total */}
+                        <div className="col-span-2 mt-">
+                            <h3 className="text-2xl  mr-2">Total Payment:</h3>
+                        </div>
+                        <div className="col-span-1 text-center">
                             <h4 className="text-2xl text-gray-500">
                                 P {(total_price + shippingFee).toFixed(2)}
                             </h4>
                         </div>
-                        <button
-                            className="bg-black text-white px-5 py-2 rounded-lg"
-                            onClick={() => post("/shopping-cart/confirm")}
-                        >
-                            Confirm Order
-                        </button>
+
+                        {/* Place Order */}
+                        <div className="col-span-2 "></div>
+                        <div className="col-span-1 rounded-xl flex justify-center mt-2 bg-gray-700 transition-all hover:bg-gray-900">
+                            <button
+                                className="w-full text-white px-12 py-2 rounded-lg text-xl "
+                                onClick={() => post("/shopping-cart/confirm")}
+                            >
+                                Place Order
+                            </button>
+                        </div>
                     </div>
                 </div>
             </main>

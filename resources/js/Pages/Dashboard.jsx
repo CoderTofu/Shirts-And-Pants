@@ -1,14 +1,14 @@
 import AuthenticatedLayout from "../Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function Dashboard({ orders }) {
     const [tab, setTab] = useState("ALL");
     const [search, setSearch] = useState("");
-    console.log(orders);
+
     const filteredOrders = orders
         .filter((order) => {
             // Filter by status
@@ -85,14 +85,6 @@ export default function Dashboard({ orders }) {
                             className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
                         >
                             Cancelled
-                        </button>
-                        <button
-                            onClick={() => {
-                                setTab("RETURN/REFUND");
-                            }}
-                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
-                        >
-                            Return/Refund
                         </button>
                     </nav>
 
