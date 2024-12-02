@@ -126,7 +126,7 @@ export default function Dashboard({ orders }) {
                                             alt="Just 1 Product Image"
                                             width={60}
                                             height={60}
-                                            className="bg-muted"
+                                            className="bg-gray-400 rounded-sm"
                                         />
                                         <div>
                                             <div className="font-medium">

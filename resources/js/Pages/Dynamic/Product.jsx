@@ -91,7 +91,7 @@ export default function Product({ product }) {
             <div className="flex flex-col justify-start pt-[10vh] pb-[20vh] overflow-y-auto items-center">
                 <div className="pl-[200px] flex flex-row justify-start w-full">
                     <div className="flex flex-col space-y-5 ">
-                        <div className="border-black border-solid border w-[30vw] h-[600px] flex items-center bg-white">
+                        <div className="border-black border-solid border w-[30vw] h-[600px] flex items-center bg-gray-400">
                             <img
                                 className="w-[600px] h-auto object-cover "
                                 src={`/assets/products/${selectedImage}`}
@@ -101,7 +101,7 @@ export default function Product({ product }) {
                             {images.map((image, index) => (
                                 <img
                                     key={index}
-                                    className="cursor-pointer hover:scale-105 hover:opacity-80 transition-all border-black border-solid border "
+                                    className="cursor-pointer hover:scale-105 hover:opacity-80 transition-all bg-gray-400 border-black border-solid border "
                                     onClick={() => setImage(index)}
                                     src={`/assets/products/${image}`}
                                 />

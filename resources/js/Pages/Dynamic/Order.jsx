@@ -107,7 +107,7 @@ export default function Order({ order }) {
                                             <img
                                                 src={`/assets/products/${product.product.display_image}`}
                                                 alt={product.product.name}
-                                                className="w-[100px] h-[100px] object-cover "
+                                                className="w-[100px] h-[100px] object-cover bg-gray-400 rounded-sm"
                                             />
                                             <div className="ml-5">
                                                 <h3 className="text-xl">

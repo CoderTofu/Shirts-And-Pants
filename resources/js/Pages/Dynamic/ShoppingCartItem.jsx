@@ -94,7 +94,7 @@ export default function ShoppingCartItem({ item, selected, setSelected }) {
                         onChange={handleSelect}
                     />
                     <img
-                        className="h-[200px] w-auto object-cover rounded-md"
+                        className="h-[200px] w-auto object-cover rounded-md bg-gray-400"
                         src={`/assets/products/${item.display_image}`}
                         alt={item.product.name}
                     />

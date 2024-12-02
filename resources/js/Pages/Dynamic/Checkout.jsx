@@ -65,7 +65,7 @@ export default function Checkout({ orders }) {
                                     <img
                                         src={`/assets/products/${item.display_image}`}
                                         alt="Product Image"
-                                        className="w-[200px] h-[200px] object-cover mr-5"
+                                        className="w-[200px] h-[200px] object-cover mr-5 bg-gray-400 rounded-sm"
                                     />
                                     <div>
                                         <h3 className="text-xl font-bold">

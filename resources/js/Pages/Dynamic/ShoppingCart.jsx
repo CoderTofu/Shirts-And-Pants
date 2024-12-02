@@ -256,7 +256,7 @@ export default function ShoppingCart({ cart, orders }) {
                                                                         .product
                                                                         .name
                                                                 }
-                                                                className="w-16 h-16 object-cover rounded-lg border"
+                                                                className="w-16 h-16 object-cover bg-gray-400 rounded-sm border"
                                                             />
                                                             <div>
                                                                 <h4 className="font-semibold text-lg">
