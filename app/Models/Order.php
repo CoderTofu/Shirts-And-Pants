@@ -28,7 +28,7 @@ class Order extends Model
         return ['id' => $this->id,
         'total' => $this->total,
         'status' => $this->status, 
-        'date' => $this->updated_at,
+        'date' => $this->created_at,
         'customer' => $this->customer->jsonify(),
         'products' => $this->items->map(
             function ($item) {
