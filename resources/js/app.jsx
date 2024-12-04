@@ -19,7 +19,7 @@ createInertiaApp({
         const root = createRoot(el);
 
         root.render(
-            <main className="min-h-screen flex flex-col">
+            <main className="min-h-screen overflow-x-hidden flex flex-col">
                 <div className="flex-grow">
                     <App {...props} />
                 </div>

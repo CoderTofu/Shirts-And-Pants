@@ -20,6 +20,15 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+Route::get('/about', function () {
+    return Inertia::render('About', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
+})->name('about');
+
 Route::controller(ProductController::class)->group(
     function () {
         Route::get('/products', 'list')->name('products');
@@ -77,8 +86,12 @@ Route::middleware(['auth', CheckAdmin::class])->group(function (){
 });
 
 
-route::get('/checkout', function(){ // Temporary route for testing
-    return Inertia::render('Dynamic/Checkout');
+route::get('/404', function(){ // Temporary route for testing
+    return Inertia::render('404');
+});
+
+route::get('/error', function(){ // Temporary route for testing
+    return Inertia::render('Error');
 });
 
 require __DIR__ . '/auth.php';

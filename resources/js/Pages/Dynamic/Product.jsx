@@ -180,7 +180,6 @@ export default function Product({ product }) {
                     </div>
                 </div>
             </div>
-            <Footer />
         </>
     );
 }

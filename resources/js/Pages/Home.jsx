@@ -14,15 +14,13 @@ import {
 
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
     const carouselItems = [
-        "/assets/images/banners/banner_1.jpg",
-        "/assets/images/banners/banner_2.jpg",
-        "/assets/images/banners/banner_3.jpg",
-        "/assets/images/banners/banner_4.jpg",
-        "/assets/images/banners/banner_5.jpg",
-        "/assets/images/banners/banner_6.jpg",
-        "/assets/images/banners/banner_7.jpg",
-        "/assets/images/banners/banner_8.jpg",
-        "/assets/images/banners/banner_9.jpg",
+        "/assets/images/banners/banner_1.png",
+        "/assets/images/banners/banner_2.png",
+        "/assets/images/banners/banner_3.png",
+        "/assets/images/banners/banner_4.png",
+        "/assets/images/banners/banner_5.png",
+        "/assets/images/banners/banner_6.png",
+        "/assets/images/banners/banner_7.png",
     ];
 
     // Randomize and select up to 5 items from carouselItems
@@ -59,7 +57,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                     <CardContent className="flex items-center justify-center w-full h-full max-h-[100%]">
                                         <img
                                             src={item}
-                                            alt={`Carousel item ${index + 1}`}
+                                            alt={item}
                                             className="object-cover w-full h-auto max-w-[80vw] object-top"
                                         />
                                     </CardContent>
