@@ -106,63 +106,75 @@ export default function Dashboard({ orders }) {
                             </div>
                         </div>
                     </div>
-                    <div className="border rounded-lg">
-                        <div className="grid grid-cols-5 gap-4 p-4  text-sm">
+                    <div className="border rounded-lg px-5">
+                        <div className="grid grid-cols-5 gap-4 p-4  text-sm border-b border-gray-500">
                             <div className="col-span-2"></div>
-                            <div className="text-center">Order Total</div>
-                            <div className="text-center">Status</div>
-                            <div className="text-center">Actions</div>
+                            <div className="text-center font-bold">
+                                Order Total
+                            </div>
+                            <div className="text-center font-bold">Status</div>
+                            <div className="text-center font-bold">Actions</div>
                         </div>
 
-                        {filteredOrders.map((order) => (
-                            <div
-                                key={order.id + order.date}
-                                className="grid grid-cols-5 gap-4 p-4 items-center text-sm"
-                            >
-                                <div className="col-span-2 flex gap-4 items-center">
-                                    <div className="flex gap-3">
-                                        <img
-                                            src={`/assets/products/${order.products[0].product.display_image}`}
-                                            alt="Just 1 Product Image"
-                                            width={60}
-                                            height={60}
-                                            className="bg-gray-400 rounded-sm"
-                                        />
-                                        <div>
-                                            <div className="font-medium">
-                                                Order #{order.id}
-                                            </div>
-                                            <div className="text-muted-foreground text-xs">
-                                                {new Date(
-                                                    order.date
-                                                ).toUTCString()}
-                                            </div>
-                                            <div className="mt-1">
-                                                Customer Name:{" "}
-                                                {order.customer.name}
+                        {filteredOrders.length === 0 ? (
+                            <div>
+                                <div className="text-center py-4">
+                                    No orders found.
+                                </div>
+                            </div>
+                        ) : (
+                            filteredOrders.map((order) => (
+                                <div
+                                    key={order.id + order.date}
+                                    className="grid grid-cols-5 gap-4 p-4 items-center text-sm border-b border-gray-300"
+                                >
+                                    <div className="col-span-2 flex gap-4 items-center">
+                                        <div className="flex gap-3">
+                                            <img
+                                                src={`/assets/products/${order.products[0].product.display_image}`}
+                                                alt="Just 1 Product Image"
+                                                width={60}
+                                                height={60}
+                                                className="bg-gray-400 rounded-sm"
+                                            />
+                                            <div>
+                                                <div className="font-medium">
+                                                    Order #{order.id}
+                                                </div>
+                                                <div className="text-muted-foreground text-xs">
+                                                    {new Date(
+                                                        order.date
+                                                    ).toUTCString()}
+                                                </div>
+                                                <div className="mt-1">
+                                                    Customer Name:{" "}
+                                                    {order.customer.name}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div className="text-center">
+                                        P {order.total}
+                                    </div>
+                                    <div className="text-center">
+                                        {order.status}
+                                    </div>
+                                    <div className="flex items-center gap-2 justify-center">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="hover:bg-slate-100 bg-slate-200 transition-colors duration-300"
+                                        >
+                                            <a href={`/order/${order.id}`}>
+                                                View Details
+                                            </a>
+                                        </Button>
+                                    </div>
                                 </div>
-                                <div className="text-center">
-                                    P {order.total}
-                                </div>
-                                <div className="text-center">
-                                    {order.status}
-                                </div>
-                                <div className="flex items-center gap-2 justify-center">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="hover:bg-slate-100 bg-slate-200 transition-colors duration-300"
-                                    >
-                                        <a href={`/order/${order.id}`}>
-                                            View Details
-                                        </a>
-                                    </Button>
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
+
+                        {}
                     </div>
                 </div>
             </div>

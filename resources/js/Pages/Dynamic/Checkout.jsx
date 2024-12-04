@@ -150,7 +150,7 @@ export default function Checkout({ orders }) {
                         <div className="col-span-2 "></div>
                         <div className="col-span-1 rounded flex justify-center mt-2  transition-all ">
                             <button
-                                className="w-full max-w-[300px] bg-gray-600 hover:bg-gray-900 transition-all text-white px-12 py-2 rounded-lg text-xl "
+                                className="w-[300px] text-white bg-customGray font-bold hover:bg-gray-400 transition-all py-2 px-4 rounded bg-products"
                                 onClick={() => post("/shopping-cart/confirm")}
                             >
                                 Place Order

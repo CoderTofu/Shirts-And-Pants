@@ -1,6 +1,6 @@
 export default function Footer() {
     return (
-        <footer className="w-full bg-customBlack flex p-20 items-center justify-between">
+        <footer className="w-full bg-customBlack flex p-20 py-11 items-center justify-between">
             <div>
                 <img src="/assets/images/sap-logo-white.png" alt="SAP Logo" />
                 <span className="league-spartan mt-3 text-white text-s">
@@ -9,8 +9,8 @@ export default function Footer() {
             </div>
             <div className="flex flex-col">
                 <a
-                    className="albert-sans mb-3 text-white font-bold text-lg"
-                    href="#"
+                    className="albert-sans mb-3 text-white font-bold text-lg hover:text-gray-300 transition-all"
+                    href="/about"
                 >
                     ABOUT US
                 </a>
