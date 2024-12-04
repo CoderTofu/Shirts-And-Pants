@@ -94,4 +94,10 @@ route::get('/error', function(){ // Temporary route for testing
     return Inertia::render('Error');
 });
 
+Route::fallback(function () {
+    return Inertia::render('404')
+        ->toResponse(request())
+        ->setStatusCode(404);
+});
+
 require __DIR__ . '/auth.php';

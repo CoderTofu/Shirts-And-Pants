@@ -61,7 +61,13 @@ export default function ShoppingCart({ cart, orders }) {
         total_price: total_price,
     }); // for checkout
     const [visibleOrder, setVisibleOrder] = useState(null);
-
+    const getTotalItems = () => {
+        let total = 0;
+        for (let item of cart.cart_items) {
+            total += item.quantity;
+        }
+        return total;
+    };
     const toggleDetails = (index) => {
         setVisibleOrder(visibleOrder === index ? null : index);
     };
@@ -128,7 +134,7 @@ export default function ShoppingCart({ cart, orders }) {
                         Your Shopping Cart
                     </h1>
                     <h4 className="albert-sans text-base font-light mt-1">
-                        Total Items: ({cart.cart_items.length})
+                        Total Items: ({getTotalItems()})
                     </h4>
                 </div>
 
