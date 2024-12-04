@@ -7,6 +7,11 @@ export default function About() {
             <Navbar />
             {/* Banner */}
             <Head title="About" />
+            {/* <div className="p-5 bg-customGray">
+                <p className="albert-sans italic font-medium text-center">
+                    Simple. Bold. Yours.
+                </p>
+            </div> */}
             <div className="relative">
                 <img
                     src="/assets/images/banners/banner_8.png"
@@ -16,13 +21,13 @@ export default function About() {
                 <div className="w-full h-full absolute bg-black opacity-30 top-0"></div>
                 <div className="w-full h-full absolute top-0">
                     <div
-                        className="flex justify-center items-center h-full text-white albert-sans text-9xl font-black"
+                        className="flex justify-center items-center h-full text-white albert-sans text-8xl italic font-black"
                         style={{
                             textShadow:
                                 "4px 4px 10px rgba(0, 0, 0, 0.8), 2px 2px 5px rgba(255, 255, 255, 0.5)",
                         }}
                     >
-                        Shirts and Pants
+                        Simple. Bold. Yours.
                     </div>
                 </div>
             </div>
