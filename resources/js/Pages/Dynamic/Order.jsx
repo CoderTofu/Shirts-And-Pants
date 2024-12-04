@@ -1,9 +1,17 @@
 import Navbar from "../../Elements/Navbar";
 import { Head, useForm } from "@inertiajs/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Alert from "../../Elements/Alert";
+import { Dialog } from "../../Elements/Dialog";
+import { useMemo } from "react"; // Import useMemo for performance optimization
 
 export default function Order({ order }) {
     const initialRenderRef = useRef(true);
+
+    const [isSaveDialogVisible, setSaveDialogVisible] = useState(false);
+    const [saveDialogResponse, setSaveDialogResult] = useState(null);
+    const [showDeleteError, setDeleteError] = useState(false);
+    const [showDeleteSuccess, setDeleteSuccess] = useState(false);
 
     const {
         data,
@@ -20,7 +28,8 @@ export default function Order({ order }) {
 
     const remove = (id) => {
         if (order.products.length === data.toDelete.length + 1) {
-            alert("An order must have at least 1 item.");
+            setDeleteError(true);
+            setTimeout(() => setDeleteError(false), 3000); // Hide after 3 seconds
         } else {
             const price = order.products.find((product) => product.id === id)
                 .product.price;
@@ -30,19 +39,58 @@ export default function Order({ order }) {
                 toDelete: [...data.toDelete, id],
                 total: data.total - Number(price),
             });
+            setDeleteSuccess(true);
+            setTimeout(() => setDeleteSuccess(false), 3000); // Hide after 3 seconds
         }
     };
 
-    const update = (e) => {
-        e.preventDefault();
+    const update = () => {
         patch(`/order/${order.id}`);
-        window.location.href = "/dashboard";
     };
+
+    const handleSaveDialog = (result) => {
+        setSaveDialogVisible(false); // Hide the dialog
+        setSaveDialogResult(result); // Capture the result (true for confirm, false for cancel)
+        if (result) {
+            // Perform confirm-related actions here
+            update();
+            window.location.reload();
+        } else {
+            // Perform cancel-related actions here
+            console.log("User canceled!");
+        }
+    };
+
+    const hasChanges = useMemo(() => {
+        return (
+            data.status !== order.status || // Check status changes
+            data.toDelete.length > 0 // Check if items are marked for deletion
+        );
+    }, [data.status, data.toDelete, order.status]);
 
     return (
         <>
             <Navbar />
             <Head title="Order" />
+
+            {isSaveDialogVisible && (
+                <Dialog
+                    onClose={handleSaveDialog}
+                    message={"Do you want to save changes?"}
+                />
+            )}
+
+            {showDeleteError && (
+                <Alert
+                    type="error"
+                    message="Order must have at least 1 item."
+                />
+            )}
+
+            {showDeleteSuccess && (
+                <Alert type="success" message="Item deleted!" />
+            )}
+
             <main className="py-12 px-[200px] albert-sans">
                 {/* Order ID and Time */}
                 <div className="flex justify-between items-center mb-2">
@@ -54,8 +102,11 @@ export default function Order({ order }) {
                     </div>
                     <div>
                         <button
-                            onClick={update}
-                            className="px-4 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition-colors duration-300"
+                            onClick={() => {
+                                setSaveDialogVisible(true);
+                            }}
+                            className="px-4 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition-colors duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                            disabled={!hasChanges}
                         >
                             Save Changes
                         </button>
@@ -107,7 +158,7 @@ export default function Order({ order }) {
                                             <img
                                                 src={`/assets/products/${product.product.display_image}`}
                                                 alt={product.product.name}
-                                                className="w-[100px] h-[100px] object-cover bg-gray-400 rounded-sm"
+                                                className="w-[100px] h-[100px] object-cover bg-products rounded-sm"
                                             />
                                             <div className="ml-5">
                                                 <h3 className="text-xl">

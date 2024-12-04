@@ -88,10 +88,10 @@ export default function Product({ product }) {
             <Head title={product.name} />
             <Navbar />
             {showAlert && <Alert type="success" message="Added to cart!" />}
-            <div className="flex flex-col justify-start pt-[10vh] pb-[20vh] overflow-y-auto items-center">
+            <div className="flex flex-col justify-start pt-[10vh] pb-[20vh] overflow-y-auto items-center albert-sans">
                 <div className="pl-[200px] flex flex-row justify-start w-full">
                     <div className="flex flex-col space-y-5 ">
-                        <div className="border-black border-solid border w-[30vw] h-[600px] flex items-center bg-gray-400">
+                        <div className="border-black border-solid border w-[30vw] h-[600px] flex items-center bg-products">
                             <img
                                 className="w-[600px] h-auto object-cover "
                                 src={`/assets/products/${selectedImage}`}
@@ -101,7 +101,7 @@ export default function Product({ product }) {
                             {images.map((image, index) => (
                                 <img
                                     key={index}
-                                    className="cursor-pointer hover:scale-105 hover:opacity-80 transition-all bg-gray-400 border-black border-solid border "
+                                    className="cursor-pointer hover:scale-105 hover:opacity-80 transition-all bg-products border-black border-solid border "
                                     onClick={() => setImage(index)}
                                     src={`/assets/products/${image}`}
                                 />
@@ -130,7 +130,7 @@ export default function Product({ product }) {
                                     <select
                                         value={data.size}
                                         onChange={changeSize}
-                                        className="cursor-pointer"
+                                        className="cursor-pointer bg-clearBlack focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
                                     >
                                         {product.sizes.map((size, index) => {
                                             return (
@@ -153,29 +153,34 @@ export default function Product({ product }) {
                                         min="1"
                                         value={Number(data.quantity)}
                                         onChange={changeQty}
-                                        className="max-w-20 cursor-pointer"
+                                        className="max-w-20 cursor-pointer bg-clearBlack focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 "
                                     />
                                 </div>
                             </div>
-                            <PrimaryButton
-                                onClick={submit}
-                                disabled={getStock() === 0}
-                                className="mt-[20px] mr-3"
-                            >
-                                Add to cart
-                            </PrimaryButton>
+                            <div className="mt-10">
+                                <PrimaryButton
+                                    onClick={submit}
+                                    disabled={getStock() === 0}
+                                    className="mt-[20px] mr-3 bg-products text-white hover:text-black transition-all"
+                                >
+                                    <p className="text-lg font-bold">
+                                        Add to cart
+                                    </p>
+                                </PrimaryButton>
 
-                            <PrimaryButton
-                                disabled={getStock() === 0}
-                                onClick={buy}
-                                className="mt-[20px]"
-                            >
-                                Buy now
-                            </PrimaryButton>
+                                <PrimaryButton
+                                    disabled={getStock() === 0}
+                                    onClick={buy}
+                                    className="mt-[20px] bg-products text-white hover:text-black transition-all"
+                                >
+                                    <p className="text-lg font-bold">Buy now</p>
+                                </PrimaryButton>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }

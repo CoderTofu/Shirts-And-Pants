@@ -155,34 +155,55 @@ export default function ShoppingCart({ cart, orders }) {
                         </div>
                         {tab === "Cart" ? (
                             <div className="flex flex-1 flex-col ">
-                                {cart.cart_items.map((item, index) => (
-                                    <div key={index}>
-                                        <ShoppingCartItem
-                                            item={item}
-                                            selected={selected}
-                                            setSelected={setSelected}
+                                {cart.cart_items.length === 0 ? (
+                                    <div className="w-full flex items-center flex-col my-16">
+                                        <img
+                                            src="/assets/images/sad_face.png"
+                                            alt="No Items in the cart"
                                         />
+                                        <p className="albert-sans mt-2 text-base">
+                                            You have no items in your cart.
+                                        </p>
                                     </div>
-                                ))}
+                                ) : (
+                                    cart.cart_items.map((item, index) => (
+                                        <div key={index}>
+                                            <ShoppingCartItem
+                                                item={item}
+                                                selected={selected}
+                                                setSelected={setSelected}
+                                            />
+                                        </div>
+                                    ))
+                                )}
+
                                 {/* Price of selected items and action buttons */}
                                 <div className="flex justify-between items-center mt-5">
                                     <p className="text-2xl font-bold">
                                         Total: P {total_price.toFixed(2)}
                                     </p>
-                                    <div>
+                                    <div className="flex space-x-5">
                                         <button
                                             disabled={selected.length === 0}
-                                            className="px-10 py-2 bg-red-600 text-white font-semibold rounded-md disabled:opacity-20 hover:bg-red-700 transition-colors duration-300 mr-5"
-                                            onClick={() => {
-                                                setDeleteDialogVisible(true);
-                                            }}
+                                            className={`px-10 py-2 font-semibold rounded-md transition-colors duration-300 ${
+                                                selected.length === 0
+                                                    ? "bg-red-600 text-white opacity-20 cursor-not-allowed"
+                                                    : "bg-red-600 text-white hover:bg-red-700"
+                                            }`}
+                                            onClick={() =>
+                                                setDeleteDialogVisible(true)
+                                            }
                                         >
                                             Delete
                                         </button>
                                         <button
-                                            onClick={checkout}
                                             disabled={selected.length === 0}
-                                            className="albert-sans text-lg font-semibold border border-black px-10 py-2 rounded-md hover:bg-black hover:text-white transition-colors duration-300 cursor-pointer"
+                                            className={`albert-sans text-lg font-semibold border border-black px-10 py-2 rounded-md transition-colors duration-300 ${
+                                                selected.length === 0
+                                                    ? "opacity-20 cursor-not-allowed"
+                                                    : "hover:bg-black hover:text-white"
+                                            }`}
+                                            onClick={checkout}
                                         >
                                             Checkout
                                         </button>
@@ -191,103 +212,120 @@ export default function ShoppingCart({ cart, orders }) {
                             </div>
                         ) : (
                             <div className="space-y-1">
-                                {orders.map((order, index) => (
-                                    <div
-                                        key={index}
-                                        className="border-[2px] border-gray-200 rounded-lg p-4 bg-white mb-0"
-                                    >
-                                        <div className="flex justify-between items-center">
-                                            <div>
-                                                <h3 className="font-bold text-lg">
-                                                    Order #{order.id}
-                                                </h3>
-                                                <p className="text-gray-500 text-sm">
-                                                    {new Date(
-                                                        order.date
-                                                    ).toUTCString()}
-                                                </p>
-                                                <p className="font-semibold text-xl text-gray-700">
-                                                    P {order.total}
-                                                </p>
+                                {orders.length === 0 ? (
+                                    <div className="w-full flex items-center flex-col my-16">
+                                        <img
+                                            src="/assets/images/sad_face.png"
+                                            alt="No orders"
+                                        />
+                                        <p className="albert-sans mt-2 text-base">
+                                            You have no orders.
+                                        </p>
+                                    </div>
+                                ) : (
+                                    orders.map((order, index) => (
+                                        <div
+                                            key={index}
+                                            className="border-[2px] border-gray-200 rounded-lg p-4 bg-white mb-0"
+                                        >
+                                            <div className="flex justify-between items-center">
+                                                <div>
+                                                    <h3 className="font-bold text-lg">
+                                                        Order #{order.id}
+                                                    </h3>
+                                                    <p className="text-gray-500 text-sm">
+                                                        {new Date(
+                                                            order.date
+                                                        ).toUTCString()}
+                                                    </p>
+                                                    <p className="font-semibold text-xl text-gray-700">
+                                                        P {order.total}
+                                                    </p>
+                                                </div>
+                                                <div className="flex justify-start items-center space-x-2">
+                                                    <p
+                                                        className={`text-sm font-semibold  text-white py-2 px-3 rounded-lg ${
+                                                            order.status ===
+                                                            "Completed"
+                                                                ? "bg-green-500"
+                                                                : order.status ===
+                                                                  "Cancelled"
+                                                                ? "bg-red-500"
+                                                                : "bg-yellow-500"
+                                                        }`}
+                                                    >
+                                                        {order.status}
+                                                    </p>
+                                                    <button
+                                                        onClick={() =>
+                                                            toggleDetails(index)
+                                                        }
+                                                        className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 focus:outline-none"
+                                                    >
+                                                        {visibleOrder === index
+                                                            ? "Hide Details"
+                                                            : "View Details"}
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div className="flex justify-start items-center space-x-2">
-                                                <p
-                                                    className={`text-sm font-semibold  text-white py-2 px-3 rounded-lg ${
-                                                        order.status ===
-                                                        "Completed"
-                                                            ? "bg-green-500"
-                                                            : order.status ===
-                                                              "Cancelled"
-                                                            ? "bg-red-500"
-                                                            : "bg-yellow-500"
-                                                    }`}
-                                                >
-                                                    {order.status}
-                                                </p>
-                                                <button
-                                                    onClick={() =>
-                                                        toggleDetails(index)
-                                                    }
-                                                    className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 focus:outline-none"
-                                                >
-                                                    {visibleOrder === index
-                                                        ? "Hide Details"
-                                                        : "View Details"}
-                                                </button>
-                                            </div>
-                                        </div>
-                                        {visibleOrder === index && (
-                                            <div className="mt-4">
-                                                {order.products.map(
-                                                    (product, productIndex) => (
-                                                        <div
-                                                            key={productIndex}
-                                                            className="flex items-center space-x-4 border-[2px] border-gray-200 p-2 rounded-lg mb-2"
-                                                        >
-                                                            <img
-                                                                src={
-                                                                    "assets/products/" +
-                                                                    product
-                                                                        .product
-                                                                        .display_image
+                                            {visibleOrder === index && (
+                                                <div className="mt-4">
+                                                    {order.products.map(
+                                                        (
+                                                            product,
+                                                            productIndex
+                                                        ) => (
+                                                            <div
+                                                                key={
+                                                                    productIndex
                                                                 }
-                                                                alt={
-                                                                    product
-                                                                        .product
-                                                                        .name
-                                                                }
-                                                                className="w-16 h-16 object-cover bg-gray-400 rounded-sm border"
-                                                            />
-                                                            <div>
-                                                                <h4 className="font-semibold text-lg">
-                                                                    {
+                                                                className="flex items-center space-x-4 border-[2px] border-gray-200 p-2 rounded-lg mb-2"
+                                                            >
+                                                                <img
+                                                                    src={
+                                                                        "assets/products/" +
+                                                                        product
+                                                                            .product
+                                                                            .display_image
+                                                                    }
+                                                                    alt={
                                                                         product
                                                                             .product
                                                                             .name
                                                                     }
-                                                                </h4>
-                                                                <p className="text-gray-500 text-sm">
-                                                                    Size:{" "}
-                                                                    {
-                                                                        product
-                                                                            .variant
-                                                                            .size
-                                                                    }
-                                                                </p>
-                                                                <p className="text-gray-500 text-sm">
-                                                                    Quantity:{" "}
-                                                                    {
-                                                                        product.quantity
-                                                                    }
-                                                                </p>
+                                                                    className="w-16 h-16 object-cover bg-gray-400 rounded-sm border"
+                                                                />
+                                                                <div>
+                                                                    <h4 className="font-semibold text-lg">
+                                                                        {
+                                                                            product
+                                                                                .product
+                                                                                .name
+                                                                        }
+                                                                    </h4>
+                                                                    <p className="text-gray-500 text-sm">
+                                                                        Size:{" "}
+                                                                        {
+                                                                            product
+                                                                                .variant
+                                                                                .size
+                                                                        }
+                                                                    </p>
+                                                                    <p className="text-gray-500 text-sm">
+                                                                        Quantity:{" "}
+                                                                        {
+                                                                            product.quantity
+                                                                        }
+                                                                    </p>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    )
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
+                                                        )
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))
+                                )}
                             </div>
                         )}
                     </div>

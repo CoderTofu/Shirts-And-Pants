@@ -90,11 +90,11 @@ export default function ShoppingCartItem({ item, selected, setSelected }) {
                 <div className="flex justify-center items-center">
                     <input
                         type="checkbox"
-                        className="mr-4 cursor-pointer"
+                        className="mr-4 cursor-pointer focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
                         onChange={handleSelect}
                     />
                     <img
-                        className="h-[200px] w-auto object-cover rounded-md bg-gray-400"
+                        className="h-[200px] w-auto object-cover rounded-md bg-products"
                         src={`/assets/products/${item.display_image}`}
                         alt={item.product.name}
                     />
@@ -112,7 +112,7 @@ export default function ShoppingCartItem({ item, selected, setSelected }) {
                     <div className="flex justify-center items-center">
                         <p className="albert-sans text-sm mr-2">Size:</p>
                         <select
-                            className="cursor-pointer"
+                            className="cursor-pointer rounded px-2 pr-10 py-1 bg-clearBlack focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
                             value={currentSize}
                             onChange={handleSizeChange}
                         >
@@ -128,7 +128,7 @@ export default function ShoppingCartItem({ item, selected, setSelected }) {
                     <div className=" ml-10 flex justify-center items-center">
                         <p className="albert-sans text-sm mr-2">Quantity:</p>
                         <input
-                            className="w-16 border rounded text-center px-2 py-1"
+                            className="w-16 border rounded px-3 py-1 bg-clearBlack focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
                             type="number"
                             name="quantity"
                             onChange={handleQtyChange}

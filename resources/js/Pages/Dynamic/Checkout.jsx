@@ -65,7 +65,7 @@ export default function Checkout({ orders }) {
                                     <img
                                         src={`/assets/products/${item.display_image}`}
                                         alt="Product Image"
-                                        className="w-[200px] h-[200px] object-cover mr-5 bg-gray-400 rounded-sm"
+                                        className="w-[200px] h-[200px] object-cover mr-5 bg-products rounded-sm"
                                     />
                                     <div>
                                         <h3 className="text-xl font-bold">
@@ -148,9 +148,9 @@ export default function Checkout({ orders }) {
 
                         {/* Place Order */}
                         <div className="col-span-2 "></div>
-                        <div className="col-span-1 rounded-xl flex justify-center mt-2 bg-gray-700 transition-all hover:bg-gray-900">
+                        <div className="col-span-1 rounded flex justify-center mt-2  transition-all ">
                             <button
-                                className="w-full text-white px-12 py-2 rounded-lg text-xl "
+                                className="w-full max-w-[300px] bg-gray-600 hover:bg-gray-900 transition-all text-white px-12 py-2 rounded-lg text-xl "
                                 onClick={() => post("/shopping-cart/confirm")}
                             >
                                 Place Order

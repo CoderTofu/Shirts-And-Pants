@@ -14,6 +14,7 @@ html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Albert Sans", sans-serif;
 }
 
 .league-spartan {
@@ -54,6 +55,26 @@ html {
 
 .min-h-90vw {
     min-height: 90vw;
+}
+
+.bg-products {
+    background-color: #aca79c;
+}
+
+.bg-clearBlack {
+    background-color: #e6e6e4;
+}
+
+.text-lightGray {
+    color: #929292;
+}
+
+.bg-green {
+    background-color: #c5efdf;
+}
+
+.text-green {
+    color: #40a67d;
 }
 
 body {

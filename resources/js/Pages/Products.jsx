@@ -28,6 +28,7 @@ export default function Products({ products }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [filterType, setFilterType] = useState("");
     const [displayedProducts, setDisplayedProducts] = useState(products);
+
     const [showSearchAlert, setShowSearchAlert] = useState(false);
     const [showFilterAlert, setShowFilterAlert] = useState(false);
 
@@ -64,6 +65,7 @@ export default function Products({ products }) {
         <>
             <Head title="Products" />
             <Navbar auth />
+
             {showSearchAlert && (
                 <Alert type="success" message="Search applied!" />
             )}
@@ -71,70 +73,97 @@ export default function Products({ products }) {
             {showFilterAlert && (
                 <Alert type="success" message="Filter applied!" />
             )}
-            <div className="px-[200px] py-5">
+            <div className="px-[200px] py-[50px]">
                 <div className="flex justify-between">
-                    <h1 className="text-4xl font-bold albert-sans">Products</h1>
+                    <h1 className="text-4xl font-bold albert-sans">
+                        Our Products
+                    </h1>
 
                     {/* Search and Filters */}
-                    <div className="flex justify-between items-center mb-4">
-                        <input
-                            type="text"
-                            placeholder="Search products..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    handleSearch();
-                                }
-                            }}
-                            className="border p-2 rounded"
-                        />
+                    <div className="flex justify-between items-center mb-4 cursor-text">
+                        <div
+                            onClick={() =>
+                                document.getElementById("searchInput").focus()
+                            }
+                            className="flex px-5 rounded mr-5 items-center bg-clearBlack border border-gray-400 focus:outline-none focus:ring focus:border-gray-400-500 "
+                        >
+                            <img
+                                src="/assets/images/search.png"
+                                className="h-[18px] w-auto"
+                                alt=""
+                            />
+                            <input
+                                id="searchInput"
+                                type="text"
+                                placeholder="Search products..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        handleSearch();
+                                    }
+                                }}
+                                className=" border-none bg-clearBlack focus:outline-none focus:ring-0 "
+                            />
+                        </div>
                         <select
                             value={filterType}
                             onChange={handleFilterType}
-                            className="border p-2 rounded"
+                            className="border border-gray-400 text-lightGray py-2 rounded cursor-pointer bg-clearBlack focus:ring-0 focus:border-gray-500 w-fit pr-10"
                         >
-                            <option value="">All Types</option>
-                            <option value="shirt">Shirt</option>
-                            <option value="pants">Pants</option>
+                            <option className="cursor-pointer" value="">
+                                All Types
+                            </option>
+                            <option className="cursor-pointer" value="shirt">
+                                Shirt
+                            </option>
+                            <option className="cursor-pointer" value="pants">
+                                Pants
+                            </option>
                         </select>
-                        <button
-                            onClick={handleSearch}
-                            className="bg-blue-500 text-white px-4 py-2 rounded"
-                        >
-                            Search
-                        </button>
                     </div>
                 </div>
 
                 {/* Product Grid */}
-                <div className="m-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-8">
-                    {displayedProducts.map((product) => (
-                        <div
-                            key={product.id}
-                            className="hover:scale-105 transition-all"
-                        >
-                            <a
-                                href={`/products/${product.id}`}
-                                className="text-center"
+                {displayedProducts.length === 0 ? (
+                    <div className="w-full flex items-center flex-col mt-16">
+                        <img
+                            src="/assets/images/sad_face.png"
+                            alt="No Items Found"
+                        />
+                        <p className="albert-sans mt-2 text-base">
+                            Sorry, we couldn’t find any results.
+                        </p>
+                    </div>
+                ) : (
+                    <div className="m-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-8">
+                        {displayedProducts.map((product) => (
+                            <div
+                                key={product.id}
+                                className="hover:scale-105 transition-all"
                             >
-                                <div className="bg-gray-400 py-5">
-                                    <img
-                                        src={`assets/products/${product.display_image}`}
-                                        alt={product.name}
-                                        className="hover:brightness-90 transition-all"
-                                    />
-                                </div>
-                                <h4 className="albert-sans text-xl p-3 pb-1 font-bold">
-                                    {product.name}
-                                </h4>
-                                <h6 className="albert-sans font-thin italic text-sm">
-                                    P {product.price}
-                                </h6>
-                            </a>
-                        </div>
-                    ))}
-                </div>
+                                <a
+                                    href={`/products/${product.id}`}
+                                    className="text-center"
+                                >
+                                    <div className="bg-products py-5">
+                                        <img
+                                            src={`assets/products/${product.display_image}`}
+                                            alt={product.name}
+                                            className="hover:brightness-90 transition-all"
+                                        />
+                                    </div>
+                                    <h4 className="albert-sans text-xl p-3 pb-1 font-bold">
+                                        {product.name}
+                                    </h4>
+                                    <h6 className="albert-sans font-thin italic text-sm">
+                                        P {product.price}
+                                    </h6>
+                                </a>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </>
     );
