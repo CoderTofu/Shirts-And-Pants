@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Product;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\CheckAdmin;
@@ -12,9 +13,15 @@ use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ShoppingCartController;
 
 Route::get('/', function () {
-    $products = app(ProductController::class)->list(); // Call the 'list' method
+    $products = Product::inRandomOrder()
+        ->limit(3)
+        ->get()
+        ->map(function ($product) {
+            return $product->jsonify();
+        }
+    );
     return Inertia::render('Home', [
-        'products' => $products,
+        'randomProducts' => $products,
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,

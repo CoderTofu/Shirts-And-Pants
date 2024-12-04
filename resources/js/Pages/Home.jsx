@@ -1,7 +1,5 @@
 import { Head } from "@inertiajs/react";
 import Navbar from "../Elements/Navbar";
-import Footer from "../Elements/Footer";
-
 import Autoplay from "embla-carousel-autoplay";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -12,28 +10,7 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel";
 
-const threeRandomProducts = [
-    {
-        id: 1,
-        name: "SAP Basic Style Tee",
-        display_image: "SAP Basic Style Tee_1.png",
-        price: "349.00",
-    },
-    {
-        id: 2,
-        name: "Retro Vibe Tee",
-        display_image: "SAP Retro Vibe Tee_1.png",
-        price: "299.00",
-    },
-    {
-        id: 3,
-        name: "SAP Butterfly Trio Tee",
-        display_image: "SAP Butterfly Trio Tee_1.png",
-        price: "249.00",
-    },
-];
-
-export default function Welcome({ products }) {
+export default function Welcome({ randomProducts }) {
     const carouselItems = [
         "/assets/images/banners/banner_1.png",
         "/assets/images/banners/banner_2.png",
@@ -48,8 +25,6 @@ export default function Welcome({ products }) {
     const shuffledItems = carouselItems
         .sort(() => 0.5 - Math.random())
         .slice(0, 5);
-
-    console.log(products);
 
     return (
         <>
@@ -93,7 +68,7 @@ export default function Welcome({ products }) {
             </Carousel>
 
             <div className="m-10 mx-32 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-1 gap-y-8">
-                {threeRandomProducts.map((product) => (
+                {randomProducts.map((product) => (
                     <div
                         key={product.id}
                         className="hover:scale-105 transition-all flex flex-col items-center"
