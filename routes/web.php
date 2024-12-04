@@ -85,15 +85,6 @@ Route::middleware(['auth', CheckAdmin::class])->group(function (){
     Route::delete('/order/{id}', [OrderController:: class, 'destroy'])->name('order.destroy');
 });
 
-
-route::get('/404', function(){ // Temporary route for testing
-    return Inertia::render('404');
-});
-
-route::get('/error', function(){ // Temporary route for testing
-    return Inertia::render('Error');
-});
-
 Route::fallback(function () {
     return Inertia::render('404')
         ->toResponse(request())
