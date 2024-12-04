@@ -2,6 +2,27 @@ import Navbar from "../Elements/Navbar";
 import { Head } from "@inertiajs/react";
 
 export default function About() {
+    function returnTeam(img, name, role, handle) {
+        return (
+            <div
+                className="flex flex-col bg-white rounded-3xl pb-5 transition-all hover:brightness-75 hover:scale-105 cursor-pointer"
+                onClick={() =>
+                    window.open(`https://www.facebook.com/${handle}/`, "_blank")
+                }
+            >
+                <img
+                    src={`/assets/images/${img}.png`}
+                    alt={name}
+                    className="h-auto w-full object-cover"
+                />
+                <div className="text-center">
+                    <h4 className="text-3xl font-bold pb-1 pt-3">{name}</h4>
+                    <h6>{role}</h6>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <>
             <Navbar />
@@ -27,7 +48,7 @@ export default function About() {
                 </div>
             </div>
             {/* Content */}
-            <div className="flex flex-col justify-center items-center mt-20">
+            <div className="flex flex-col justify-center items-center mt-20 px-4 sm:px-8 md:px-16 lg:px-24">
                 <div className="albert-sans">
                     <h2 className="text-center text-4xl font-black">
                         ABOUT US
@@ -68,7 +89,49 @@ export default function About() {
                     <h2 className="text-center text-4xl font-black">
                         MEET THE TEAM
                     </h2>
-                    {/* INSERT CARDS HERE */}
+                    <div className="px-4 sm:px-8 md:px-16 lg:px-24 pb-10 m-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-8">
+                        {returnTeam(
+                            "Paolo",
+                            "Paolo Dionisio",
+                            "Front-End Developer | Leader",
+                            "paoIoer"
+                        )}
+
+                        {returnTeam(
+                            "Irish",
+                            "Irish Gorme",
+                            "UI/UX Designer",
+                            "arishhiii"
+                        )}
+
+                        {returnTeam(
+                            "Princess",
+                            "Princess Gorme",
+                            "Lead UI/UX Designer",
+                            "cssgrgr"
+                        )}
+
+                        {returnTeam(
+                            "Venus",
+                            "Venus Sanchez",
+                            "UI/UX Designer | Database",
+                            "venus.sanchez.752"
+                        )}
+
+                        {returnTeam(
+                            "Raffy",
+                            "Rafael Torres",
+                            "Back-End Developer",
+                            "rstorresss"
+                        )}
+
+                        {returnTeam(
+                            "Ysa",
+                            "Ysabella Vargas",
+                            "UI/UX Designer",
+                            "ysabellamae.vargas"
+                        )}
+                    </div>
                 </div>
             </div>
         </>

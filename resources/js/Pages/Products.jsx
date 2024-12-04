@@ -73,14 +73,14 @@ export default function Products({ products }) {
             {showFilterAlert && (
                 <Alert type="success" message="Filter applied!" />
             )}
-            <div className="px-[200px] py-[50px]">
-                <div className="flex justify-between">
-                    <h1 className="text-4xl font-bold albert-sans">
+            <div className="">
+                <div className=" flex flex-col md:flex-row justify-between pt-10 px-8">
+                    <h1 className="text-4xl mt font-bold albert-sans">
                         Our Products
                     </h1>
 
                     {/* Search and Filters */}
-                    <div className="flex justify-between items-center mb-4 cursor-text">
+                    <div className="flex items-center mt-4 md:mt-0 md:mb-4 cursor-text">
                         <div
                             onClick={() =>
                                 document.getElementById("searchInput").focus()
@@ -136,7 +136,7 @@ export default function Products({ products }) {
                         </p>
                     </div>
                 ) : (
-                    <div className="m-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-8">
+                    <div className="m-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-8">
                         {displayedProducts.map((product) => (
                             <div
                                 key={product.id}
