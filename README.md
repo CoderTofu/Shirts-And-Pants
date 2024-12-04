@@ -2,7 +2,7 @@
 
 ## About SAP
 
-Shirts & Pants (SAP) is an E-commerce website created using Laravel and React.js. It is a simple E-commerce website where users can view products, add them to cart, and place an order. The website also has an admin panel where the admin can add, update, and delete products. The admin can also view the orders placed by the users.
+Shirts & Pants (SAP) is an E-commerce website created using Laravel and React.js. It is a simple E-commerce website where users can view products, add them to cart, and place an order. The website also has an admin panel where the admin can monitor and update customer orders.
 
 ## How to run the project
 
