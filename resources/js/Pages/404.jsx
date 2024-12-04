@@ -1,9 +1,11 @@
 import Navbar from "../Elements/Navbar";
+import { Head } from "@inertiajs/react";
 
 export default function page404() {
     return (
         <>
             <Navbar />
+            <Head title="404" />
             <div className="flex justify-center flex-col items-center h-screen w-screen">
                 <div className="flex flex-col justify-center items-center">
                     <h1 className="albert-sans text-8xl font-bold">404</h1>

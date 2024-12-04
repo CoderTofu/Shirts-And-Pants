@@ -12,7 +12,9 @@ use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ShoppingCartController;
 
 Route::get('/', function () {
+    $products = app(ProductController::class)->list(); // Call the 'list' method
     return Inertia::render('Home', [
+        'products' => $products,
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,

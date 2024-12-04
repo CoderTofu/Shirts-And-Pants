@@ -161,7 +161,7 @@ export default function Product({ product }) {
                                 <PrimaryButton
                                     onClick={submit}
                                     disabled={getStock() === 0}
-                                    className="mt-[20px] mr-3 bg-products text-white hover:text-black transition-all"
+                                    className="mt-[20px] mr-3 bg-gray-300 text-black border border-gray-600 rounded-md transition-all hover:bg-gray-600 hover:text-white hover:border-transparent disabled:opacity-50"
                                 >
                                     <p className="text-lg font-bold">
                                         Add to cart
@@ -171,7 +171,7 @@ export default function Product({ product }) {
                                 <PrimaryButton
                                     disabled={getStock() === 0}
                                     onClick={buy}
-                                    className="mt-[20px] bg-products text-white hover:text-black transition-all"
+                                    className="mt-[20px] bg-gray-600 text-black border border-transparent hover:bg-gray-800 hover:text-white transition-all disabled:opacity-50"
                                 >
                                     <p className="text-lg font-bold">Buy now</p>
                                 </PrimaryButton>

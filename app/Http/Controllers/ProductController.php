@@ -10,7 +10,7 @@ use Inertia\Inertia;
 class ProductController extends Controller
 {
 
-    public function list(Request $request)
+    public function list(Request $request = null)
     {
         $products = Product::with(['variants.size', 'images'])->get();
         $response = $products->map(function ($product) { 

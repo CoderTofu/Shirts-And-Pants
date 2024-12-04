@@ -4,6 +4,8 @@ export default function Error() {
     return (
         <>
             <Navbar />
+            <Head title="Error" />
+
             <div className="flex justify-center flex-col items-center h-screen w-screen">
                 <div className="flex flex-col justify-center items-center">
                     <h1 className="albert-sans text-8xl font-bold">Error</h1>

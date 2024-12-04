@@ -146,7 +146,7 @@ export default function Products({ products }) {
                                     href={`/products/${product.id}`}
                                     className="text-center"
                                 >
-                                    <div className="bg-products py-5">
+                                    <div className="bg-products hover:brightness-75 py-5 transition-all">
                                         <img
                                             src={`assets/products/${product.display_image}`}
                                             alt={product.name}

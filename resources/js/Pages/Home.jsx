@@ -12,7 +12,28 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel";
 
-export default function Welcome({ auth, laravelVersion, phpVersion }) {
+const threeRandomProducts = [
+    {
+        id: 1,
+        name: "SAP Basic Style Tee",
+        display_image: "SAP Basic Style Tee_1.png",
+        price: "349.00",
+    },
+    {
+        id: 2,
+        name: "Retro Vibe Tee",
+        display_image: "SAP Retro Vibe Tee_1.png",
+        price: "299.00",
+    },
+    {
+        id: 3,
+        name: "SAP Butterfly Trio Tee",
+        display_image: "SAP Butterfly Trio Tee_1.png",
+        price: "249.00",
+    },
+];
+
+export default function Welcome({ products }) {
     const carouselItems = [
         "/assets/images/banners/banner_1.png",
         "/assets/images/banners/banner_2.png",
@@ -27,6 +48,8 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
     const shuffledItems = carouselItems
         .sort(() => 0.5 - Math.random())
         .slice(0, 5);
+
+    console.log(products);
 
     return (
         <>
@@ -68,6 +91,34 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                 </CarouselContent>
                 <CarouselNext className="absolute right-5 z-20 border-none bg-white rounded cursor-pointer transition-all opacity-15 hover:opacity-100" />
             </Carousel>
+
+            <div className="m-10 mx-32 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-1 gap-y-8">
+                {threeRandomProducts.map((product) => (
+                    <div
+                        key={product.id}
+                        className="hover:scale-105 transition-all flex flex-col items-center"
+                    >
+                        <a
+                            href={`/products/${product.id}`}
+                            className="text-center"
+                        >
+                            <div className="bg-products py-5">
+                                <img
+                                    src={`assets/products/${product.display_image}`}
+                                    alt={product.name}
+                                    className="hover:brightness-90 transition-all"
+                                />
+                            </div>
+                            <h4 className="albert-sans text-xl p-3 pb-1 font-bold">
+                                {product.name}
+                            </h4>
+                            <h6 className="albert-sans font-thin italic text-sm">
+                                P {product.price}
+                            </h6>
+                        </a>
+                    </div>
+                ))}
+            </div>
         </>
     );
 }
