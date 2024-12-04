@@ -7,11 +7,6 @@ export default function About() {
             <Navbar />
             {/* Banner */}
             <Head title="About" />
-            {/* <div className="p-5 bg-customGray">
-                <p className="albert-sans italic font-medium text-center">
-                    Simple. Bold. Yours.
-                </p>
-            </div> */}
             <div className="relative">
                 <img
                     src="/assets/images/banners/banner_8.png"
