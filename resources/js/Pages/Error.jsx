@@ -1,4 +1,5 @@
 import Navbar from "../Elements/Navbar";
+import { Head } from "@inertiajs/react";
 
 export default function Error() {
     return (

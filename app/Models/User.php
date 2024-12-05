@@ -3,12 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -41,6 +41,8 @@ class User extends Authenticatable
     protected $attributes = [
         'is_admin' => false,
     ];
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     /**
      * Get the attributes that should be cast.
@@ -59,7 +61,7 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'user_id', 'id');
     }
     public function jsonify(){
-        return ['id'=>$this->id, 'name' => $this->name, 'address' => $this->address, 'phone' => $this->phone, 'email' => $this->email];
+        return ['id'=>$this->id, 'name' => $this->first_name.' '.$this->last_name, 'username' => $this->username, 'address' => $this->address, 'phone' => $this->phone, 'email' => $this->email];
     }
 
     protected static function boot()
@@ -67,9 +69,14 @@ class User extends Authenticatable
         parent::boot();
 
         static::creating(function ($model) {
-            if (empty($model->user_id)) {
-                $model->user_id = Str::random(9); // Generate a 9-character string
+            if (empty($model->id)) {
+                $number = strval(mt_rand(0, 999999999));
+                $model->id = str_pad($number, 9, '0', STR_PAD_LEFT);
             }
         });
+    }
+    public function getAuthIdentifier()
+    {
+        return $this->getKey();
     }
 }

@@ -1,6 +1,17 @@
 import Navbar from "../../Elements/Navbar";
 import { Head, usePage, useForm } from "@inertiajs/react";
 
+function addWeekdays(date, daysToAdd) {
+    while (daysToAdd > 0) {
+        date.setDate(date.getDate() + 1);
+        // Check if the current day is a weekend (Saturday or Sunday)
+        if (date.getDay() !== 6 && date.getDay() !== 0) {
+            daysToAdd--; // Only count weekdays
+        }
+    }
+    return date;
+}
+
 export default function Checkout({ orders }) {
     console.log(orders);
     const items = orders.selected_items;
@@ -12,14 +23,14 @@ export default function Checkout({ orders }) {
         total_price: total_price + shippingFee,
     });
 
-    const estimatedDeliveryDate = new Date();
-    estimatedDeliveryDate.setDate(estimatedDeliveryDate.getDate() + 3);
+    let estimatedDeliveryDate = new Date();
+    estimatedDeliveryDate = addWeekdays(new Date(estimatedDeliveryDate), 3);
     const deliveryStart = estimatedDeliveryDate.toLocaleDateString("en-US", {
         month: "long",
         day: "numeric",
     });
 
-    estimatedDeliveryDate.setDate(estimatedDeliveryDate.getDate() + 4);
+    estimatedDeliveryDate = addWeekdays(new Date(estimatedDeliveryDate), 4);
     const deliveryEnd = estimatedDeliveryDate.toLocaleDateString("en-US", {
         month: "long",
         day: "numeric",

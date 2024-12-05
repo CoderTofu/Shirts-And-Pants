@@ -1,7 +1,12 @@
 import { useForm } from "@inertiajs/react";
 import { useEffect, useRef, useState } from "react";
 
-export default function ShoppingCartItem({ item, selected, setSelected }) {
+export default function ShoppingCartItem({
+    item,
+    selected,
+    setSelected,
+    checked,
+}) {
     const sizes = item.product.sizes.map((size) => size.size);
     const { data, setData, patch, processing } = useForm({
         id: item.id,
@@ -90,6 +95,7 @@ export default function ShoppingCartItem({ item, selected, setSelected }) {
                 <div className="flex justify-center items-center">
                     <input
                         type="checkbox"
+                        checked={checked}
                         className="mr-4 cursor-pointer focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
                         onChange={handleSelect}
                     />

@@ -50,7 +50,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
         $route = route($user->is_admin ? 'dashboard' : 'home', absolute: false);
-        return redirect()->intended($route);
+        return redirect($route);
         // return redirect(route('dashboard', absolute: false));
     }
 }

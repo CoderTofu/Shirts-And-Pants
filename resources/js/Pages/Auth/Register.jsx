@@ -60,7 +60,7 @@ export default function Register() {
                             className="mt-2"
                         />
                     </div>
-                    <div>
+                    <div className="mt-4">
                         <InputLabel
                             htmlFor="last_name"
                             className="text-white"
@@ -73,7 +73,7 @@ export default function Register() {
                             value={data.last_name}
                             className="mt-1 block w-full input-bg-form border-none"
                             autoComplete="last_name"
-                            isFocused={true}
+                            isFocused={false}
                             onChange={(e) =>
                                 setData("last_name", e.target.value)
                             }
@@ -116,7 +116,7 @@ export default function Register() {
 
                         <TextInput
                             id="username"
-                            type="username"
+                            type="text"
                             name="username"
                             value={data.username}
                             className="mt-1 block w-full input-bg-form border-none"

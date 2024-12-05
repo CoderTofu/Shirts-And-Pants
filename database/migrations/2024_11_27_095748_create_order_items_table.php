@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->string('order_id', 12);
+            $table->string('order_id', 9);
             $table->unsignedBigInteger('shopping_cart_item_id');
             $table->foreign('shopping_cart_item_id')->references('id')->on('shopping_cart_items')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('order_id')->references('id')->on('orders')->cascadeOnDelete()->cascadeOnUpdate();

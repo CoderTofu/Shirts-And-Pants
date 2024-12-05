@@ -19,6 +19,9 @@ class Order extends Model
         'total'
     ];
 
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     public function items(){
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
@@ -45,10 +48,13 @@ class Order extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (empty($model->user_id)) {
-                $model->user_id = Str::random(12); // Generate a 9-character string
-            }
+            $number = strval(mt_rand(0, 999999999));
+            $model->id = str_pad($number, 9, '0', STR_PAD_LEFT); // Generate a 9-character string
         });
+    }
+    public function getAuthIdentifier()
+    {
+        return $this->getKey();
     }
 
 }

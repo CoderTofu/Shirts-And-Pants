@@ -41,6 +41,7 @@ import Alert from "../../Elements/Alert";
 
 export default function ShoppingCart({ cart, orders }) {
     const user = usePage().props.auth.user;
+    user.name = `${user.first_name} ${user.last_name}`;
     let [tab, setTab] = useState("Cart");
     let [selected, setSelected] = useState([]);
     let [total_price, setTotal] = useState(0);
@@ -110,6 +111,23 @@ export default function ShoppingCart({ cart, orders }) {
         }
     };
 
+    const handleSelectAll = () => {
+        if (selected.length === cart.cart_items.length) {
+            setSelected([]); // Deselect all
+        } else {
+            setSelected(cart.cart_items.map((item) => item)); // Select all
+        }
+    };
+
+    useEffect(() => {
+        let newTotal = 0;
+        selected.forEach((item) => {
+            newTotal += parseFloat(item.product.price * item.quantity);
+        });
+        setTotal(newTotal); // Update total price based on selected items
+        setData({ ...data, selected_items: selected, total_price: newTotal });
+    }, [selected]);
+
     return (
         <>
             <Head title="Shopping Cart" />
@@ -172,15 +190,33 @@ export default function ShoppingCart({ cart, orders }) {
                                         </p>
                                     </div>
                                 ) : (
-                                    cart.cart_items.map((item, index) => (
-                                        <div key={index}>
-                                            <ShoppingCartItem
-                                                item={item}
-                                                selected={selected}
-                                                setSelected={setSelected}
+                                    <>
+                                        {/* Select All Checkbox */}
+                                        <div className="flex items-center mb-4">
+                                            <input
+                                                type="checkbox"
+                                                checked={
+                                                    selected.length ===
+                                                    cart.cart_items.length
+                                                }
+                                                onChange={handleSelectAll}
+                                                className="mr-2 cursor-pointer"
                                             />
+                                            <span>Select All</span>
                                         </div>
-                                    ))
+                                        {cart.cart_items.map((item, index) => (
+                                            <div key={index}>
+                                                <ShoppingCartItem
+                                                    item={item}
+                                                    checked={selected.includes(
+                                                        item
+                                                    )}
+                                                    selected={selected}
+                                                    setSelected={setSelected}
+                                                />
+                                            </div>
+                                        ))}
+                                    </>
                                 )}
 
                                 {/* Price of selected items and action buttons */}

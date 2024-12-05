@@ -33,7 +33,6 @@ export default function Order({ order }) {
         } else {
             const price = order.products.find((product) => product.id === id)
                 .product.price;
-            console.log(price);
             setData({
                 ...data,
                 toDelete: [...data.toDelete, id],

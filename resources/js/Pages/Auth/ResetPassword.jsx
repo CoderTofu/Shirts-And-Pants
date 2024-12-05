@@ -26,7 +26,7 @@ export default function ResetPassword({ token, email }) {
             <Head title="Reset Password" />
 
             <form onSubmit={submit}>
-                <div>
+                <div className="mt-5">
                     <InputLabel htmlFor="email" value="Email" />
 
                     <TextInput
@@ -37,6 +37,7 @@ export default function ResetPassword({ token, email }) {
                         className="mt-1 block w-full"
                         autoComplete="username"
                         onChange={(e) => setData("email", e.target.value)}
+                        disabled
                     />
 
                     <InputError message={errors.email} className="mt-2" />

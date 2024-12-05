@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->string('id', 12)->primary();
+            $table->string('id', 9)->primary();
             $table->string('user_id', 9);
             $table->enum('status', ['To ship', 'Shipping', 'Completed', 'Cancelled'])->default('To ship');
             $table->decimal('total', 8, 2);
