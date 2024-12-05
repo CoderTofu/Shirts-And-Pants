@@ -14,7 +14,7 @@ use App\Http\Controllers\ShoppingCartController;
 
 Route::get('/', function () {
     $products = Product::inRandomOrder()
-        ->limit(3)
+        ->limit(4)
         ->get()
         ->map(function ($product) {
             return $product->jsonify();

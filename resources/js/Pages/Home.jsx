@@ -67,11 +67,11 @@ export default function Welcome({ randomProducts }) {
                 <CarouselNext className="absolute right-5 z-20 border-none bg-white rounded cursor-pointer transition-all opacity-15 hover:opacity-100" />
             </Carousel>
 
-            <div className="m-10 mx-32 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-1 gap-y-8">
+            <div className="px-4 sm:px-8 md:px-16 lg:px-24 pb-10 m-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-8">
                 {randomProducts.map((product) => (
                     <div
                         key={product.id}
-                        className="hover:scale-105 transition-all flex flex-col items-center"
+                        className="hover:scale-105 hover:brightness-75 transition-all flex flex-col items-center"
                     >
                         <a
                             href={`/products/${product.id}`}
