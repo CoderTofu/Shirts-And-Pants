@@ -7,8 +7,10 @@ import { Head, Link, useForm } from "@inertiajs/react";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: "",
+        first_name: "",
+        last_name: "",
         email: "",
+        username: "",
         password: "",
         password_confirmation: "",
     });
@@ -35,23 +37,53 @@ export default function Register() {
                 >
                     <div>
                         <InputLabel
-                            htmlFor="name"
+                            htmlFor="first_name"
                             className="text-white"
-                            value="Name"
+                            value="First Name"
                         />
 
                         <TextInput
-                            id="name"
-                            name="name"
-                            value={data.name}
+                            id="first_name"
+                            name="first_name"
+                            value={data.first_name}
                             className="mt-1 block w-full input-bg-form border-none"
-                            autoComplete="name"
+                            autoComplete="first_name"
                             isFocused={true}
-                            onChange={(e) => setData("name", e.target.value)}
+                            onChange={(e) =>
+                                setData("first_name", e.target.value)
+                            }
                             required
                         />
 
-                        <InputError message={errors.name} className="mt-2" />
+                        <InputError
+                            message={errors.first_name}
+                            className="mt-2"
+                        />
+                    </div>
+                    <div>
+                        <InputLabel
+                            htmlFor="last_name"
+                            className="text-white"
+                            value="Last Name"
+                        />
+
+                        <TextInput
+                            id="last_name"
+                            name="last_name"
+                            value={data.last_name}
+                            className="mt-1 block w-full input-bg-form border-none"
+                            autoComplete="last_name"
+                            isFocused={true}
+                            onChange={(e) =>
+                                setData("last_name", e.target.value)
+                            }
+                            required
+                        />
+
+                        <InputError
+                            message={errors.last_name}
+                            className="mt-2"
+                        />
                     </div>
 
                     <div className="mt-4">
@@ -73,6 +105,32 @@ export default function Register() {
                         />
 
                         <InputError message={errors.email} className="mt-2" />
+                    </div>
+
+                    <div className="mt-4">
+                        <InputLabel
+                            htmlFor="username"
+                            className="text-white"
+                            value="Username"
+                        />
+
+                        <TextInput
+                            id="username"
+                            type="username"
+                            name="username"
+                            value={data.username}
+                            className="mt-1 block w-full input-bg-form border-none"
+                            autoComplete="username"
+                            onChange={(e) =>
+                                setData("username", e.target.value)
+                            }
+                            required
+                        />
+
+                        <InputError
+                            message={errors.username}
+                            className="mt-2"
+                        />
                     </div>
 
                     <div className="mt-4">

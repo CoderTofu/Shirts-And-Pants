@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -18,8 +19,10 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
+        'username',
         'password',
         'address',
         'phone'
@@ -57,5 +60,16 @@ class User extends Authenticatable
     }
     public function jsonify(){
         return ['id'=>$this->id, 'name' => $this->name, 'address' => $this->address, 'phone' => $this->phone, 'email' => $this->email];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->user_id)) {
+                $model->user_id = Str::random(9); // Generate a 9-character string
+            }
+        });
     }
 }
