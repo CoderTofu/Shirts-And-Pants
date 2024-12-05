@@ -10,7 +10,7 @@ class Order extends Model
 {
     use HasUlids;
     protected $attributes = [
-        'status' => 'To ship',
+        'status' => 'Pending Order',
     ];
 
     protected $fillable = [

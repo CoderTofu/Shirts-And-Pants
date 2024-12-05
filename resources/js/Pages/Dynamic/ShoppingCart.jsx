@@ -1,11 +1,10 @@
 import { Head, useForm, usePage } from "@inertiajs/react";
 import Navbar from "@/Elements/Navbar";
 import ShoppingCartItem from "./ShoppingCartItem";
-import PrimaryButton from "@/Elements/PrimaryButton";
 import { useEffect, useState } from "react";
 import { Dialog } from "../../Elements/Dialog";
 import Alert from "../../Elements/Alert";
-
+import axios from "axios";
 /* 
     Cart = {
         cart_id: number
@@ -127,6 +126,12 @@ export default function ShoppingCart({ cart, orders }) {
         setTotal(newTotal); // Update total price based on selected items
         setData({ ...data, selected_items: selected, total_price: newTotal });
     }, [selected]);
+
+    const cancelOrder = (orderNumber) => {
+        axios
+            .post(`/order/cancel/${orderNumber}`)
+            .then((resp) => window.location.reload());
+    };
 
     return (
         <>
@@ -308,6 +313,19 @@ export default function ShoppingCart({ cart, orders }) {
                                                             ? "Hide Details"
                                                             : "View Details"}
                                                     </button>
+                                                    {order.status ===
+                                                        "Pending Order" && (
+                                                        <button
+                                                            onClick={() =>
+                                                                cancelOrder(
+                                                                    order.id
+                                                                )
+                                                            }
+                                                            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none"
+                                                        >
+                                                            Cancel Order
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </div>
                                             {visibleOrder === index && (

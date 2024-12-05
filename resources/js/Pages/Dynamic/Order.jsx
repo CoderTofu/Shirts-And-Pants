@@ -26,6 +26,8 @@ export default function Order({ order }) {
         total: Number(order.total),
     });
 
+    console.log(order.status);
+
     const remove = (id) => {
         if (order.products.length === data.toDelete.length + 1) {
             setDeleteError(true);
@@ -134,6 +136,9 @@ export default function Order({ order }) {
                                     }
                                     className="cursor-pointer border border-gray-300 rounded-md px-3 py-1 text-base focus:outline-none focus:ring-2 focus:ring-gray-400"
                                 >
+                                    <option value="Pending Order">
+                                        Pending Order
+                                    </option>
                                     <option value="To Ship">To Ship</option>
                                     <option value="Shipping">Shipping</option>
                                     <option value="Completed">Completed</option>

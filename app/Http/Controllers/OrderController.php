@@ -13,17 +13,23 @@ class OrderController extends Controller
         return Inertia::render('Dashboard', ['orders' => $orders] );
     }
 
-    public function get(Request $request, int $id){
+    public function get(Request $request, string $id){
         $order = Order::find($id)->jsonify();
         return Inertia::render('Dynamic/Order', ['order'=>$order]);
     }
 
-    public function edit(Request $request, int $id){
+    public function edit(Request $request, string $id){
         $order = Order::find($id);
         $order->status = $request->input('status');
         $toDelete = $request->input('toDelete');
         OrderItem::destroy($toDelete);
         $order->total = $request->input('total');
         $order->save();   
+    }
+
+    public function cancel(Request $request, string $id) {
+        $order = Order::find($id);
+        $order->status = 'Cancelled';
+        $order->save();
     }
 }

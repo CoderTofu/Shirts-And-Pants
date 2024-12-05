@@ -13,6 +13,8 @@ export default function Dashboard({ orders }) {
         .filter((order) => {
             // Filter by status
             if (tab === "ALL") return true;
+            if (tab === "PENDING ORDER" && order.status === "Pending Order")
+                return true;
             if (tab === "TO SHIP" && order.status === "To ship") return true;
             if (tab === "SHIPPING" && order.status === "Shipping") return true;
             if (tab === "COMPLETED" && order.status === "Completed")
@@ -53,6 +55,14 @@ export default function Dashboard({ orders }) {
                             className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
                         >
                             All
+                        </button>
+                        <button
+                            onClick={() => {
+                                setTab("PENDING ORDER");
+                            }}
+                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
+                        >
+                            Pending Order
                         </button>
                         <button
                             onClick={() => {

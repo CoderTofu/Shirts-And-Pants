@@ -80,7 +80,9 @@ Route::middleware('auth')->controller(ShoppingCartController::class)->group(
     }
 );
 
-Route::get('/dashboard', [OrderController::class, 'list'])->middleware(['auth', 'verified', CheckAdmin::class])->name('dashboard');
+Route::post('/order/cancel/{id}', [OrderController::class, 'cancel'])->middleware(['auth'])->name('cancelOrder');
+
+Route::get('/dashboard', [OrderController::class, 'list'])->middleware(['auth', CheckAdmin::class])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
