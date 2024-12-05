@@ -82,6 +82,8 @@ export default function UpdateProfileInformation({
                         required
                         isFocused
                         autoComplete="username"
+                        pattern="^[a-zA-Z0-9.-_$@*!]{1, 16}$"
+                        title="Username must be at most 16 characters and should only contain the following: A-Z, a-z, 0-9, ., _, -, $, @, *, !"
                     />
 
                     <InputError className="mt-2" message={errors.username} />

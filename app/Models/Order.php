@@ -57,4 +57,11 @@ class Order extends Model
         return $this->getKey();
     }
 
+    protected static function booted()
+    {
+        static::addGlobalScope('ordered', function ($query) {
+            $query->orderBy('created_at', 'desc');
+        });
+    }
+
 }
