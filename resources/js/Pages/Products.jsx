@@ -74,7 +74,7 @@ export default function Products({ products }) {
                 <Alert type="success" message="Filter applied!" />
             )}
             <div className="">
-                <div className=" flex flex-col md:flex-row justify-between pt-10 px-8">
+                <div className=" flex flex-col md:flex-row md:px-[5vw] justify-between pt-10 px-8">
                     <h1 className="text-4xl mt font-bold albert-sans">
                         Our Products
                     </h1>
@@ -136,7 +136,7 @@ export default function Products({ products }) {
                         </p>
                     </div>
                 ) : (
-                    <div className="m-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-8">
+                    <div className="m-10 md:px-[5vw] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-8">
                         {displayedProducts.map((product) => (
                             <div
                                 key={product.id}

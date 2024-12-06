@@ -122,8 +122,8 @@ export default function Order({ order }) {
                             <div>
                                 <h2 className="text-2xl">Order Details</h2>
                             </div>
-                            <div className="flex items-center space-x-2">
-                                <h4 className="albert-sans text-base font-light pb-1">
+                            <div className="flex items-center justify-center space-x-2">
+                                <h4 className="albert-sans text-base font-light  ">
                                     Status:
                                 </h4>
                                 <select
@@ -134,7 +134,7 @@ export default function Order({ order }) {
                                             status: e.target.value,
                                         })
                                     }
-                                    className="cursor-pointer border border-gray-300 rounded-md px-3 py-1 text-base focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                    className="cursor-pointer border border-gray-300 rounded-md pl-2 pr-8 py-1 text-base focus:outline-none focus:ring-2 focus:ring-gray-400"
                                 >
                                     <option value="Pending Order">
                                         Pending Order

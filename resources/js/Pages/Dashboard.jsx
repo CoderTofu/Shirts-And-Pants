@@ -9,29 +9,45 @@ export default function Dashboard({ orders }) {
     const [tab, setTab] = useState("ALL");
     const [search, setSearch] = useState("");
 
-    const filteredOrders = orders
-        .filter((order) => {
-            // Filter by status
-            if (tab === "ALL") return true;
-            if (tab === "PENDING ORDER" && order.status === "Pending Order")
-                return true;
-            if (tab === "TO SHIP" && order.status === "To ship") return true;
-            if (tab === "SHIPPING" && order.status === "Shipping") return true;
-            if (tab === "COMPLETED" && order.status === "Completed")
-                return true;
-            if (tab === "CANCELLED" && order.status === "Cancelled")
-                return true;
-            if (tab === "RETURN/REFUND" && order.status === "Return/Refund")
-                return true;
-            return false;
-        })
-        .filter((order) => {
-            // Filter by search query
-            return (
-                String(order.id).toLowerCase().includes(search.toLowerCase()) ||
-                order.customer.name.toLowerCase().includes(search.toLowerCase())
-            );
-        });
+    const [filteredOrders, setFilteredOrders] = useState(orders);
+
+    useEffect(() => {
+        setFilteredOrders(
+            orders.filter((order) => {
+                // Filter by status
+                if (tab === "ALL") return true;
+                if (tab === "PENDING ORDER" && order.status === "Pending Order")
+                    return true;
+                if (tab === "TO SHIP" && order.status === "To ship")
+                    return true;
+                if (tab === "SHIPPING" && order.status === "Shipping")
+                    return true;
+                if (tab === "COMPLETED" && order.status === "Completed")
+                    return true;
+                if (tab === "CANCELLED" && order.status === "Cancelled")
+                    return true;
+                if (tab === "RETURN/REFUND" && order.status === "Return/Refund")
+                    return true;
+                return false;
+            })
+        );
+    }, [tab]);
+
+    useEffect(() => {
+        setFilteredOrders(
+            filteredOrders.filter((order) => {
+                // Filter by search query
+                return (
+                    String(order.id)
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
+                    order.customer.name
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
+                );
+            })
+        );
+    });
 
     return (
         <AuthenticatedLayout
@@ -47,7 +63,7 @@ export default function Dashboard({ orders }) {
                 <div className="p-6">
                     <h1 className="text-2xl font-semibold mb-6">Orders</h1>
 
-                    <nav className="flex">
+                    <nav className="flex bg-white border-2 border-gray-300 rounded-xl rounded-b-none">
                         <button
                             onClick={() => {
                                 setTab("ALL");
@@ -98,7 +114,7 @@ export default function Dashboard({ orders }) {
                         </button>
                     </nav>
 
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg my-2">
+                    <div className="overflow-hidden bg-white  border-2 border-gray-300 shadow-sm sm:rounded-lg my-2 rounded-xl sm:rounded-t-none">
                         <div className="px-4 text-gray-900 ">
                             <div className="flex gap-4 my-3">
                                 <Input

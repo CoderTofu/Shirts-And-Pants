@@ -197,18 +197,6 @@ export default function ShoppingCart({ cart, orders }) {
                                 ) : (
                                     <>
                                         {/* Select All Checkbox */}
-                                        <div className="flex items-center mb-4">
-                                            <input
-                                                type="checkbox"
-                                                checked={
-                                                    selected.length ===
-                                                    cart.cart_items.length
-                                                }
-                                                onChange={handleSelectAll}
-                                                className="mr-2 cursor-pointer"
-                                            />
-                                            <span>Select All</span>
-                                        </div>
                                         {cart.cart_items.map((item, index) => (
                                             <div key={index}>
                                                 <ShoppingCartItem
@@ -226,10 +214,13 @@ export default function ShoppingCart({ cart, orders }) {
 
                                 {/* Price of selected items and action buttons */}
                                 <div className="flex justify-between items-center mt-5">
-                                    <p className="text-2xl font-bold">
-                                        Total: P {total_price.toFixed(2)}
-                                    </p>
-                                    <div className="flex space-x-5">
+                                    <div>
+                                        <button
+                                            className="bg-products text-white font-bold hover:bg-gray-400 transition-all py-2 px-4 rounded mr-3"
+                                            onClick={handleSelectAll}
+                                        >
+                                            Select All
+                                        </button>
                                         <button
                                             disabled={selected.length === 0}
                                             className={`px-10 py-2 font-semibold rounded-md transition-colors duration-300 ${
@@ -243,6 +234,11 @@ export default function ShoppingCart({ cart, orders }) {
                                         >
                                             Delete
                                         </button>
+                                    </div>
+                                    <div className="flex space-x-5 justify-center items-center">
+                                        <p className="text-2xl font-bold">
+                                            Total: P {total_price.toFixed(2)}
+                                        </p>
                                         <button
                                             disabled={selected.length === 0}
                                             className={`albert-sans text-lg font-semibold border border-black px-10 py-2 rounded-md transition-colors duration-300 ${
