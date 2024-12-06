@@ -106,7 +106,7 @@ export default function About() {
 
                         {returnTeam(
                             "Princess",
-                            "Princess Gorme",
+                            "Princess Gregorio",
                             "Lead UI/UX Designer",
                             "cssgrgr"
                         )}
