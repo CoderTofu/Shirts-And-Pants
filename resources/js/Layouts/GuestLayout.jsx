@@ -9,9 +9,9 @@ export default function GuestLayout({ children }) {
             <div className="flex h-5/6 flex-col items-center pt-6 sm:justify-center sm:pt-0">
                 {children}
             </div>
-            <div className="pt-[20vh]">
+            {/* <div className="pt-[20vh]">
                 <Footer />
-            </div>
+            </div> */}
         </>
     );
 }

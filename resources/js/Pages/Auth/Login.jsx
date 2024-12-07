@@ -28,11 +28,11 @@ export default function Login({ status, canResetPassword }) {
         <GuestLayout>
             <Head title="Log in" />
             {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
+                <div className="mt-5 text-sm font-medium text-green-600">
                     {status}
                 </div>
             )}
-            <main className="w-full flex flex-col justify-center items-center mt-[100px]">
+            <main className="w-full flex flex-col justify-center items-center mt-[100px] mb-20">
                 <h1 className="text-3xl mb-[30px] font-bold albert-sans">
                     LOGIN
                 </h1>
