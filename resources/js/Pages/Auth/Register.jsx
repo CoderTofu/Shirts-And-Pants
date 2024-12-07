@@ -27,7 +27,7 @@ export default function Register() {
         <GuestLayout>
             <Head title="Register" />
 
-            <main className="w-full flex flex-col justify-center items-center mt-[100px]">
+            <main className="w-full flex flex-col justify-center items-center mt-[100px] mb-[100px]">
                 <h1 className="albert-sans text-3xl font-bold mb-[50px]">
                     CREATE AN ACCOUNT
                 </h1>

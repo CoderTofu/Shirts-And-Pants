@@ -32,7 +32,7 @@ export default function Login({ status, canResetPassword }) {
                     {status}
                 </div>
             )}
-            <main className="w-full flex flex-col justify-center items-center mt-[100px] mb-20">
+            <main className="w-full flex flex-col justify-center items-center mt-[100px] mb-[100px]">
                 <h1 className="text-3xl mb-[30px] font-bold albert-sans">
                     LOGIN
                 </h1>
