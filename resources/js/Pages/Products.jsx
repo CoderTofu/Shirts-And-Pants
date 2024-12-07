@@ -100,7 +100,7 @@ export default function Products({ products }) {
                             className="border border-gray-400 text-lightGray py-2 rounded bg-clearBlack focus:ring-0 w-fit pr-10"
                         >
                             <option value="">All Types</option>
-                            <option value="shirt">Shirt</option>
+                            <option value="shirt">Shirts</option>
                             <option value="pants">Pants</option>
                         </select>
                     </div>
