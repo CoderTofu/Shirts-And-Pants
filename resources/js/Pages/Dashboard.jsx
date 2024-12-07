@@ -1,53 +1,65 @@
 import AuthenticatedLayout from "../Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Alert from "../Elements/Alert";
 
 export default function Dashboard({ orders }) {
     const [tab, setTab] = useState("ALL");
     const [search, setSearch] = useState("");
-
     const [filteredOrders, setFilteredOrders] = useState(orders);
+    const [showSearchAlert, setShowSearchAlert] = useState(false);
+    const [showFilterAlert, setShowFilterAlert] = useState(false);
 
-    useEffect(() => {
-        setFilteredOrders(
-            orders.filter((order) => {
-                // Filter by status
-                if (tab === "ALL") return true;
-                if (tab === "PENDING ORDER" && order.status === "Pending Order")
-                    return true;
-                if (tab === "TO SHIP" && order.status === "To ship")
-                    return true;
-                if (tab === "SHIPPING" && order.status === "Shipping")
-                    return true;
-                if (tab === "COMPLETED" && order.status === "Completed")
-                    return true;
-                if (tab === "CANCELLED" && order.status === "Cancelled")
-                    return true;
-                if (tab === "RETURN/REFUND" && order.status === "Return/Refund")
-                    return true;
-                return false;
-            })
-        );
-    }, [tab]);
+    const handleSearch = () => {
+        const filtered = orders.filter((order) => {
+            const matchesTab =
+                tab === "ALL" || order.status.toUpperCase() === tab;
 
-    useEffect(() => {
-        setFilteredOrders(
-            filteredOrders.filter((order) => {
-                // Filter by search query
-                return (
-                    String(order.id)
-                        .toLowerCase()
-                        .includes(search.toLowerCase()) ||
-                    order.customer.name
-                        .toLowerCase()
-                        .includes(search.toLowerCase())
-                );
-            })
-        );
-    });
+            const matchesSearch =
+                order.customer.name
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                String(order.id).includes(search);
+
+            return matchesTab && matchesSearch;
+        });
+
+        setFilteredOrders(filtered);
+        setShowSearchAlert(true);
+        setTimeout(() => setShowSearchAlert(false), 3000);
+    };
+
+    const handleTabChange = (status) => {
+        const filtered = orders.filter((order) => {
+            const matchesTab =
+                status === "ALL" || order.status.toUpperCase() === status;
+
+            return (
+                matchesTab &&
+                (search
+                    ? order.customer.name
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                      String(order.id).includes(search)
+                    : true)
+            );
+        });
+
+        setTab(status);
+        setFilteredOrders(filtered);
+        setShowFilterAlert(true);
+        setSearch("");
+        setTimeout(() => setShowFilterAlert(false), 3000);
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            handleSearch();
+        }
+    };
 
     return (
         <AuthenticatedLayout
@@ -58,82 +70,63 @@ export default function Dashboard({ orders }) {
             }
         >
             <Head title="Dashboard" />
+            {showSearchAlert && (
+                <Alert type="success" message="Search applied!" />
+            )}
 
+            {showFilterAlert && (
+                <Alert type="success" message="Filter applied!" />
+            )}
             <div className="py-12 px-[100px] albert-sans">
                 <div className="p-6">
                     <h1 className="text-2xl font-semibold mb-6">Orders</h1>
 
                     <nav className="flex bg-white border-2 border-gray-300 rounded-xl rounded-b-none">
-                        <button
-                            onClick={() => {
-                                setTab("ALL");
-                            }}
-                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
-                        >
-                            All
-                        </button>
-                        <button
-                            onClick={() => {
-                                setTab("PENDING ORDER");
-                            }}
-                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
-                        >
-                            Pending Order
-                        </button>
-                        <button
-                            onClick={() => {
-                                setTab("TO SHIP");
-                            }}
-                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
-                        >
-                            To Ship
-                        </button>
-                        <button
-                            onClick={() => {
-                                setTab("SHIPPING");
-                            }}
-                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
-                        >
-                            Shipping
-                        </button>
-                        <button
-                            onClick={() => {
-                                setTab("COMPLETED");
-                            }}
-                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
-                        >
-                            Completed
-                        </button>
-                        <button
-                            onClick={() => {
-                                setTab("CANCELLED");
-                            }}
-                            className="flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300"
-                        >
-                            Cancelled
-                        </button>
+                        {[
+                            "ALL",
+                            "PENDING ORDER",
+                            "TO SHIP",
+                            "SHIPPING",
+                            "COMPLETED",
+                            "CANCELLED",
+                        ].map((status) => (
+                            <button
+                                key={status}
+                                onClick={() => handleTabChange(status)}
+                                className={`flex-1 py-2 px-5 hover:bg-slate-100 transition-colors duration-300 ${
+                                    tab === status
+                                        ? "bg-gray-200 font-bold"
+                                        : ""
+                                }`}
+                            >
+                                {status}
+                            </button>
+                        ))}
                     </nav>
 
-                    <div className="overflow-hidden bg-white  border-2 border-gray-300 shadow-sm sm:rounded-lg my-2 rounded-xl sm:rounded-t-none">
+                    <div className="overflow-hidden bg-white border-2 border-gray-300 shadow-sm sm:rounded-lg my-2 rounded-xl sm:rounded-t-none">
                         <div className="px-4 text-gray-900 ">
                             <div className="flex gap-4 my-3">
                                 <Input
-                                    placeholder="Order ID..."
+                                    placeholder="Search orders..."
                                     className="max-w-sm"
+                                    value={search}
                                     onChange={(e) => setSearch(e.target.value)}
+                                    onKeyDown={handleKeyDown} // Trigger search on Enter
                                 />
                                 <Button
                                     className="py-2 px-5 hover:bg-slate-100"
                                     variant="outline"
-                                    onClick={() => {}}
+                                    onClick={handleSearch}
                                 >
-                                    Search ID
+                                    Search
                                 </Button>
                             </div>
                         </div>
                     </div>
+
                     <div className="border rounded-lg px-5">
-                        <div className="grid grid-cols-5 gap-4 p-4  text-sm border-b border-gray-500">
+                        <div className="grid grid-cols-5 gap-4 p-4 text-sm border-b border-gray-500">
                             <div className="col-span-2"></div>
                             <div className="text-center font-bold">
                                 Order Total
@@ -158,7 +151,7 @@ export default function Dashboard({ orders }) {
                                         <div className="flex gap-3">
                                             <img
                                                 src={`/assets/products/${order.products[0].product.display_image}`}
-                                                alt="Just 1 Product Image"
+                                                alt="Product Image"
                                                 width={60}
                                                 height={60}
                                                 className="bg-gray-400 rounded-sm"
@@ -199,8 +192,6 @@ export default function Dashboard({ orders }) {
                                 </div>
                             ))
                         )}
-
-                        {}
                     </div>
                 </div>
             </div>
