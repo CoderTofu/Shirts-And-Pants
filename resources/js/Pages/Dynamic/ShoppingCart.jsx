@@ -51,6 +51,7 @@ export default function ShoppingCart({ cart, orders }) {
     const [cancelDialogResponse, setCancelDialogResult] = useState(null);
 
     const [showAlert, setShowAlert] = useState(false);
+    const orderNumber = useRef(null);
 
     const {
         data,
@@ -87,11 +88,9 @@ export default function ShoppingCart({ cart, orders }) {
         }
     };
 
-    let orderNumber = useRef(null);
     const handleCancelDialog = (result) => {
         setCancelDialogVisible(false); // Hide the dialog
         setCancelDialogResult(result); // Capture the result (true for confirm, false for cancel)
-        console.log(orderNumber);
         if (result && orderNumber.current !== null) {
             axios
                 .post(`/order/cancel/${orderNumber.current}`)
