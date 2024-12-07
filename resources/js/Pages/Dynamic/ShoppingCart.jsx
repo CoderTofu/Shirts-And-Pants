@@ -1,7 +1,7 @@
 import { Head, useForm, usePage } from "@inertiajs/react";
 import Navbar from "@/Elements/Navbar";
 import ShoppingCartItem from "./ShoppingCartItem";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dialog } from "../../Elements/Dialog";
 import Alert from "../../Elements/Alert";
 import axios from "axios";
@@ -47,6 +47,8 @@ export default function ShoppingCart({ cart, orders }) {
 
     const [isDeleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [deleteDialogResponse, setDeleteDialogResult] = useState(null);
+    const [isCancelDialogVisible, setCancelDialogVisible] = useState(false);
+    const [cancelDialogResponse, setCancelDialogResult] = useState(null);
 
     const [showAlert, setShowAlert] = useState(false);
 
@@ -78,6 +80,22 @@ export default function ShoppingCart({ cart, orders }) {
         if (result) {
             // Perform confirm-related actions here
             destroy("/shopping-cart");
+            window.location.reload();
+        } else {
+            console.log("User canceled!");
+            // Perform cancel-related actions here
+        }
+    };
+
+    let orderNumber = useRef(null);
+    const handleCancelDialog = (result) => {
+        setCancelDialogVisible(false); // Hide the dialog
+        setCancelDialogResult(result); // Capture the result (true for confirm, false for cancel)
+        console.log(orderNumber);
+        if (result && orderNumber.current !== null) {
+            axios
+                .post(`/order/cancel/${orderNumber.current}`)
+                .then((resp) => window.location.reload());
             window.location.reload();
         } else {
             console.log("User canceled!");
@@ -127,12 +145,6 @@ export default function ShoppingCart({ cart, orders }) {
         setData({ ...data, selected_items: selected, total_price: newTotal });
     }, [selected]);
 
-    const cancelOrder = (orderNumber) => {
-        axios
-            .post(`/order/cancel/${orderNumber}`)
-            .then((resp) => window.location.reload());
-    };
-
     return (
         <>
             <Head title="Shopping Cart" />
@@ -141,6 +153,12 @@ export default function ShoppingCart({ cart, orders }) {
                 <Dialog
                     onClose={handleDeleteDialog}
                     message={"Do you want to remove selected item/s?"}
+                />
+            )}
+            {isCancelDialogVisible && (
+                <Dialog
+                    onClose={handleCancelDialog}
+                    message={"Do you want to cancel this order?"}
                 />
             )}
 
@@ -312,11 +330,13 @@ export default function ShoppingCart({ cart, orders }) {
                                                     {order.status ===
                                                         "Pending Order" && (
                                                         <button
-                                                            onClick={() =>
-                                                                cancelOrder(
-                                                                    order.id
-                                                                )
-                                                            }
+                                                            onClick={() => {
+                                                                orderNumber.current =
+                                                                    order.id;
+                                                                setCancelDialogVisible(
+                                                                    true
+                                                                );
+                                                            }}
                                                             className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none"
                                                         >
                                                             Cancel Order
