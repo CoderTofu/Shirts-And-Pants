@@ -98,7 +98,7 @@ export default function Order({ order }) {
                     <div className="flex items-end mb-2">
                         <h1 className="text-4xl mr-5">Order #{order.id}</h1>
                         <h4 className="text-xl text-customGray">
-                            {new Date(order.date).toUTCString()}
+                            {new Date(order.date).toLocaleString()}
                         </h4>
                     </div>
                     <div>

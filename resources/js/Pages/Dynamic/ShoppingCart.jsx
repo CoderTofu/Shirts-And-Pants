@@ -279,7 +279,7 @@ export default function ShoppingCart({ cart, orders }) {
                                                     <p className="text-gray-500 text-sm">
                                                         {new Date(
                                                             order.date
-                                                        ).toUTCString()}
+                                                        ).toLocaleString()}
                                                     </p>
                                                     <p className="font-semibold text-xl text-gray-700">
                                                         P {order.total}

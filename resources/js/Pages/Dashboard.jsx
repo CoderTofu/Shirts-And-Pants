@@ -163,7 +163,7 @@ export default function Dashboard({ orders }) {
                                                 <div className="text-muted-foreground text-xs">
                                                     {new Date(
                                                         order.date
-                                                    ).toUTCString()}
+                                                    ).toLocaleString()}
                                                 </div>
                                                 <div className="mt-1">
                                                     Customer Name:{" "}
